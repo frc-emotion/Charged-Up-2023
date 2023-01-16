@@ -4,51 +4,72 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.SwerveArcadeCommand;
+import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.auton.ExamplePathPlannerCommand;
+import frc.robot.subsystems.SwerveSubsytem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static Joystick arcadeStick = new Joystick(1);
+  public static Joystick arcadeStick2 = new Joystick(0);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
+    swerveSubsytem.setDefaultCommand(
+    
+      new SwerveArcadeCommand(
+        swerveSubsytem, 
+        () -> arcadeStick.getRawAxis(1),
+        () ->  -arcadeStick.getRawAxis(0), 
+        () -> arcadeStick2.getRawAxis(2), 
+        () -> !arcadeStick.getRawButton(3),
+        () -> arcadeStick.getRawButton(1),
+        () -> arcadeStick.getRawButton(2))
+
+    /*
+    new SwerveXboxCommand(
+    swerveSubsytem, 
+    () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
+    () ->  -driverController.getRawAxis(OIConstants.kDriverXAxis), 
+    () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+    () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
+    () -> driverController.getLeftBumper(),
+    () -> driverController.getRightBumper())
+    */
+    );
+    configureButtonBindings();
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link GenericHID} or one of its subclasses ({@link
+   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+  private void configureButtonBindings() {
+    new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    /*Depreciated */
+    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
+    //new JoystickButton(arcadeStick, 5).whenPressed(() -> swerveSubsytem.zeroHeading());
+
+   
   }
 
   /**
@@ -57,7 +78,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
   }
 }
