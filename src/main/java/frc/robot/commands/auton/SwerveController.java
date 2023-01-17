@@ -34,12 +34,13 @@ public final class SwerveController {
          }),
          new PPSwerveControllerCommand(
              traj, 
-             swerveSubsystem::getPose, // Pose supplier
+             swerveSubsystem::getCurrentPose, // Pose supplier
              DriveConstants.kDriveKinematics, // SwerveDriveKinematics
              xController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
              yController, // Y controller (usually the same values as X controller)
              thetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-             swerveSubsystem::setModuleStates, // Module states consumer
+             swerveSubsystem::setModuleStates,
+             false, // Module states consumer
              swerveSubsystem // Requires this drive subsystem
          )
           
