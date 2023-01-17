@@ -12,6 +12,8 @@ import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+
+import java.io.IOException;
 import java.util.ArrayList; 
 import edu.wpi.first.math.Pair;
 import java.util.Optional;
@@ -19,7 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class PoseEstimator extends SubsystemBase {
  
-    public PhotonCamera cam;
+    private final PhotonCamera cam;
 
     // Physical location of the camera on the robot, relative to the center of the robot. 
     Transform3d robotToCam = new Transform3d(
@@ -29,14 +31,17 @@ public class PoseEstimator extends SubsystemBase {
 
     Transform3d camToRobot = robotToCam.inverse();
 
-    public RobotPoseEstimator robotPoseEstimator; 
-
+    private final RobotPoseEstimator robotPoseEstimator; 
+    public AprilTagFieldLayout aprilTagFieldLayout;
 
     public PoseEstimator() {
-      
+        try {
+            aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile); 
+        } catch (IOException e){
+            System.out.println(e);
+        }
         //Gets Apriltag layout from JSON with IDs and poses. 
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile); 
-    
+       
         cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
 
         // Assembles the list of cameras & mount locations
@@ -48,7 +53,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Pair<Pose2d, Double> getEstimatedPose() {
-     //  robotPoseEstimator.setReferencePose(prevEstimatedRobotPose); setup for reference pose strategy only  
+        //robotPoseEstimator.setReferencePose(prevEstimatedRobotPose); setup for reference pose strategy only  
     
         double currentTime = Timer.getFPGATimestamp();
         Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();

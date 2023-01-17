@@ -70,22 +70,19 @@ public class SwerveSubsytem extends SubsystemBase {
 
     public PoseEstimator visionPoseEstimator;
 
-    private SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
+    private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
         backLeft.getPosition(),
         backRight.getPosition()
     };
 
-    public SwerveModulePosition[] getModulePositions() {
-        return modulePositions;
-      }    
-
-    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), //FIX why 0 & not getRotation2d? 
         modulePositions,  
-        getPose()); // FIX add the starting pose estimate? 
+        getCurrentPose()); // FIX add the starting pose estimate? 
+
     private ChassisSpeeds robotSpeeds;
 
     private ShuffleboardLayout frontLeftData;
@@ -138,6 +135,15 @@ public class SwerveSubsytem extends SubsystemBase {
     public void setChassisSpeeds(ChassisSpeeds speeds){
         robotSpeeds = speeds;
     }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+            frontLeft.getPosition(),
+            frontRight.getPosition(),
+            backLeft.getPosition(),
+            backRight.getPosition()
+        };
+    }    
     
 
     @Override
