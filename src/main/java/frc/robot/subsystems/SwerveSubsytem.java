@@ -19,6 +19,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
 import frc.robot.util.dashboard.TabManager.SubsystemTab;
+import frc.robot.util.vision.PoseEstimator;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.Pair;
+import java.util.Optional;
 
 /**
  * Main Swerve Subsytem class
@@ -64,6 +68,8 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+    public PoseEstimator visionPoseEstimator;
+
     private SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
@@ -71,7 +77,15 @@ public class SwerveSubsytem extends SubsystemBase {
         backRight.getPosition()
     };
 
-    private SwerveDriveOdometry odometry = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), modulePositions);
+    public SwerveModulePosition[] getModulePositions() {
+        return modulePositions;
+      }    
+
+    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+        DriveConstants.kDriveKinematics, 
+        new Rotation2d(0), //FIX why 0 & not getRotation2d? 
+        modulePositions,  
+        getPose()); // FIX add the starting pose estimate? 
     private ChassisSpeeds robotSpeeds;
 
     private ShuffleboardLayout frontLeftData;
@@ -105,20 +119,16 @@ public class SwerveSubsytem extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
-    public Pose2d getPose(){
-        return odometry.getPoseMeters();
+    public Pose2d getCurrentPose(){
+        return poseEstimator.getEstimatedPosition();
     }
 
+    //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){
-        odometry.resetPosition(
+        poseEstimator.resetPosition(
             getRotation2d(), 
-            new SwerveModulePosition[] {
-                frontLeft.getPosition(),
-                frontRight.getPosition(),
-                backLeft.getPosition(),
-                backRight.getPosition()
-            }, 
-            pose );
+            getModulePositions(),
+            pose);
     }
 
     public ChassisSpeeds getChassisSpeeds(){
@@ -132,15 +142,18 @@ public class SwerveSubsytem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        odometry.update(getRotation2d(),
-            new SwerveModulePosition[] {
-                frontLeft.getPosition(),
-                frontRight.getPosition(),
-                backLeft.getPosition(),
-                backRight.getPosition()
-            });
 
-        m_field.setRobotPose(getPose());
+        //Updates with drivetrain sensors
+        poseEstimator.update(                   
+            getRotation2d(), 
+            getModulePositions());
+
+        Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+
+        //Adds vision 
+        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+
+        m_field.setRobotPose(getCurrentPose());
     }
 
     public void stopModules() {
