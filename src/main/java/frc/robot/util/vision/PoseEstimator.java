@@ -35,13 +35,11 @@ public class PoseEstimator extends SubsystemBase {
     public AprilTagFieldLayout aprilTagFieldLayout;
 
     public PoseEstimator() {
-
         try {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile); 
         } catch (IOException e){
             System.out.println(e);
         }
-
         //Gets Apriltag layout from JSON with IDs and poses. 
        
         cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
@@ -56,6 +54,7 @@ public class PoseEstimator extends SubsystemBase {
 
     public Pair<Pose2d, Double> getEstimatedPose() {
         //robotPoseEstimator.setReferencePose(prevEstimatedRobotPose); setup for reference pose strategy only  
+    
         double currentTime = Timer.getFPGATimestamp();
         Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();
 

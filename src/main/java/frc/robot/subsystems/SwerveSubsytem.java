@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
@@ -21,6 +22,8 @@ import frc.robot.util.dashboard.TabManager.SubsystemTab;
 import frc.robot.util.vision.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.Pair;
+import java.util.Optional;
+
 /**
  * Main Swerve Subsytem class
  * Holds gyro and odometry methods
@@ -67,16 +70,14 @@ public class SwerveSubsytem extends SubsystemBase {
 
     public PoseEstimator visionPoseEstimator;
 
-    private SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
+    private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
         backLeft.getPosition(),
         backRight.getPosition()
     };
 
-
-
-    private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), //FIX why 0 & not getRotation2d? 
         modulePositions,  
@@ -127,6 +128,14 @@ public class SwerveSubsytem extends SubsystemBase {
             pose);
     }
 
+    public ChassisSpeeds getChassisSpeeds(){
+        return robotSpeeds;
+    }
+    
+    public void setChassisSpeeds(ChassisSpeeds speeds){
+        robotSpeeds = speeds;
+    }
+
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[] {
             frontLeft.getPosition(),
@@ -135,14 +144,6 @@ public class SwerveSubsytem extends SubsystemBase {
             backRight.getPosition()
         };
     }    
-
-    public ChassisSpeeds getChassisSpeeds(){
-        return robotSpeeds;
-    }
-    
-    public void setChassisSpeeds(ChassisSpeeds speeds){
-        robotSpeeds = speeds;
-    }
     
 
     @Override
@@ -154,6 +155,7 @@ public class SwerveSubsytem extends SubsystemBase {
             getModulePositions());
 
         Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+
         //Adds vision 
         poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
