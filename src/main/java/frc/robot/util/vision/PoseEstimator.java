@@ -1,19 +1,24 @@
 package frc.robot.util.vision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import org.photonvision.PhotonCamera;
 import frc.robot.Constants.CameraConstants;
+
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 
 import java.io.IOException;
+
 import java.util.ArrayList; 
 import edu.wpi.first.math.Pair;
 import java.util.Optional;
@@ -34,17 +39,18 @@ public class PoseEstimator extends SubsystemBase {
     private final RobotPoseEstimator robotPoseEstimator; 
     public AprilTagFieldLayout aprilTagFieldLayout;
 
-    public PoseEstimator() {
+    public PoseEstimator(PhotonCamera cam) {
+
+         //Gets Apriltag layout from JSON with IDs and poses.
         try {
             aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile); 
         } catch (IOException e){
             System.out.println(e);
-        }
-        //Gets Apriltag layout from JSON with IDs and poses. 
+        } 
        
-        cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
+        this.cam = cam; 
 
-        // Assembles the list of cameras & mount locations
+        // Assembles the list of cameras & mount locations.
         ArrayList<Pair<PhotonCamera, Transform3d>> camList = new ArrayList<Pair<PhotonCamera, Transform3d>>();
         camList.add(new Pair<PhotonCamera, Transform3d>(cam, robotToCam));  
 

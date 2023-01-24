@@ -79,9 +79,9 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics, 
-        new Rotation2d(0), //FIX why 0 & not getRotation2d? 
-        modulePositions,  
-        getCurrentPose()); // FIX add the starting pose estimate? 
+        new Rotation2d(0), // Rotation and Pose are 0 because auto sets them to a different value anyway. 
+        modulePositions, 
+        new Pose2d()); 
 
     private ChassisSpeeds robotSpeeds;
 
@@ -149,7 +149,7 @@ public class SwerveSubsytem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        //Updates with drivetrain sensors
+        //Updates with drivetrain sensors.
         poseEstimator.update(                   
             getRotation2d(), 
             getModulePositions());

@@ -52,14 +52,20 @@ public final class Constants {
     public static final class CameraConstants {
         
         // currently Cam mounted facing forward, half a meter forward of center, half a meter up from center.
-        
         public static final double CAMERA_ROLL = 0;
         public static final double CAMERA_PITCH = 0;
         public static final double CAMERA_YAW = 0;
 
-        public static final double CAMERA_XAXIS = 0.5;
+        public static final double CAMERA_XAXIS = 0.24;
         public static final double CAMERA_YAXIS = 0;
-        public static final double CAMERA_ZAXIS = 0.5;
+        public static final double CAMERA_ZAXIS = 0;
+
+        public static final double TARGET_RANGE = 1.0; //how far in front of the target we want to align to 
+       
+        public static final double MAX_ALIGN_VELOCITY = 1; //FIX mps 
+        public static final double MAX_ALIGN_ACCELERATION = 3; //FIX ? 
+        public static final double MAX_ROTATE_VELOCITY = 1; //FIX  
+        public static final double MAX_ROTATE_ACCELERATION = 3; //FIX 
     }
 
 

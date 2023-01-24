@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,6 +17,7 @@ import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
+import frc.robot.util.vision.PoseEstimator;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,6 +31,10 @@ public class RobotContainer {
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
+
+  private final PhotonCamera cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
+  private final PoseEstimator poseEstimator = new PoseEstimator(cam); 
+
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
@@ -52,7 +59,7 @@ public class RobotContainer {
     () -> driverController.getRightBumper())
     */
     );
-    configureButtonBindings();
+    configureButtonBindings(); 
   }
 
   /**
@@ -69,7 +76,8 @@ public class RobotContainer {
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
     //new JoystickButton(arcadeStick, 5).whenPressed(() -> swerveSubsytem.zeroHeading());
 
-   
+    //FIX add button for align to target 
+
   }
 
   /**
