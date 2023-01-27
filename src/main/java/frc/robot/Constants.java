@@ -161,6 +161,14 @@ public final class Constants {
         public static final double kPAlignment = 0.05;
         public static final double kDAlignment = 0.0;
         public static final double kIAlignment = 0.05;
+
+        // Angles for leveling
+
+        public static final double TARGET_ANGLE = 0;
+        public static final double MAX_LEVEL_VELOCITY = 1; //FIX mps 
+        public static final double MAX_LEVEL_ACCELERATION = 2; //Fix with testing
+        public static final double THRESHOLD = 1;
+
     }
 
     public static class AutoConstants {
