@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -31,6 +32,8 @@ public class LevelChargeStation extends CommandBase{
         this.gyro = gyro;
 
         inControl = false; // Used to account for if angle is negative considering that calculate determines actual sign of velocity
+        angleController.setTolerance(1); //Not sure if radian conversion is needed here considering everything else is done with degrees in mind
+        angleController.enableContinuousInput(-180, 180);
 
         addRequirements(swerve);
     }
@@ -42,7 +45,7 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public void execute() {
-        double alpha = gyro.getPitch();
+        double alpha = gyro.getPitch(); // Returns angle measure from -180 to 180
         var robotPose2d = swerve.getCurrentPose();
         var xSpeed = 0.0;
         
