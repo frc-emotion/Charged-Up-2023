@@ -15,6 +15,8 @@ import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
+import frc.robot.util.vision.LimeLight;
+import frc.robot.util.vision.LimeLightAlign;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,13 +27,15 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  private final LimeLight limelight = new LimeLight();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static XboxController operatorController = new XboxController(1);
   public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
-    
+    /* 
       new SwerveArcadeCommand(
         swerveSubsytem, 
         () -> arcadeStick.getRawAxis(1),
@@ -40,8 +44,8 @@ public class RobotContainer {
         () -> !arcadeStick.getRawButton(3),
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
-
-    /*
+/* */
+    
     new SwerveXboxCommand(
     swerveSubsytem, 
     () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
@@ -49,9 +53,7 @@ public class RobotContainer {
     () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
-    () -> driverController.getRightBumper())
-    */
-    );
+    () -> driverController.getRightBumper()));
     configureButtonBindings();
   }
 
@@ -63,6 +65,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    new JoystickButton(operatorController, XboxController.Button.kA.value).whileTrue(new LimeLightAlign(swerveSubsytem, limelight));
+
+
+
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
     /*Depreciated */

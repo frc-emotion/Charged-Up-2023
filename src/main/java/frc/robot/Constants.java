@@ -152,9 +152,9 @@ public final class Constants {
         public static final double kTeleDriveSlowAngularAccelerationUnitsPerSecond = 3;
 
         // alignment PID
-        public static final double kPAlignment = 0.05;
+        public static final double kPAlignment = 0.3;
         public static final double kDAlignment = 0.0;
-        public static final double kIAlignment = 0.05;
+        public static final double kIAlignment = 0.0;
     }
 
     public static class AutoConstants {

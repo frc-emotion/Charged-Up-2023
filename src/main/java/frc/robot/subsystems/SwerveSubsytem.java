@@ -81,7 +81,7 @@ public class SwerveSubsytem extends SubsystemBase {
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), //FIX why 0 & not getRotation2d? 
         modulePositions,  
-        getCurrentPose()); // FIX add the starting pose estimate? 
+        new Pose2d()); // FIX add the starting pose estimate? 
 
     private ChassisSpeeds robotSpeeds;
 
@@ -154,10 +154,10 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-        Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+       // Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+      //  poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
     }
