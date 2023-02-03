@@ -19,21 +19,19 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class LevelChargeStation extends CommandBase{
 
     private final SwerveSubsytem swerve;
-    private final AHRS gyro;
 
     private boolean inControl;
 
     private static final TrapezoidProfile.Constraints travelConstraints = new TrapezoidProfile.Constraints(DriveConstants.MAX_LEVEL_VELOCITY, DriveConstants.MAX_LEVEL_ACCELERATION);
-    private final ProfiledPIDController angleController = new ProfiledPIDController(0.05, 0, 0, travelConstraints); //General approximation should have Kp be something like Max Velocity / max Angle
+    private final ProfiledPIDController angleController = new ProfiledPIDController(DriveConstants.KPLevel, DriveConstants.KDLevel, DriveConstants.KILevel, travelConstraints); //General approximation should have Kp be something like Max Velocity / max Angle
 
-    public LevelChargeStation(SwerveSubsytem swerve, AHRS gyro){
+    public LevelChargeStation(SwerveSubsytem swerve){
 
         this.swerve = swerve;
-        this.gyro = gyro;
 
         inControl = false; // Used to account for if angle is negative considering that calculate determines actual sign of velocity
-        angleController.setTolerance(1); //Not sure if radian conversion is needed here considering everything else is done with degrees in mind
-        angleController.enableContinuousInput(-180, 180);
+        angleController.setTolerance(Math.PI/180); //Not sure if radian conversion is needed here considering everything else is done with degrees in mind
+        angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(swerve);
     }
@@ -45,19 +43,19 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public void execute() {
-        double alpha = gyro.getPitch(); // Returns angle measure from -180 to 180
+        double alpha = swerve.getPitch(); // Returns angle measure from -pi to pi
         var robotPose2d = swerve.getCurrentPose();
-        var xSpeed = 0.0;
+        var ySpeed = 0.0;
         
         //Checks to see if the Robot is on the Charge Station and tilted 
-        if (alpha > DriveConstants.THRESHOLD || inControl){
+        if (-alpha > DriveConstants.THRESHOLD || inControl){
             if (!inControl){
                 inControl = true;
             }
-            xSpeed = angleController.calculate(alpha);           
+            ySpeed = angleController.calculate(-alpha);           
         }
 
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, 0, 0, robotPose2d.getRotation());
+        ChassisSpeeds speeds = new ChassisSpeeds(ySpeed, 0, 0);
         swerve.setChassisSpeeds(speeds);
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);

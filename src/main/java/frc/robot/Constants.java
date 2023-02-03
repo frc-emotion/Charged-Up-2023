@@ -167,7 +167,10 @@ public final class Constants {
         public static final double TARGET_ANGLE = 0;
         public static final double MAX_LEVEL_VELOCITY = 1; //FIX mps 
         public static final double MAX_LEVEL_ACCELERATION = 2; //Fix with testing
-        public static final double THRESHOLD = 1;
+        public static final double THRESHOLD = Math.PI / 180;
+        public static final double KPLevel = 10;
+        public static final double KDLevel = 0;
+        public static final double KILevel = 0;
 
     }
 

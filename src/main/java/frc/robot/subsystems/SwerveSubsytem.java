@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -120,6 +121,10 @@ public class SwerveSubsytem extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
+    public double getPitch(){
+        return Units.degreesToRadians((gyro.getPitch()));
+    }
+
     //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){
         poseEstimator.resetPosition(
@@ -154,12 +159,13 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-        Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+        //Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+        //poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
+        System.out.println(gyro.getPitch());
     }
 
     public void stopModules() {
@@ -192,6 +198,8 @@ public class SwerveSubsytem extends SubsystemBase {
 
         TabManager.getInstance().addFieldWidget(TabManager.getInstance().accessTab(SubsystemTab.AUTON), BuiltInWidgets.kField, "Pose", m_field,
         new int[] { 0, 0 }, new int[] { 6, 4 });
+       // KPLevel = TabManager.getInstance().addFieldWidget(TabManager.getInstance().accessTab(SubsystemTab.AUTON), BuiltInWidgets.kField, "Pose", m_field,
+        //new int[] { 0, 0 }, new int[] { 6, 4 });
     }
 
     private void fillList(SwerveModuleNeoFalcon module, ShuffleboardLayout layout){
@@ -201,6 +209,9 @@ public class SwerveSubsytem extends SubsystemBase {
         layout.withSize(2, 4);
     }
 
+    private void updateShuffleboard(){
+        
+    }
 
  
 }
