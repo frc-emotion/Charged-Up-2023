@@ -50,7 +50,7 @@ public class LevelChargeStation extends CommandBase{
         var xSpeed = 0.0;
         
         //Checks to see if the Robot is on the Charge Station and tilted 
-        if (alpha > DriveConstants.THRESHOLD || inControl){
+        if (Math.abs(alpha) > DriveConstants.THRESHOLD || inControl){
             if (!inControl){
                 inControl = true;
             }
