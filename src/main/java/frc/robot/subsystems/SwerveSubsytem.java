@@ -124,6 +124,9 @@ public class SwerveSubsytem extends SubsystemBase {
     public double getPitch(){
         return Units.degreesToRadians((gyro.getPitch()));
     }
+    public double getRoll(){
+        return Units.degreesToRadians((gyro.getRoll()));
+    }
 
     //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){

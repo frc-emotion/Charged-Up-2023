@@ -58,7 +58,7 @@ public class RobotContainer {
     swerveSubsytem, 
     () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
     () ->  -driverController.getRawAxis(OIConstants.kDriverXAxis), 
-    () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+    () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
     () -> driverController.getRightBumper())

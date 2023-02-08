@@ -44,15 +44,18 @@ public class LevelChargeStation extends CommandBase{
     @Override
     public void execute() {
         double alpha = swerve.getPitch(); // Returns angle measure from -pi to pi
+        //double beta = swerve.getRoll();
         var robotPose2d = swerve.getCurrentPose();
         var ySpeed = 0.0;
+        //var xSpeed = 0.0;
         
         //Checks to see if the Robot is on the Charge Station and tilted 
         if (-alpha > DriveConstants.THRESHOLD || inControl){
             if (!inControl){
                 inControl = true;
             }
-            ySpeed = angleController.calculate(-alpha);           
+            ySpeed = angleController.calculate(-alpha);
+                     
         }
 
         ChassisSpeeds speeds = new ChassisSpeeds(ySpeed, 0, 0);
