@@ -59,7 +59,7 @@ public final class Constants {
 
         public static final double CAMERA_XAXIS = 0.5;
         public static final double CAMERA_YAXIS = 0;
-        public static final double CAMERA_ZAXIS = 0.5;
+        public static final double CAMERA_ZAXIS = Units.inchesToMeters(6);
     }
 
 
@@ -152,9 +152,14 @@ public final class Constants {
         public static final double kTeleDriveSlowAngularAccelerationUnitsPerSecond = 3;
 
         // alignment PID
-        public static final double kPAlignment = 0.3;
-        public static final double kDAlignment = 0.0;
+        public static final double kPAlignment = 14.7;
         public static final double kIAlignment = 0.0;
+        public static final double kDAlignment = 0.5;
+
+        // strafe PID
+        public static final double kPDrive = 1.5;
+        public static final double kIDrive = 0.0;
+        public static final double kDDrive = 0.5;
     }
 
     public static class AutoConstants {
