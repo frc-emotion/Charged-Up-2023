@@ -39,7 +39,7 @@ public class LimeLightAlign extends CommandBase {
 
     @Override
     public void execute() {
-        turningSpeed = alignmentController.calculate(Units.degreesToRadians(limelight.getEntry("tx")));
+        turningSpeed = alignmentController.calculate(Units.degreesToRadians(-1*(limelight.getEntry("tx"))));
         alignmentSpeeds = new ChassisSpeeds(0, 0, turningSpeed);
         swerveSubsystem.setChassisSpeeds(alignmentSpeeds);
 

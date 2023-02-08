@@ -20,13 +20,43 @@ public class LimeLight extends SubsystemBase{
         return NetworkTableInstance.getDefault().getTable(table).getEntry(selector).getDouble(0);
     }
 
+    // LIMELIGHT TURN THEN STRAFE ------------------
+
     public double getLateral(double tx, double ty){
-        return (getDistance(ty) * Math.tan(Math.toRadians(tx)));
+        return (getHypotenuse(ty)*Math.cos(Math.toRadians(tx)));
     }
 
-    public double getDistance(double ty) {
-        return ((getHeight()) / Math.tan(getAngle(Math.toRadians(ty))) - 0.1); // arbitrary distance away from the target so robot doesnt strafe directly into it?
+    public double getDistance(double tx, double ty){
+        return (getHypotenuse(ty)*Math.sin(Math.toRadians(tx)));
     }
+
+    public double getHypotenuse(double ty) {
+        return (((getHeight()) / Math.tan(getAngle(Math.toRadians(ty)))) - 0.8); // arbitrary distance away from the target so robot doesnt strafe directly into it?
+    }
+
+    // LIMELIGHT SIMULTANEOUS STRAFE/ALIGN ------------------------
+
+    public double getVisionLine(double ty){
+        return (getHeight() / Math.tan(Math.toRadians(ty)));
+    }
+
+    public double getHypot(double tx, double ty){
+        return (getVisionLine(ty)) / Math.cos(Math.toRadians(tx));
+    }
+
+    public double getTheta(double tx, double heading){
+        return ((Math.PI/2) - Math.abs(heading)  + Math.abs(Math.toRadians(tx)));
+    }
+
+    public double getXDist(double tx, double ty, double heading){
+        return getHypot(tx, ty) * Math.sin(Math.toRadians(getTheta(tx, heading)));
+    }
+
+    public double getYDist(double tx, double ty, double heading){
+        return getHypot(tx, ty) * Math.cos(Math.toRadians(getTheta(tx, heading)));
+    }
+
+    // GENERAL
 
     public double getHeight() {
         return Units.inchesToMeters(refrenceHeight) - Constants.CameraConstants.CAMERA_ZAXIS; // camera constants need to be changed i think
