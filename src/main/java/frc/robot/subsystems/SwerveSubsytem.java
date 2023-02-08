@@ -128,6 +128,14 @@ public class SwerveSubsytem extends SubsystemBase {
         return Units.degreesToRadians((gyro.getRoll()));
     }
 
+    public double getRoll(){
+        return Units.degreesToRadians((gyro.getRoll()));
+    }
+
+    public double getAlignmentHeading(){
+        return Units.degreesToRadians(gyro.getCompassHeading()); // need to find the difference between North and the direction of the Charge Station 
+    } // Might use getFusedHeading() instead of getCompassHeading(), not sure how they work yet
+
     //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){
         poseEstimator.resetPosition(
