@@ -1,17 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsytem;
 
@@ -29,8 +23,8 @@ public class LevelChargeStation extends CommandBase{
 
         this.swerve = swerve;
 
-        inControl = false; // Used to account for if angle is negative considering that calculate determines actual sign of velocity
-        angleController.setTolerance(Math.PI/180); //Not sure if radian conversion is needed here considering everything else is done with degrees in mind
+        inControl = false; // Used to account for if angle is negative considering that PID calculate determines actual sign of velocity
+        angleController.setTolerance(Math.PI/180); 
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(swerve);
@@ -43,8 +37,8 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public void execute() {
-        var stationHeadingAngle = swerve.getAlignmentHeading() - DriveConstants.REFERENCE_HEADING;
-        double error1 = (swerve.getPitch() * Math.cos(stationHeadingAngle)) + (swerve.getRoll() * Math.sin(stationHeadingAngle)); // Returns angle measure from -180 to 180 ( Might need to change to a - instead of a + depending on if I interpreted roll correctly)
+        var stationHeadingAngle = Units.degreesToRadians(swerve.getHeading());
+        double error1 = (-swerve.getPitch() * Math.cos(stationHeadingAngle)) - (swerve.getRoll() * Math.sin(stationHeadingAngle)); // Returns measure of Roll and Pitch and takes cos and sin to determine error
         var levelSpeed = 0.0;
         
         //Checks to see if the Robot is on the Charge Station and tilted 
@@ -55,7 +49,7 @@ public class LevelChargeStation extends CommandBase{
             levelSpeed = angleController.calculate(error1);
         }
 
-        ChassisSpeeds speeds = new ChassisSpeeds((levelSpeed * Math.cos(stationHeadingAngle)), (levelSpeed * Math.sin(stationHeadingAngle)), 0);
+        ChassisSpeeds speeds = new ChassisSpeeds((levelSpeed * Math.cos(stationHeadingAngle)), (levelSpeed * Math.sin(stationHeadingAngle)), 0); //Speed is always in the correct heading assuming that heading angle is constant throughout the field
         swerve.setChassisSpeeds(speeds);
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
