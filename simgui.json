@@ -1,0 +1,22 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/AUTON/Pose": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/AUTON/Pose": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
+  }
+}

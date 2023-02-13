@@ -68,7 +68,7 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public PoseEstimator visionPoseEstimator;
+    private final PoseEstimator visionPoseEstimator = new PoseEstimator();
 
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
@@ -81,7 +81,7 @@ public class SwerveSubsytem extends SubsystemBase {
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), //FIX why 0 & not getRotation2d? 
         modulePositions,  
-        getCurrentPose()); // FIX add the starting pose estimate? 
+        new Pose2d()); // FIX add the starting pose estimate? 
 
     private ChassisSpeeds robotSpeeds;
 
@@ -101,6 +101,7 @@ public class SwerveSubsytem extends SubsystemBase {
         }).start();
 
         initShuffleboard();
+
 
     }
 
@@ -157,7 +158,7 @@ public class SwerveSubsytem extends SubsystemBase {
         Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+       // poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
     }
