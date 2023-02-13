@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -24,6 +25,9 @@ public class Robot extends TimedRobot {
 
   public static PathPlannerTrajectory examplePath;
 
+  XboxController controller2 = new XboxController(2);
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -31,7 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //load Trajectories here
-    examplePath = PathPlanner.loadPath("Sigma", 4, 3);
+    examplePath = PathPlanner.loadPath("Forward", 1, 1);
 
     m_robotContainer = new RobotContainer();
   }
@@ -87,7 +91,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+
+  }
 
   @Override
   public void testInit() {
@@ -105,5 +112,6 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }

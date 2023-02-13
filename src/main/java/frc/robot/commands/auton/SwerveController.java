@@ -42,9 +42,9 @@ public final class SwerveController {
              swerveSubsystem::setModuleStates,
              false, // Module states consumer
              swerveSubsystem // Requires this drive subsystem
-         )
+         ),
           
-         //new InstantCommand(() -> swerveSubsystem.stopModules())
+         new InstantCommand(() -> swerveSubsystem.stopModules())
      ); 
   }
 }

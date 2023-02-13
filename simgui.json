@@ -1,11 +1,26 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [13]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/Shuffleboard/AUTON/Pose": "Field2d"
+      "/Shuffleboard/AUTON/Pose": "Field2d",
+      "/SmartDashboard/Elevator Sim": "Mechanism2d"
     },
     "windows": {
       "/Shuffleboard/AUTON/Pose": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Elevator Sim": {
         "window": {
           "visible": true
         }
@@ -13,6 +28,15 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "Transitory Values": {
+      "open": false
+    },
     "transitory": {
       "Shuffleboard": {
         "open": true

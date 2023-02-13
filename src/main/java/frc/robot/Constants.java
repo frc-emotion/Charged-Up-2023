@@ -47,6 +47,10 @@ public final class Constants {
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
         public static final double kPTurning = 0.3;
         public static final double kDTurning = 0;
+
+        public static final double drivekS = 0;
+        public static final double drivekV = 0;
+        public static final double drivekA = 0;
     }
 
     public static final class CameraConstants {
@@ -87,10 +91,10 @@ public final class Constants {
         public static final int kFrontRightTurningMotorPort = 12;
         public static final int kBackRightTurningMotorPort = 10;
 
-        public static final boolean kFrontLeftTurningEncoderReversed = false;
-        public static final boolean kBackLeftTurningEncoderReversed = false;
-        public static final boolean kFrontRightTurningEncoderReversed = false;
-        public static final boolean kBackRightTurningEncoderReversed = false;
+        public static final boolean kFrontLeftTurningEncoderReversed = true;
+        public static final boolean kBackLeftTurningEncoderReversed = true;
+        public static final boolean kFrontRightTurningEncoderReversed = true;
+        public static final boolean kBackRightTurningEncoderReversed = true;
 
         public static final boolean kFrontLeftDriveEncoderReversed = false;
         public static final boolean kBackLeftDriveEncoderReversed = false;
@@ -102,10 +106,10 @@ public final class Constants {
         public static final int kFrontRightDriveAbsoluteEncoderPort = 4;
         public static final int kBackRightDriveAbsoluteEncoderPort = 3;
 
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
-        public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
-        public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
-        public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
+        public static final boolean kBackLeftDriveAbsoluteEncoderReversed = false;
+        public static final boolean kFrontRightDriveAbsoluteEncoderReversed = false;
+        public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
 
         /**
@@ -165,9 +169,9 @@ public final class Constants {
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
     
         //Change based on testing/tune PID controllers
-        public static final double kPXController = 1.5;
+        public static final double kPXController = 3.1;
         public static final double kPYController = 1.5;
-        public static final double kPThetaController = 0.1;
+        public static final double kPThetaController = 0;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
                 new TrapezoidProfile.Constraints(

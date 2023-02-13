@@ -110,7 +110,7 @@ public class SwerveSubsytem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(-gyro.getAngle(), 360);
+        return Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -155,7 +155,7 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-        Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+      //  Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
        // poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
@@ -190,6 +190,7 @@ public class SwerveSubsytem extends SubsystemBase {
         fillList(backRight, backRightData);
 
         m_field = new Field2d();
+        
 
         TabManager.getInstance().addFieldWidget(TabManager.getInstance().accessTab(SubsystemTab.AUTON), BuiltInWidgets.kField, "Pose", m_field,
         new int[] { 0, 0 }, new int[] { 6, 4 });

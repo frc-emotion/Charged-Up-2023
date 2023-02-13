@@ -26,13 +26,13 @@ public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
-  public static Joystick arcadeStick = new Joystick(1);
-  public static Joystick arcadeStick2 = new Joystick(0);
+  //public static Joystick arcadeStick = new Joystick(1);
+  //public static Joystick arcadeStick2 = new Joystick(0);
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
     
-      new SwerveArcadeCommand(
+   /*    new SwerveArcadeCommand(
         swerveSubsytem, 
         () -> arcadeStick.getRawAxis(1),
         () ->  -arcadeStick.getRawAxis(0), 
@@ -40,17 +40,17 @@ public class RobotContainer {
         () -> !arcadeStick.getRawButton(3),
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
-
-    /*
+    */
+    
     new SwerveXboxCommand(
     swerveSubsytem, 
-    () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
-    () ->  -driverController.getRawAxis(OIConstants.kDriverXAxis), 
-    () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+    () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
+    () ->  driverController.getRawAxis(OIConstants.kDriverXAxis), 
+    () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
     () -> driverController.getRightBumper())
-    */
+    
     );
     configureButtonBindings();
   }
@@ -62,8 +62,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
     /*Depreciated */
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
