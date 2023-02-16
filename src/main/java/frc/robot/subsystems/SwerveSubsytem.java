@@ -24,6 +24,8 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.Pair;
 import java.util.Optional;
 
+import org.photonvision.PhotonCamera;
+
 /**
  * Main Swerve Subsytem class
  * Holds gyro and odometry methods
@@ -63,12 +65,14 @@ public class SwerveSubsytem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
             DriveConstants.kBackRightDriveAbsoluteEncoderPort,
+
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public PoseEstimator visionPoseEstimator;
+    private final PhotonCamera cam  = new PhotonCamera("lifecam"); 
+    private final PoseEstimator visionPoseEstimator = new PoseEstimator(cam); 
 
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
@@ -157,7 +161,9 @@ public class SwerveSubsytem extends SubsystemBase {
         Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+        if ((result.getFirst() != null) && (result.getSecond() != null)){
+            poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+        }
 
         m_field.setRobotPose(getCurrentPose());
     }

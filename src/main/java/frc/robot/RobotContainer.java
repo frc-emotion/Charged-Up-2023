@@ -17,7 +17,9 @@ import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
+import frc.robot.util.vision.AlignToTarget;
 import frc.robot.util.vision.PoseEstimator;
+import edu.wpi.first.wpilibj.GenericHID;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -32,13 +34,13 @@ public class RobotContainer {
   public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
 
-  private final PhotonCamera cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
+  private final PhotonCamera cam  = new PhotonCamera("lifecam"); 
   private final PoseEstimator poseEstimator = new PoseEstimator(cam); 
-
+  private final AlignToTarget alignToTarget = new AlignToTarget(cam, swerveSubsytem);
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
-    
+    /* 
       new SwerveArcadeCommand(
         swerveSubsytem, 
         () -> arcadeStick.getRawAxis(1),
@@ -47,8 +49,8 @@ public class RobotContainer {
         () -> !arcadeStick.getRawButton(3),
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
-
-    /*
+    */
+    
     new SwerveXboxCommand(
     swerveSubsytem, 
     () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
@@ -57,7 +59,6 @@ public class RobotContainer {
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
     () -> driverController.getRightBumper())
-    */
     );
     configureButtonBindings(); 
   }
@@ -69,14 +70,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
     /*Depreciated */
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
     //new JoystickButton(arcadeStick, 5).whenPressed(() -> swerveSubsytem.zeroHeading());
 
-    //FIX add button for align to target 
+        // While holding the x button, align to target
+        new JoystickButton(driverController, XboxController.Button.kX.value).whileTrue(alignToTarget);
 
   }
 

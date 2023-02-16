@@ -75,7 +75,7 @@ public class SwerveXboxCommand extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(robotSpeeds);
         swerveSubsytem.setModuleStates(moduleStates);
 
-        //System.out.println(swerveSubsytem.getCurrentPose());
+        System.out.println(swerveSubsytem.getCurrentPose());
     }
 
     @Override
