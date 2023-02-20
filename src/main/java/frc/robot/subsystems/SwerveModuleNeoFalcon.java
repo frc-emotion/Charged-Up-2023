@@ -92,7 +92,7 @@ public class SwerveModuleNeoFalcon {
     }
 
     public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(-getDrivePosition(), new Rotation2d(getTurningPosition()));
+        return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition()));
     }
 
     public void setReferenceAngle(double referenceAngleRadians){
@@ -149,7 +149,7 @@ public class SwerveModuleNeoFalcon {
 
 
     public SwerveModuleState getState(){
-        return new SwerveModuleState(-getDriveVelocity(), new Rotation2d(getTurningPosition()));
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
     }
 
     /**

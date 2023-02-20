@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //load Trajectories here
-    examplePath = PathPlanner.loadPath("Forward", 1, 1);
+    examplePath = PathPlanner.loadPath("Rotate", 1, 1);
 
     m_robotContainer = new RobotContainer();
   }

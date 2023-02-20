@@ -45,7 +45,7 @@ public class RobotContainer {
     new SwerveXboxCommand(
     swerveSubsytem, 
     () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
-    () ->  driverController.getRawAxis(OIConstants.kDriverXAxis), 
+    () ->  -driverController.getRawAxis(OIConstants.kDriverXAxis), 
     () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
