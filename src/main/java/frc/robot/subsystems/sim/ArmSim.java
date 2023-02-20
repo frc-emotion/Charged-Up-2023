@@ -22,7 +22,7 @@ import frc.robot.SimConstants;
  * Uses PWM SparkMax instead of CANSparkMax to simulate timesteps and voltages - (REV Physics sim is faulty)
  */
 
-public class ArmSim {
+public class ArmSim implements Simulatable {
 
     private final DCMotor m_armGearbox = DCMotor.getNEO(1);
     private final PIDController m_controller = new PIDController(SimConstants.ArmValues.kArmKp, 0,
@@ -63,6 +63,7 @@ public class ArmSim {
         return Units.radiansToDegrees(m_armSim.getAngleRads());
     }
 
+    @Override
     public void onInit() {
         m_encoder.setDistancePerPulse(SimConstants.ArmValues.kArmEncoderDistPerPulse);
 
@@ -74,6 +75,7 @@ public class ArmSim {
         }
     }
 
+    @Override
     public void simulate() {
         m_armSim.setInput(m_motor.get() * RobotController.getBatteryVoltage());
         m_armSim.update(0.020);
@@ -82,6 +84,7 @@ public class ArmSim {
                 BatterySim.calculateDefaultBatteryLoadedVoltage(m_armSim.getCurrentDrawAmps()));
     }
     
+    @Override
     public void run() {
         if (m_joystick.getRawButton(1)) {
             var pidOutput = m_controller.calculate(m_encoder.getDistance(),
@@ -94,6 +97,7 @@ public class ArmSim {
         }
     }
 
+    @Override
     public void disabledInit() {
         m_motor.set(0.0);
     }
