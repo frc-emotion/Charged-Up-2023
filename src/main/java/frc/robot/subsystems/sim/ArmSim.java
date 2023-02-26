@@ -34,14 +34,10 @@ public class ArmSim implements Simulatable {
 
     private final Joystick m_joystick;
 
-    // Simulation classes help us simulate what's going on, including gravity.
     private static final double m_armReduction = 50;
     private static final double m_armMass = Units.lbsToKilograms(9.0); // Kilograms
     private static final double m_armLength = Units.inchesToMeters(45);
 
-    // This arm sim represents an arm that can travel from -75 degrees (rotated down
-    // front)
-    // to 255 degrees (rotated down in the back).
     private final SingleJointedArmSim m_armSim = new SingleJointedArmSim(
             m_armGearbox,
             m_armReduction,
@@ -51,8 +47,9 @@ public class ArmSim implements Simulatable {
             Units.degreesToRadians(255),
             m_armMass,
             true,
-            VecBuilder.fill(SimConstants.ArmValues.kArmEncoderDistPerPulse) // Add noise with a std-dev of 1 tick
+            VecBuilder.fill(SimConstants.ArmValues.kArmEncoderDistPerPulse) 
     );
+
     private final EncoderSim m_encoderSim = new EncoderSim(m_encoder);
 
     public ArmSim(Joystick m_joystick) {
@@ -66,13 +63,6 @@ public class ArmSim implements Simulatable {
     @Override
     public void onInit() {
         m_encoder.setDistancePerPulse(SimConstants.ArmValues.kArmEncoderDistPerPulse);
-
-        if (!Preferences.containsKey(SimConstants.ArmValues.kArmPositionKey)) {
-            Preferences.setDouble(SimConstants.ArmValues.kArmPositionKey, SimConstants.ArmValues.armPositionDeg);
-        }
-        if (!Preferences.containsKey(SimConstants.ArmValues.kArmPKey)) {
-            Preferences.setDouble(SimConstants.ArmValues.kArmPKey, SimConstants.ArmValues.kArmKp);
-        }
     }
 
     @Override
