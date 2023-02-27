@@ -36,6 +36,7 @@ public class ElevatorSimulator implements Simulatable {
             SimConstants.ElevatorValues.kMaxElevatorHeight,
             true,
             VecBuilder.fill(0.01));
+            
     private final EncoderSim m_encoderSim = new EncoderSim(m_encoder);
 
     public ElevatorSimulator(Joystick m_joystick) {

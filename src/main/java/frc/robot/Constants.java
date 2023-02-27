@@ -179,11 +179,4 @@ public final class Constants {
                         kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
-
-    public static class SimConstants{
-
-        
-    }
-
-
 }

@@ -8,17 +8,20 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.MacePoint;
 import frc.robot.subsystems.MaceTrajectory;
 import frc.robot.subsystems.MaceTrajectoryGenerator;
 
-public class MaceSim implements Simulatable {
+public class MaceSim extends SubsystemBase{
 
     private final ArmSim aSim;
     private final ElevatorSimulator eSim;
 
+    
     private final Mechanism2d m_mech2d = new Mechanism2d(60, 60);
     private final MechanismRoot2d m_elevator = m_mech2d.getRoot("Elevator", 30, 30);
 
@@ -29,7 +32,7 @@ public class MaceSim implements Simulatable {
     public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
         this.aSim = aSim;
         this.eSim = eSim;
-
+ 
         m_elevatorMech2d = m_elevator.append(
             new MechanismLigament2d(
                 "Elevator", Units.metersToInches(eSim.getPosition()), 90));
@@ -44,38 +47,27 @@ public class MaceSim implements Simulatable {
                 6,
                 new Color8Bit(Color.kYellow)));
 
+        aSim.onInit();
+        eSim.onInit();
+        SmartDashboard.putData("Arm Sim", m_mech2d);
+
     }
 
     @Override
-    public void onInit() {
-        // TODO Auto-generated method stub
+    public void periodic() {
+        aSim.run();
+        eSim.run();
+
         
     }
 
     @Override
-    public void run() {
-        // TODO Auto-generated method stub
-        
+    public void simulationPeriodic() {
+        aSim.simulate();
+        eSim.simulate();
+        m_arm.setAngle(aSim.getArmAngle() - 90);
+        m_elevatorMech2d.setLength(eSim.getPosition());
     }
 
-    @Override
-    public void simulate() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void disabledInit() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    private void initShuffleBoard(){
-
-    }
-
-    private void updateShuffleBoard(){
-
-    }
     
 }

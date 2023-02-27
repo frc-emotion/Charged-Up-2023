@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
  */
 public class TabManager {
     private static TabManager instance;
-    private static String[] tabNames = { "DRIVETRAIN", "SHOOTER", "INDEXER", "CLIMB", "VISION", "AUTON"};
+    private static String[] tabNames = { "DRIVETRAIN", "INTAKE", "INDEXER", "MACE", "VISION", "AUTON"};
 
     public enum SubsystemTab {
-        DRIVETRAIN, SHOOTER, INDEXER,
-        CLIMB, VISION, AUTON
+        DRIVETRAIN, INTAKE, INDEXER,
+        MACE, VISION, AUTON
     }
 
     public TabManager() {
@@ -41,12 +41,12 @@ public class TabManager {
         switch (tabs) {
             case DRIVETRAIN:
                 return Shuffleboard.getTab("DRIVETRAIN");
-            case SHOOTER:
-                return Shuffleboard.getTab("SHOOTER");
+            case INTAKE:
+                return Shuffleboard.getTab("INTAKE");
             case INDEXER:
                 return Shuffleboard.getTab("INDEXER");
-            case CLIMB:
-                return Shuffleboard.getTab("CLIMB");
+            case MACE:
+                return Shuffleboard.getTab("MACE");
             case VISION:
                 return Shuffleboard.getTab("VISION");
             case AUTON:

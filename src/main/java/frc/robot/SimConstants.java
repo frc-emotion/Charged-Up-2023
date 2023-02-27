@@ -17,7 +17,7 @@ public class SimConstants {
     }
 
     public static final class ElevatorValues{
-        public static final int kMotorPort = 0;
+        public static final int kMotorPort = 1;
         public static final int kEncoderAChannel = 0;
         public static final int kEncoderBChannel = 1;
         public static final double kElevatorKp = 8.0;
@@ -33,10 +33,10 @@ public class SimConstants {
     }
     
     public static final class ArmValues {
-        public static final int kMotorPort = 1;
+        public static final int kMotorPort = 2;
         public static final int kEncoderAChannel = 2;
         public static final int kEncoderBChannel = 3;
-        public static final int kJoystickPort = 0;
+        public static final int kJoystickPort = 3;
     
         // The P gain for the PID controller that drives this arm.
         public static double kArmKp = 100;
