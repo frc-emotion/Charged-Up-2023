@@ -51,6 +51,11 @@ public class LimeLightTurnStrafe extends CommandBase{
         tx = limelight.getEntry("tx");
         ty = limelight.getEntry("ty");
 
+        System.out.println("x distance: " + limelight.getXDist(tx, ty, heading));
+        System.out.println("y distance: " + limelight.getYDist(tx, ty, heading));
+
+        /* 
+
         xSpeed = vxController.calculate(limelight.getXDist(tx, ty, heading));
         ySpeed = vyController.calculate(limelight.getYDist(tx, ty, heading));
         rotSpeed = angController.calculate(heading);
@@ -61,6 +66,8 @@ public class LimeLightTurnStrafe extends CommandBase{
         swerveSubsystem.setChassisSpeeds(strafeSpeeds);
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(strafeSpeeds);
         swerveSubsystem.setModuleStates(moduleStates);
+
+        */
 
     }
 

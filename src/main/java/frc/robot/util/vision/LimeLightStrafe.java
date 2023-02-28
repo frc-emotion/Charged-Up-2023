@@ -39,10 +39,9 @@ public class LimeLightStrafe extends CommandBase{
     public void initialize(){
         vxController.setSetpoint(0);
         vyController.setSetpoint(0);
-        angController.setSetpoint(0); //not sure about this setpoint
+        angController.setSetpoint(0); 
         angController.enableContinuousInput(-Math.PI, Math.PI);
 
-        //not sure how big tolerances are supposed to be
     }
 
     @Override
@@ -52,23 +51,25 @@ public class LimeLightStrafe extends CommandBase{
         ty = limelight.getEntry("ty");
         heading = swerveSubsystem.getCurrentPose().getRotation().getRadians();
 
-        xSpeed = vxController.calculate(limelight.getLateral(tx, ty));
-        ySpeed = vyController.calculate(limelight.getDistance(tx, ty));
+        xSpeed = vxController.calculate(limelight.getDistance(tx, ty));
+        ySpeed = vyController.calculate(limelight.getLateral(tx, ty));
         rotSpeed = angController.calculate(heading);
 
-        print();
 
         turnSpeeds = new ChassisSpeeds(0, 0, rotSpeed);
         strafeSpeeds = new ChassisSpeeds(xSpeed, ySpeed, 0);
         
 
         if(Math.abs(heading) > Units.degreesToRadians(1)){
+            System.out.println("heading: " + heading);
+            System.out.println("rotSpeed: " + rotSpeed);
             swerveSubsystem.setChassisSpeeds(turnSpeeds);
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(turnSpeeds);
             swerveSubsystem.setModuleStates(moduleStates);
 
         }
         else {
+            print();
             swerveSubsystem.setChassisSpeeds(strafeSpeeds);
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(strafeSpeeds);
             swerveSubsystem.setModuleStates(moduleStates);
@@ -91,8 +92,6 @@ public class LimeLightStrafe extends CommandBase{
         System.out.println("hypotenuse: " + limelight.getHypotenuse(limelight.getEntry("ty")));
         System.out.println("x distance: " + limelight.getLateral(limelight.getEntry("tx"), limelight.getEntry("ty")));
         System.out.println("y distance: " + limelight.getDistance(limelight.getEntry("tx"), limelight.getEntry("ty")));
-        System.out.println("heading: " + heading);
-        System.out.println("rotSpeed: " + rotSpeed);
         System.out.println("xSpeed: " + xSpeed);
         System.out.println("ySpeed: " + ySpeed);
         System.out.println("------------");

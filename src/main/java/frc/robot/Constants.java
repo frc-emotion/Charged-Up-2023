@@ -162,6 +162,35 @@ public final class Constants {
         public static final double kDDrive = 0.5;
     }
 
+    public static class IntakeConstants{
+
+        //CHANGE ALL
+        public static final int INTAKE_MOTOR_PORT = 0;
+        public static final int PIVOT_MOTOR_PORT = 1;
+
+        public static final double MAX_INTAKE_VELOCITY = 0.0;
+        public static final double MAX_INTAKE_ACCELERATION = 0.0;
+        public static final int MAX_CURRENT = 45;
+        public static final double CURRENT_SPIKE_THRESHOLD = 30;
+
+        public static final double INTAKE_SPEED = 0.5;
+
+        public static final double kS = 0.0;
+        public static final double kG = 0.0;
+        public static final double kV = 0.0; 
+
+        public static final double kPPivot = 1.5;
+        public static final double kIPivot = 0.0;
+        public static final double kDPivot = 0.5;
+
+        public static final double INTAKE_UP_POSITION = 0.0;
+        public static final double INTAKE_DOWN_POSITION = 5.0;
+    }
+
+    public static class IndexerConstants{
+        public static final int INDEXER_MOTOR_PORT = 2;
+    }
+
     public static class AutoConstants {
 
         //Chane all values based on testing
