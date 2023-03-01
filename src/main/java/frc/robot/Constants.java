@@ -87,6 +87,10 @@ public final class Constants {
         
     }
 
+    public static final class MotorPorts {
+        public static final int CLAW = 0; 
+
+    }
 
     public static final class DriveConstants {
 

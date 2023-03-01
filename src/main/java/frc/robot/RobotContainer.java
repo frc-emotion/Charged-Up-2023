@@ -16,6 +16,7 @@ import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 
 /**
@@ -27,6 +28,7 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static  XboxController operatorController = new XboxController(1);
@@ -36,7 +38,7 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
     
-      new SwerveArcadeCommand(
+   /*   new SwerveArcadeCommand(
         swerveSubsytem, 
         () -> arcadeStick.getRawAxis(1),
         () ->  -arcadeStick.getRawAxis(0), 
@@ -44,9 +46,9 @@ public class RobotContainer {
         () -> !arcadeStick.getRawButton(3),
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
+    */
 
     
-    /*
     new SwerveXboxCommand(
     swerveSubsytem, 
     () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
@@ -55,7 +57,7 @@ public class RobotContainer {
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
     () -> driverController.getRightBumper())
-    */
+  
     );
 
     //armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
@@ -64,6 +66,10 @@ public class RobotContainer {
         //armSubsystem, 
         //() -> arcadestick2.getRawAxis(1))
    //);
+
+
+   // clawSubsystem.setDefaultCommand() FIX 
+   ;
 
     configureButtonBindings();
     
@@ -76,8 +82,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+
+    //new JoystickButton(driverController, XboxController.Button.kA).onTrue(command); FIX 
+    
 
     /*Depreciated */
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
