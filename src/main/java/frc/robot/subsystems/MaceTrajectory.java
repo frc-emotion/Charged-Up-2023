@@ -86,4 +86,12 @@ public class MaceTrajectory extends Trajectory {
     public List<State> allStates() {
         return mTrajectory.getStates();
     }
+
+    public boolean isActive(double time){
+        if (time <= totalTime()){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.sim;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.SimConstants;
+import frc.robot.SimConstants.ArmValues;
 
 
 /**
@@ -38,6 +40,8 @@ public class ArmSim implements Simulatable {
     private static final double m_armMass = Units.lbsToKilograms(9.0); // Kilograms
     private static final double m_armLength = Units.inchesToMeters(45);
 
+    private final ArmFeedforward armFeedforward = new ArmFeedforward(ArmValues.kS, ArmValues.kG, ArmValues.kV, ArmValues.kA);
+
     private final SingleJointedArmSim m_armSim = new SingleJointedArmSim(
             m_armGearbox,
             m_armReduction,
@@ -59,6 +63,19 @@ public class ArmSim implements Simulatable {
     public double getArmAngle() {
         return Units.radiansToDegrees(m_armSim.getAngleRads());
     }
+
+    public void setArmVoltage(double volts){
+        m_motor.setVoltage(volts);
+    }
+
+    public double getPIDOutputVolts(double setpoint){
+       return m_controller.calculate(m_encoder.getDistance(), setpoint);
+    }
+
+    public double getFeedForwardOutputVolts(double positionRadians, double velocityRadPerSec, double accelRadPerSecSquared){
+        return armFeedforward.calculate(positionRadians, velocityRadPerSec, accelRadPerSecSquared);
+    }
+
 
     @Override
     public void onInit() {

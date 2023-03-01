@@ -14,7 +14,6 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
-import frc.robot.commands.sim_command.MaceCommand;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.subsystems.sim.ArmSim;
 import frc.robot.subsystems.sim.ElevatorSimulator;
@@ -30,14 +29,17 @@ public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+
   //public static Joystick arcadeStick = new Joystick(1);
   //public static Joystick arcadeStick2 = new Joystick(0);
 
 
+  public static Joystick simJoystick = new Joystick(3);
+
 
   //sim
-  private final ElevatorSimulator eSimulator = new ElevatorSimulator(new Joystick(3));
-  private final ArmSim aSim = new ArmSim(new Joystick(3));
+  private final ElevatorSimulator eSimulator = new ElevatorSimulator(simJoystick);
+  private final ArmSim aSim = new ArmSim(simJoystick);
   private final MaceSim maceSim = new MaceSim(aSim, eSimulator);
 
   public RobotContainer() {
@@ -81,9 +83,6 @@ public class RobotContainer {
     //new JoystickButton(arcadeStick, 5).whenPressed(() -> swerveSubsytem.zeroHeading());
   }
 
-  public Command getSimCommand(){
-    return new MaceCommand(maceSim);
-  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

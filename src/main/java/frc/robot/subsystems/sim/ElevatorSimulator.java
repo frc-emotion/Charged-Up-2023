@@ -1,6 +1,7 @@
 package frc.robot.subsystems.sim;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import frc.robot.SimConstants;
+import frc.robot.SimConstants.ElevatorValues;
 
 public class ElevatorSimulator implements Simulatable {
 
@@ -36,12 +38,29 @@ public class ElevatorSimulator implements Simulatable {
             SimConstants.ElevatorValues.kMaxElevatorHeight,
             true,
             VecBuilder.fill(0.01));
-            
+
     private final EncoderSim m_encoderSim = new EncoderSim(m_encoder);
+
+    private final ElevatorFeedforward elevatorFeedforward = new ElevatorFeedforward(ElevatorValues.kS, ElevatorValues.kG, ElevatorValues.kG, ElevatorValues.kA);
 
     public ElevatorSimulator(Joystick m_joystick) {
         this.m_joystick = m_joystick;
     }
+
+
+
+    public void setElevatorVoltage(double volts){
+        m_motor.setVoltage(volts);
+    }
+
+    public double getPIDOutputVolts(double setpoint){
+        return m_controller.calculate(m_encoder.getDistance(), setpoint);
+     }
+ 
+     public double getFeedForwardOutputVolts(double velocityMPS, double accelMeterPerSecSquared){
+         return elevatorFeedforward.calculate(velocityMPS, accelMeterPerSecSquared);
+     }
+
 
     public void onInit() {
         m_encoder.setDistancePerPulse(SimConstants.ElevatorValues.kElevatorEncoderDistPerPulse);

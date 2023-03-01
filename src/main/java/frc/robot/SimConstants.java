@@ -1,5 +1,9 @@
 package frc.robot;
 
+import org.apache.commons.io.input.buffer.CircularBufferInputStream;
+
+import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
+
 import edu.wpi.first.math.util.Units;
 
 public class SimConstants {
@@ -30,6 +34,11 @@ public class SimConstants {
         // distance per pulse = (distance per revolution) / (pulses per revolution)
         // = (Pi * D) / ppr
         public static final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
+
+        public static double kS = 0.5;
+        public static double kG = 1.29;
+        public static double kA = 3.84;
+        public static double kV = 0.21;
     }
     
     public static final class ArmValues {
@@ -49,7 +58,28 @@ public class SimConstants {
         //  = (2 * PI rads) / (4096 pulses)
         public static final double kArmEncoderDistPerPulse = 2.0 * Math.PI / 4096;
         public static final double kArmDistPerRot = 2 * Math.PI;
-      
 
+        public static double kS = 0.2;
+        public static double kG = 1.06;
+        public static double kA = 0.97;
+        public static double kV = 0.08;
+    
     }
+
+    //1 rot = 2 * pi * r  mete
+
+    private double metertoRot(double meter){
+        return meter ; 
+    }
+
+
+    public static double armMeterstoRadians(double meters){
+        return meters;
+    }
+
+    public static double armRadToMeter(double rad){
+        return (1 / 50)  * (Units.radiansToRotations(rad)) * 2 * Math.PI * Units.inchesToMeters(45);
+    }
+
+
 }

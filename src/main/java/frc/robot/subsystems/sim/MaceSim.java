@@ -1,10 +1,14 @@
 package frc.robot.subsystems.sim;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.opencv.aruco.EstimateParameters;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -12,9 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.MacePoint;
 import frc.robot.subsystems.MaceTrajectory;
 import frc.robot.subsystems.MaceTrajectoryGenerator;
+import frc.robot.subsystems.StoredTrajectories;
 
 public class MaceSim extends SubsystemBase{
 
@@ -27,6 +33,12 @@ public class MaceSim extends SubsystemBase{
 
     private final MechanismLigament2d m_elevatorMech2d;
     private final MechanismLigament2d m_arm;
+
+
+    private Timer trajTimer = new Timer();
+
+
+    private MaceTrajectory currentTraj = null;
 
 
     public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
@@ -49,7 +61,23 @@ public class MaceSim extends SubsystemBase{
 
         aSim.onInit();
         eSim.onInit();
+
         SmartDashboard.putData("Arm Sim", m_mech2d);
+        
+    }
+
+    private void runTrajectory(){
+        trajTimer.reset();
+
+        if (RobotContainer.simJoystick.getRawButtonPressed(3) && currentTraj == null){
+            trajTimer.start();
+            currentTraj = StoredTrajectories.TEST_TRAJECTORY;
+            List<Double> values = currentTraj.sampleMace(trajTimer.get());
+        }
+
+        if (!currentTraj.isActive(trajTimer.get()) && currentTraj != null){
+            currentTraj = null;
+        }
 
     }
 
@@ -57,8 +85,6 @@ public class MaceSim extends SubsystemBase{
     public void periodic() {
         aSim.run();
         eSim.run();
-
-        
     }
 
     @Override

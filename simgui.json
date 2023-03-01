@@ -31,11 +31,6 @@
       "/SmartDashboard/PPSwerveControllerCommand_field": "Field2d"
     },
     "windows": {
-      "/SmartDashboard/Arm Sim": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/PPSwerveControllerCommand_field": {
         "window": {
           "visible": true
