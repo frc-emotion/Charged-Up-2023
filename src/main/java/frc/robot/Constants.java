@@ -22,6 +22,7 @@ public final class Constants {
     //Add all Driver/Teleop Controller here
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
 
         //Change to match driver button map 
         public static final int kDriverYAxis = 1;
@@ -32,6 +33,10 @@ public final class Constants {
         public static final int kDriverZeroHeadingButtonIdx = XboxController.Button.kB.value;
         public static final int kDriverSlowButtonIdx = XboxController.Button.kLeftBumper.value;
         public static final int kDriverTurboButtonIdx = XboxController.Button.kRightBumper.value;
+
+        //change to match operator button map 
+        public static final int kOperatorClawButtonIdx = XboxController.Button.kA.value;
+
 
         public static final double kDeadband = 0.4;
     }
@@ -93,10 +98,16 @@ public final class Constants {
         
     }
 
-    public static final class MotorPorts {
+    public static class ClawConstants {
+
         public static final int CLAW = 0; 
 
+        //test to get correct values 
+        public static final double closedClawCurrentThreshold = 1; 
+        public static final double clawNormalSpeed = 1; 
+
     }
+
 
     public static final class DriveConstants {
 

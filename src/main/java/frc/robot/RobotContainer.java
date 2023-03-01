@@ -18,6 +18,7 @@ import frc.robot.commands.LevelChargeStation;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.ClawCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
@@ -38,7 +39,7 @@ public class RobotContainer {
   private final ClawSubsystem clawSubsystem = new ClawSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
-  public static XboxController operatorController = new XboxController(1);
+  public static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   //public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
@@ -85,8 +86,12 @@ public class RobotContainer {
    //);
 
 
-   // clawSubsystem.setDefaultCommand() FIX 
-   ;
+   clawSubsystem.setDefaultCommand(
+    new ClawCommand(
+    clawSubsystem,
+    () -> operatorController.getRawButton(OIConstants.kOperatorClawButtonIdx))
+    ); 
+   
 
     configureButtonBindings();
     
