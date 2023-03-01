@@ -72,13 +72,3 @@ public class Elevator {
     
 }   
 
-/*have a profiled pid controller or trapezoidal
-use that with feed forwad
-bind to button in command
-    * 
-set position/velocity conversion factor(sparkmax) to convert to meters
- * 
- */
-
- //how to import timeofflight
- //what is the conversion that has to be calculated(i wrote that terribly in my notes)
