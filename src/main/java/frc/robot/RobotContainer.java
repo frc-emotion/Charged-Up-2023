@@ -11,9 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 
 /**
@@ -25,7 +27,9 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static  XboxController operatorController = new XboxController(1);
   public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
 
@@ -41,6 +45,7 @@ public class RobotContainer {
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
 
+    
     /*
     new SwerveXboxCommand(
     swerveSubsytem, 
@@ -52,7 +57,16 @@ public class RobotContainer {
     () -> driverController.getRightBumper())
     */
     );
+
+    //armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
+
+      //new ManualArmCommand(
+        //armSubsystem, 
+        //() -> arcadestick2.getRawAxis(1))
+   //);
+
     configureButtonBindings();
+    
   }
 
   /**
