@@ -68,6 +68,35 @@ public final class Constants {
         public static final double MAX_ROTATE_ACCELERATION = 3; //FIX 
     }
 
+    public static final class ArmConstants {
+        
+        public static final int armMotorPort = 100;
+        public static final int absoluteEncoderPort = 3;
+
+        public static final double ARM_SPEED = 0.5;
+        public static final double TOP_HEIGHT = 7.0;
+        public static final double MIDDLE_HEIGHT = 4.0;
+        public static final double LOW_HEIGHT = 1.0;
+
+        // For Feedfoward
+        public static final double armKS = 3;
+        public static final double armKG = 4;
+        public static final double armKV = 5;
+
+        // For PID controller
+        public static final double armKP = 1;
+        public static final double armKD = 0;
+        public static final double armKI = 0;
+        public static final double MAX_ARM_VELOCITY = 1.0;
+        public static final double MAX_ARM_ACCELERATION = 2.0;
+
+        
+    }
+
+    public static final class MotorPorts {
+        public static final int CLAW = 0; 
+
+    }
 
     public static final class DriveConstants {
 

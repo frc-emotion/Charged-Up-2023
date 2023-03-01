@@ -82,8 +82,8 @@ public class SwerveSubsytem extends SubsystemBase {
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), // Rotation and Pose are 0 because auto sets them to a different value anyway. 
         modulePositions, 
-        new Pose2d()); 
-
+        new Pose2d()); // FIX add the starting pose estimate? 
+    
     private ChassisSpeeds robotSpeeds;
 
     private ShuffleboardLayout frontLeftData;
@@ -91,6 +91,7 @@ public class SwerveSubsytem extends SubsystemBase {
     private ShuffleboardLayout backLeftData;
     private ShuffleboardLayout backRightData;
     private Field2d m_field;
+}
 
     public SwerveSubsytem() {
         new Thread(() -> {

@@ -15,9 +15,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LevelChargeStation;
+import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.util.vision.PoseEstimator;
 import com.kauailabs.navx.frc.AHRS;
@@ -32,9 +35,12 @@ import com.kauailabs.navx.frc.AHRS;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static XboxController operatorController = new XboxController(1);
   //public static Joystick arcadeStick = new Joystick(1);
+  public static Joystick arcadeStick = new Joystick(1);
   public static Joystick arcadeStick2 = new Joystick(0);
   public static AHRS gyro = new AHRS();
   private final PhotonCamera cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
@@ -45,6 +51,7 @@ public class RobotContainer {
     swerveSubsytem.setDefaultCommand(
     
      /* new SwerveArcadeCommand(
+   /*   new SwerveArcadeCommand(
         swerveSubsytem, 
         () -> arcadeStick.getRawAxis(1),
         () ->  -arcadeStick.getRawAxis(0), 
@@ -53,6 +60,8 @@ public class RobotContainer {
         () -> arcadeStick.getRawButton(1),
         () -> arcadeStick.getRawButton(2))
 `/* */
+    
+
     
     new SwerveXboxCommand(
     swerveSubsytem, 
@@ -65,6 +74,22 @@ public class RobotContainer {
     
     );
     configureButtonBindings(); 
+  
+
+
+    //armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
+
+      //new ManualArmCommand(
+        //armSubsystem, 
+        //() -> arcadestick2.getRawAxis(1))
+   //);
+
+
+   // clawSubsystem.setDefaultCommand() FIX 
+   ;
+
+    configureButtonBindings();
+    
   }
 
   /**
@@ -79,6 +104,10 @@ public class RobotContainer {
 
 
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+    new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+
+    //new JoystickButton(driverController, XboxController.Button.kA).onTrue(command); FIX 
+    
 
     /*Depreciated */
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
