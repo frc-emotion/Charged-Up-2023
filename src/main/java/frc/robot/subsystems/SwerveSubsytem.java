@@ -59,7 +59,7 @@ public class SwerveSubsytem extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
     private final SwerveModuleNeoFalcon backRight = new SwerveModuleNeoFalcon(
-            DriveConstants.kBackRightDriveMotorPort,
+            DriveConstants.kBackRightDriveMotorPort, 
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
@@ -128,9 +128,6 @@ public class SwerveSubsytem extends SubsystemBase {
         return Units.degreesToRadians((gyro.getRoll()));
     }
 
-    public double getRoll(){
-        return Units.degreesToRadians((gyro.getRoll()));
-    }
 
     public double getAlignmentHeading(){
         return Units.degreesToRadians(gyro.getCompassHeading()); // need to find the difference between North and the direction of the Charge Station 

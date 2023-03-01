@@ -200,6 +200,22 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
     }
+    public static final class ElevatorConstants{
+        //constants for levels may vary
+        public static final double MINLEVEL = 1;
+        public static final double LOWLEVEL = 2;
+        public static final double MIDDLELEVEL = 7;
+        public static final double HIGHLEVEL = 12;
+        public static final double ELEVATORMOTORSPEED = 10;
+        public static final double KP = 0;
+        public static final double KD = 1;
+        public static final double KI = 1;
+        public static final double PIDVALUE = 0.5;
+        public static final int CANID = 0;
+        public static final double FACTOR = 1 / 39.37;
+
+
+    }
 
 
 

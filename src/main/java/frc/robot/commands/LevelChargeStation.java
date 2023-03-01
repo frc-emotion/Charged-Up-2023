@@ -43,29 +43,23 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public void execute() {
-<<<<<<< HEAD
         double alpha = swerve.getPitch(); // Returns angle measure from -pi to pi
         //double beta = swerve.getRoll();
         var robotPose2d = swerve.getCurrentPose();
         var ySpeed = 0.0;
         //var xSpeed = 0.0;
-=======
         var stationHeadingAngle = swerve.getAlignmentHeading() - DriveConstants.REFERENCE_HEADING;
         double error1 = (swerve.getPitch() * Math.cos(stationHeadingAngle)) + (swerve.getRoll() * Math.sin(stationHeadingAngle)); // Returns angle measure from -180 to 180 ( Might need to change to a - instead of a + depending on if I interpreted roll correctly)
         var levelSpeed = 0.0;
->>>>>>> 861dc7bf4156bd82ac18aaeb06c804899bdedeaa
         
         //Checks to see if the Robot is on the Charge Station and tilted 
         if (Math.abs(error1) > DriveConstants.THRESHOLD || inControl){
             if (!inControl){
                 inControl = true;
             }
-<<<<<<< HEAD
             ySpeed = angleController.calculate(-alpha);
                      
-=======
             levelSpeed = angleController.calculate(error1);
->>>>>>> 861dc7bf4156bd82ac18aaeb06c804899bdedeaa
         }
 
         ChassisSpeeds speeds = new ChassisSpeeds((levelSpeed * Math.cos(stationHeadingAngle)), (levelSpeed * Math.sin(stationHeadingAngle)), 0);
