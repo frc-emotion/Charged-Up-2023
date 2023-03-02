@@ -36,6 +36,7 @@ public final class Constants {
 
         //change to match operator button map 
         public static final int kOperatorClawButtonIdx = XboxController.Button.kA.value;
+        public static final int kOperatorArmAxis = XboxController.Axis.kRightY.value;
 
 
         public static final double kDeadband = 0.4;

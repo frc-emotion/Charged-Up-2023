@@ -78,12 +78,12 @@ public class RobotContainer {
   
 
 
-    //armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
+    armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
 
-      //new ManualArmCommand(
-        //armSubsystem, 
-        //() -> arcadestick2.getRawAxis(1))
-   //);
+    new ManualArmCommand(
+        armSubsystem, 
+        () -> operatorController.getRawAxis(OIConstants.kOperatorArmAxis))
+   );
 
 
    clawSubsystem.setDefaultCommand(
