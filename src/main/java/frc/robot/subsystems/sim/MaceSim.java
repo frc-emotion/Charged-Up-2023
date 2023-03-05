@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.SimConstants;
 import frc.robot.subsystems.MacePoint;
 import frc.robot.subsystems.MaceTrajectory;
 import frc.robot.subsystems.MaceTrajectoryGenerator;
@@ -63,6 +64,8 @@ public class MaceSim extends SubsystemBase{
         eSim.onInit();
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
+        SmartDashboard.putNumber("Angle", aSim.getArmAngle());
+        SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
         
     }
 
@@ -73,18 +76,31 @@ public class MaceSim extends SubsystemBase{
             trajTimer.start();
             currentTraj = StoredTrajectories.TEST_TRAJECTORY;
             List<Double> values = currentTraj.sampleMace(trajTimer.get());
+
+            aSim.setArmVoltage(10);
+         //   aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
+         //       SimConstants.armMPSStoRadSS(values.get(2))) + aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+
+
+            eSim.setElevatorVoltage(eSim.getFeedForwardOutputVolts(values.get(4), values.get(5)) + eSim.getPIDOutputVolts(values.get(3)));
         }
 
-        if (!currentTraj.isActive(trajTimer.get()) && currentTraj != null){
-            currentTraj = null;
+        if (currentTraj != null) {
+            if (!currentTraj.isActive(trajTimer.get())){
+                currentTraj = null;
+            }
         }
+
+
 
     }
 
     @Override
     public void periodic() {
-        aSim.run();
-        eSim.run();
+        runTrajectory();
+
+        SmartDashboard.putNumber("Angle", aSim.getArmAngle());
+        SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
     }
 
     @Override
@@ -93,6 +109,9 @@ public class MaceSim extends SubsystemBase{
         eSim.simulate();
         m_arm.setAngle(aSim.getArmAngle() - 90);
         m_elevatorMech2d.setLength(eSim.getPosition());
+
+        SmartDashboard.putNumber("Angle", aSim.getArmAngle());
+        SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
     }
 
     
