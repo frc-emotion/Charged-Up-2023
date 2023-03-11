@@ -85,6 +85,7 @@ public class RobotContainer {
         () -> operatorController.getRawAxis(OIConstants.kOperatorArmAxis))
    );
 
+   configureButtonBindings();
 
    clawSubsystem.setDefaultCommand(
     new ClawCommand(

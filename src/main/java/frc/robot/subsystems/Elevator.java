@@ -86,10 +86,10 @@ public class Elevator extends SubsystemBase{
 
     
     //converts inches to meters
-    public void convertToMeters(){
-        elevatorMotor.getEncoder().setPositionConversionFactor(0.001 * Constants.ElevatorConstants.GEARRATIO);
-        elevatorMotor.getEncoder().setVelocityConversionFactor((Math.PI / 30) * Constants.ElevatorConstants.SPROCKETRADIUS);
-    }
+    //public void convertToMeters(){
+        //elevatorMotor.getEncoder().setPositionConversionFactor(0.001 * Constants.ElevatorConstants.GEARRATIO);
+        //elevatorMotor.getEncoder().setVelocityConversionFactor((Math.PI / 30) * Constants.ElevatorConstants.SPROCKETRADIUS);
+    //}
 
     public void stopElevator(){
         elevatorMotor.stopMotor();

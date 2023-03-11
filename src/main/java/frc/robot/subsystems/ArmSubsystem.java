@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 import com.revrobotics.CANSparkMax;
@@ -12,8 +13,8 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 
@@ -22,9 +23,8 @@ public class ArmSubsystem extends SubsystemBase{
     private final CANSparkMax armMotor;
     private final DutyCycleEncoder absoluteEncoder;
     private final ArmFeedforward armFeedForward;
-    private final TrapezoidProfile.Constraints armConstraints;
-    private final SparkMaxPIDController sparkArmController; // Not entirely sure which one we want to be using right now so will use them based on the ways I'm seeing other people use them
-    private final ProfiledPIDController profiledArmController;
+    private final PIDController armController;
+    private double pidVal, feedForwardVal;
     
 
     
@@ -45,27 +45,34 @@ public class ArmSubsystem extends SubsystemBase{
 
         absoluteEncoder = new DutyCycleEncoder(ArmConstants.absoluteEncoderPort);
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKV, ArmConstants.armKG);
-        
-        armConstraints = new TrapezoidProfile.Constraints(ArmConstants.MAX_ARM_VELOCITY, ArmConstants.MAX_ARM_ACCELERATION); // change this
-        profiledArmController = new ProfiledPIDController(ArmConstants.armKP, ArmConstants.armKD, ArmConstants.armKI, armConstraints); // change this
-        sparkArmController = armMotor.getPIDController();
-
+        armController = new PIDController(ArmConstants.armKP, ArmConstants.armKD, ArmConstants.armKI);
     }
-    
-    //public void setArmHeightP(){ // Utilizes ProfiledPIDController
-        //double PIDValue = profiledArmController.calculate(getAbsolutePosition());
-        //double FFValue = armFeedForward.calculate(getAbsolutePosition(), ArmConstants.MAX_ARM_VELOCITY); // Don't think it will work if the Absolute Encoder's original position is assumed to be perpedicular to the floor
-    //}
 
-    public void setArmHeightS(){ // Utilizes SparkMaxPIDController
-        if (RobotContainer.operatorController.getAButtonPressed()){
-            sparkArmController.setReference(ArmConstants.TOP_HEIGHT, ControlType.kPosition, 5, armFeedForward.calculate(getAbsolutePosition(), ArmConstants.ARM_SPEED));
+    public void setArmAngle(){
+
+        if(RobotContainer.operatorController.getRightStickButtonPressed()){
+            armController.setSetpoint(ArmConstants.TOP_HEIGHT);
+            pidVal = armController.calculate(getAbsolutePosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
         }
-        if (RobotContainer.operatorController.getBButtonPressed()){
-            sparkArmController.setReference(ArmConstants.MIDDLE_HEIGHT, ControlType.kPosition, 5, armFeedForward.calculate(getAbsolutePosition(), ArmConstants.ARM_SPEED));
+        else if(RobotContainer.operatorController.getRightBumperPressed()){
+            armController.setSetpoint(ArmConstants.MIDDLE_HEIGHT);
+            pidVal = armController.calculate(getAbsolutePosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.MIDDLE_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
         }
-        if (RobotContainer.operatorController.getXButtonPressed()){
-            sparkArmController.setReference(ArmConstants.LOW_HEIGHT, ControlType.kPosition, 5, armFeedForward.calculate(getAbsolutePosition(), ArmConstants.ARM_SPEED));
+        else if(RobotContainer.operatorController.getLeftBumperPressed()){
+            armController.setSetpoint(ArmConstants.LOW_HEIGHT);
+            pidVal = armController.calculate(getAbsolutePosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.LOW_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
         }
     }
     
@@ -77,11 +84,32 @@ public class ArmSubsystem extends SubsystemBase{
         armMotor.stopMotor();
     }
 
+    //converts inches to meters
+    public void convertToMeters(){
+        armMotor.getEncoder().setPositionConversionFactor(0.001 * ArmConstants.ARM_GEAR_RATIO);
+        armMotor.getEncoder().setVelocityConversionFactor((Math.PI / 30) * ArmConstants.ARM_SPROCKET_RADIUS);
+    }
+
     public double getAbsolutePosition(){
         return absoluteEncoder.getAbsolutePosition();
     }
 
     public void resetPosition(){
         absoluteEncoder.reset();
+    }
+
+    public void getPositionOffset(){
+        absoluteEncoder.getPositionOffset();
+    }
+
+    @Override
+    public void periodic(){
+        //put values on smart dashboard
+        SmartDashboard.putNumber("KP Constant", ArmConstants.armKP);
+        SmartDashboard.putNumber("KD Constant", ArmConstants.armKD);
+        SmartDashboard.putNumber("KI Constant", ArmConstants.armKI);
+
+        //get the height to the next setpoint periodically
+        getAbsolutePosition();
     }
 }

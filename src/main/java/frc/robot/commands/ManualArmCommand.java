@@ -9,7 +9,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ManualArmCommand extends CommandBase {
 
     private final ArmSubsystem arm;
-    private final Supplier<Double> angularSpdFunc;
+    private Supplier<Double> angularSpdFunc;
 
     public ManualArmCommand(ArmSubsystem arm,  Supplier<Double> angularSpdFunc){
         this.arm = arm;

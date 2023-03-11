@@ -25,7 +25,7 @@ public class MacroArmCommand extends CommandBase {
 
     @Override
     public void execute() { // Don't use needs way more work 
-        arm.setArmHeightS();
+        arm.setArmAngle();
     }
 
     @Override
