@@ -5,12 +5,15 @@ import frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import java.util.function.Supplier;
 
 public class ManualControlElevator extends CommandBase{
     private Elevator myElevator;
+    private Supplier<Double> elevatorSpeedFunc;
 
-    public ManualControlElevator(Elevator elevator){
+    public ManualControlElevator(Elevator elevator, Supplier<Double> func){
         myElevator = elevator;
+        elevatorSpeedFunc = func;
         addRequirements(myElevator);
     }
 
