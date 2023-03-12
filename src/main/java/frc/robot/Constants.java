@@ -166,7 +166,7 @@ public final class Constants {
 
         //CHANGE ALL
         public static final int INTAKE_MOTOR_PORT = 0;
-        public static final int PIVOT_MOTOR_PORT = 1;
+        public static final int PIVOT_MOTOR_PORT = 0;
 
         public static final double MAX_INTAKE_VELOCITY = 0.0;
         public static final double MAX_INTAKE_ACCELERATION = 0.0;
@@ -188,7 +188,8 @@ public final class Constants {
     }
 
     public static class IndexerConstants{
-        public static final int INDEXER_MOTOR_PORT = 2;
+        public static final int INDEXER_A_MOTOR_PORT = 0;
+        public static final int INDEXER_B_MOTOR_PORT = 0;
     }
 
     public static class AutoConstants {

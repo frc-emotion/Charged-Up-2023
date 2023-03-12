@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 
 public class PivotIntake extends CommandBase {
@@ -15,26 +14,21 @@ public class PivotIntake extends CommandBase {
 
     @Override
     public void initialize() {
-        if(RobotContainer.operatorController.getXButtonPressed()){
-            intake.setDownPosition();
-        }
-        if(RobotContainer.operatorController.getYButtonPressed()){
-            intake.setUpPosition();
-        }
+        intake.toggleEndState();
     }
     
     @Override
     public void execute() {
         intake.pivot();
-        intake.checkPivotStop();
     }
 
     @Override
     public void end(boolean interrupted) {
+        intake.pivotStop();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return intake.checkCurrentSpike();
     }
 }

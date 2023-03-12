@@ -5,16 +5,18 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
     private final CANSparkMax pivotMotor;
-    private final CANSparkMax intakeMotor;
+    private final CANSparkMax intakeMotorA;
 
     private final ArmFeedforward feedforward;
 
@@ -22,6 +24,8 @@ public class Intake extends SubsystemBase {
     private final ProfiledPIDController pivotController;
 
     private static RelativeEncoder pivotEncoder;
+
+    public static boolean down = false;
 
     public Intake(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
@@ -46,8 +50,11 @@ public class Intake extends SubsystemBase {
 
     public void pivot(){
         double pidVal = pivotController.calculate(pivotEncoder.getPosition());
-        double ffVal = feedforward.calculate(pivotEncoder.getPosition(), IntakeConstants.MAX_INTAKE_VELOCITY); //unsure about what goes in the velocity argument
-        pivotMotor.set(pidVal + ffVal);
+        double ffVal = feedforward.calculate(pivotEncoder.getPosition(), pivotEncoder.getVelocity());
+        
+        double volts = MathUtil.clamp(volts, 0, 8);
+
+        pivotMotor.setVoltage(volts);
     }
 
     public void pivotStop(){
@@ -62,23 +69,46 @@ public class Intake extends SubsystemBase {
         pivotController.setGoal(IntakeConstants.INTAKE_UP_POSITION);
     }
 
-    public void checkPivotStop(){
+    public void toggleEndState(){
+        down = !down;
+        if(down){
+            setDownPosition();
+        }
+        if(!down){
+            setUpPosition();
+        }
+    }
+
+    public boolean checkCurrentSpike(){
         if(pivotMotor.getOutputCurrent() > IntakeConstants.CURRENT_SPIKE_THRESHOLD){
-            pivotStop();
+            if(down){
+                pivotEncoder.setPosition(IntakeConstants.INTAKE_DOWN_POSITION);
+            }
+            if(!down){
+                pivotEncoder.setPosition(IntakeConstants.INTAKE_UP_POSITION);
+            }
+
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
     public void intakeForward(){
-        intakeMotor.set(IntakeConstants.INTAKE_SPEED);
+        if(down){
+            intakeMotor.set(IntakeConstants.INTAKE_SPEED);
+        }
     }
 
     public void intakeReverse(){
-        intakeMotor.set(-IntakeConstants.INTAKE_SPEED);
+        if(down){
+            intakeMotor.set(-IntakeConstants.INTAKE_SPEED);
+        }
     }
 
     public void intakeStop(){
         intakeMotor.set(0);
     }
-    
 }
     
