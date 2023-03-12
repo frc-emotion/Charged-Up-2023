@@ -8,7 +8,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.IntakeConstants;
@@ -16,7 +18,7 @@ import frc.robot.Constants.IntakeConstants;
 public class Intake extends SubsystemBase {
 
     private final CANSparkMax pivotMotor;
-    private final CANSparkMax intakeMotorA;
+    private final CANSparkMax intakeMotor;
 
     private final ArmFeedforward feedforward;
 
@@ -27,14 +29,16 @@ public class Intake extends SubsystemBase {
 
     public static boolean down = false;
 
+    private final SlewRateLimiter rampLimiter;
+
     public Intake(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
         pivotMotor = new CANSparkMax(IntakeConstants.PIVOT_MOTOR_PORT, MotorType.kBrushless);
 
         intakeMotor.setSmartCurrentLimit(IntakeConstants.MAX_CURRENT);
         intakeMotor.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
-        intakeMotor.setIdleMode(IdleMode.kBrake);
-
+        intakeMotor.setIdleMode(IdleMode.kCoast);
+ 
         pivotMotor.setSmartCurrentLimit(IntakeConstants.MAX_CURRENT);
         pivotMotor.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
         pivotMotor.setIdleMode(IdleMode.kBrake);
@@ -43,16 +47,18 @@ public class Intake extends SubsystemBase {
 
         pivotConstraints = new TrapezoidProfile.Constraints(IntakeConstants.MAX_INTAKE_VELOCITY, IntakeConstants.MAX_INTAKE_ACCELERATION); // CHANGE
         pivotController = new ProfiledPIDController(IntakeConstants.kPPivot, IntakeConstants.kIPivot, IntakeConstants.kDPivot, pivotConstraints); // CHANGE 
-
+        
         pivotEncoder = pivotMotor.getEncoder();
-    }
 
+        rampLimiter = new SlewRateLimiter(-0.6, 0.6, 0.25);
+    }
 
     public void pivot(){
         double pidVal = pivotController.calculate(pivotEncoder.getPosition());
         double ffVal = feedforward.calculate(pivotEncoder.getPosition(), pivotEncoder.getVelocity());
+        double volts = pidVal + ffVal;
         
-        double volts = MathUtil.clamp(volts, 0, 8);
+        MathUtil.clamp(volts, 0, 8);
 
         pivotMotor.setVoltage(volts);
     }
@@ -96,19 +102,20 @@ public class Intake extends SubsystemBase {
     }
 
     public void intakeForward(){
-        if(down){
-            intakeMotor.set(IntakeConstants.INTAKE_SPEED);
-        }
+        intakeMotor.set(rampLimiter.calculate(SmartDashboard.getNumber("Intake Speed", IntakeConstants.INTAKE_SPEED)));
     }
 
     public void intakeReverse(){
-        if(down){
-            intakeMotor.set(-IntakeConstants.INTAKE_SPEED);
-        }
+        intakeMotor.set(-rampLimiter.calculate(SmartDashboard.getNumber("Intake Speed", IntakeConstants.INTAKE_SPEED)));
     }
 
     public void intakeStop(){
         intakeMotor.set(0);
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Intake Speed", IntakeConstants.INTAKE_SPEED);
     }
 }
     

@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.IntakeConstants;;
@@ -21,21 +22,21 @@ public class Indexer extends SubsystemBase {
 
         indexerMotorA.setSmartCurrentLimit(IntakeConstants.MAX_CURRENT);
         indexerMotorA.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
-        indexerMotorA.setIdleMode(IdleMode.kBrake);
+        indexerMotorA.setIdleMode(IdleMode.kCoast);
 
         indexerMotorB.setSmartCurrentLimit(IntakeConstants.MAX_CURRENT);
         indexerMotorB.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
-        indexerMotorB.setIdleMode(IdleMode.kBrake);
+        indexerMotorB.setIdleMode(IdleMode.kCoast);
     }
 
     public void indexerForward(){
-        indexerMotorA.set(IntakeConstants.INTAKE_SPEED);
-        indexerMotorB.set(-IntakeConstants.INTAKE_SPEED);
+        indexerMotorA.set(SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
+        indexerMotorB.set(-SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
     }
 
     public void intakeReverse(){
-        indexerMotorA.set(-IntakeConstants.INTAKE_SPEED);
-        indexerMotorB.set(IntakeConstants.INTAKE_SPEED);
+        indexerMotorA.set(-SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
+        indexerMotorB.set(SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
     }
 
     public void indexerStop(){
@@ -44,5 +45,9 @@ public class Indexer extends SubsystemBase {
 
     }
     
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED);
+    }
 }
     

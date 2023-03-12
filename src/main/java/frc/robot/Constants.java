@@ -82,7 +82,7 @@ public final class Constants {
         public static final int kFrontRightDriveMotorPort = 7;
         public static final int kBackRightDriveMotorPort = 6;
 
-        public static final int kFrontLeftTurningMotorPort =9;
+        public static final int kFrontLeftTurningMotorPort = 9;
         public static final int kBackLeftTurningMotorPort = 11;
         public static final int kFrontRightTurningMotorPort = 12;
         public static final int kBackRightTurningMotorPort = 10;
@@ -165,8 +165,8 @@ public final class Constants {
     public static class IntakeConstants{
 
         //CHANGE ALL
-        public static final int INTAKE_MOTOR_PORT = 0;
-        public static final int PIVOT_MOTOR_PORT = 0;
+        public static final int INTAKE_MOTOR_PORT = 20;
+        public static final int PIVOT_MOTOR_PORT = 21;
 
         public static final double MAX_INTAKE_VELOCITY = 0.0;
         public static final double MAX_INTAKE_ACCELERATION = 0.0;
@@ -188,8 +188,9 @@ public final class Constants {
     }
 
     public static class IndexerConstants{
-        public static final int INDEXER_A_MOTOR_PORT = 0;
-        public static final int INDEXER_B_MOTOR_PORT = 0;
+        public static final int INDEXER_A_MOTOR_PORT = 25;
+        public static final int INDEXER_B_MOTOR_PORT = 24;
+        public static final double INDEXER_SPEED = 0.25; 
     }
 
     public static class AutoConstants {

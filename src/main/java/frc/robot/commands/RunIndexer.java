@@ -23,8 +23,15 @@ public class RunIndexer extends CommandBase {
         if(RobotContainer.operatorController.getLeftBumperPressed()){
             indexer.indexerForward();
         }
+        else if(RobotContainer.operatorController.getLeftBumperReleased()){
+            indexer.indexerStop();
+        }
+
         if(RobotContainer.operatorController.getRightBumperPressed()){
             indexer.indexerForward();
+        }
+        else if(RobotContainer.operatorController.getRightBumperReleased()){
+            indexer.indexerStop();
         }
     }
 

@@ -22,6 +22,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
+  private Command intake, indexer; 
+
   public static PathPlannerTrajectory examplePath;
 
   /**
@@ -83,11 +85,29 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    //intake = m_robotContainer.runIntake();
+    indexer = m_robotContainer.runIndexer();
+
+    /*
+    if (intake != null) {
+      intake.schedule();
+    }
+    */
+    if (indexer != null) {
+      indexer.schedule();
+    }
+    else{
+      System.out.println("not scheduled");
+    }
+
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+  }
 
   @Override
   public void testInit() {
