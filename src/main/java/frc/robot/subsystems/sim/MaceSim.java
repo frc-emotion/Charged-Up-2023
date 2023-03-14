@@ -6,7 +6,13 @@ import java.util.List;
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.opencv.aruco.EstimateParameters;
+import org.opencv.core.RotatedRect;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -39,7 +45,12 @@ public class MaceSim extends SubsystemBase{
     private Timer trajTimer = new Timer();
 
 
+
+    double times = 0;
+
     private MaceTrajectory currentTraj = null;
+
+    private MaceTrajectory t;
 
 
     public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
@@ -61,23 +72,31 @@ public class MaceSim extends SubsystemBase{
                 new Color8Bit(Color.kYellow)));
 
         aSim.onInit();
+
         eSim.onInit();
+
+        t = StoredTrajectories.TEST_TRAJECTORY;
+
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
         SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
+        SmartDashboard.putNumber("timer", trajTimer.get());
+        //SmartDashboard.putNumber("totalTime", 0);
+        trajTimer.reset();
+
+        SmartDashboard.putNumber("ttR", t.totalTime());
         
     }
 
     private void runTrajectory(){
-        trajTimer.reset();
 
-        if (RobotContainer.simJoystick.getRawButtonPressed(3) && currentTraj == null){
+        if (RobotContainer.simJoystick.getRawButton(3) && currentTraj == null){
             trajTimer.start();
-            currentTraj = StoredTrajectories.TEST_TRAJECTORY;
+            currentTraj = t;
             List<Double> values = currentTraj.sampleMace(trajTimer.get());
 
-            aSim.setArmVoltage(10);
+            //aSim.setArmVoltage(10);
          //   aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
          //       SimConstants.armMPSStoRadSS(values.get(2))) + aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
 
@@ -88,6 +107,7 @@ public class MaceSim extends SubsystemBase{
         if (currentTraj != null) {
             if (!currentTraj.isActive(trajTimer.get())){
                 currentTraj = null;
+                trajTimer.reset();
             }
         }
 
@@ -99,6 +119,8 @@ public class MaceSim extends SubsystemBase{
     public void periodic() {
         runTrajectory();
 
+        SmartDashboard.putNumber("timer", trajTimer.get());
+        SmartDashboard.putNumber("totalTime", t.getTotalTimeSeconds());
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
         SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
     }
@@ -113,6 +135,31 @@ public class MaceSim extends SubsystemBase{
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
         SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
     }
+
+
+    public MaceTrajectory generateTrajectory() {
+
+        // 2018 cross scale auto waypoints.
+        var sideStart = new Pose2d(Units.feetToMeters(1.54), Units.feetToMeters(23.23),
+            Rotation2d.fromDegrees(-180));
+        var crossScale = new Pose2d(Units.feetToMeters(23.7), Units.feetToMeters(6.8),
+            Rotation2d.fromDegrees(-160));
+    
+        var interiorWaypoints = new ArrayList<Translation2d>();
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(14.54), Units.feetToMeters(23.23)));
+        interiorWaypoints.add(new Translation2d(Units.feetToMeters(21.04), Units.feetToMeters(18.23)));
+    
+        TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
+        config.setReversed(true);
+    
+        var trajectory = TrajectoryGenerator.generateTrajectory(
+            sideStart,
+            interiorWaypoints,
+            crossScale,
+            config);
+
+        return new MaceTrajectory(trajectory);
+      }
 
     
 }

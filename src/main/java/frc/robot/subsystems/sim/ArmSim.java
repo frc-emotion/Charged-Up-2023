@@ -47,8 +47,8 @@ public class ArmSim implements Simulatable {
             m_armReduction,
             SingleJointedArmSim.estimateMOI(m_armLength, m_armMass),
             m_armLength,
-            Units.degreesToRadians(-75),
-            Units.degreesToRadians(255),
+            Units.degreesToRadians(-90),
+            Units.degreesToRadians(270),
             m_armMass,
             true,
             VecBuilder.fill(SimConstants.ArmValues.kArmEncoderDistPerPulse) 

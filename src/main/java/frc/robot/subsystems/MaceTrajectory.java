@@ -80,7 +80,7 @@ public class MaceTrajectory extends Trajectory {
     }
 
     public double totalTime() {
-        return mTrajectory.getTotalTimeSeconds();
+        return new Trajectory(allStates()).getTotalTimeSeconds();
     }
 
     public List<State> allStates() {

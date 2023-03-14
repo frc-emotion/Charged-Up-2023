@@ -26,7 +26,7 @@ public class SimConstants {
         public static final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
         public static final double kCarriageMass = 4.0; // kg
         public static final double kMinElevatorHeight = Units.inchesToMeters(2);
-        public static final double kMaxElevatorHeight = Units.inchesToMeters(50);
+        public static final double kMaxElevatorHeight = Units.inchesToMeters(200);
     
         // distance per pulse = (distance per revolution) / (pulses per revolution)
         // = (Pi * D) / ppr

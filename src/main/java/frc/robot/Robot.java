@@ -5,13 +5,21 @@
 package frc.robot;
 
 
+import java.util.ArrayList;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.MacePoint;
+import frc.robot.subsystems.MaceTrajectory;
+import frc.robot.subsystems.MaceTrajectoryGenerator;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -31,6 +39,7 @@ public class Robot extends TimedRobot {
   XboxController controller2 = new XboxController(2);
 
 
+  public static MaceTrajectory m;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -41,6 +50,8 @@ public class Robot extends TimedRobot {
     examplePath = PathPlanner.loadPath("Rotate", 1, 1);
 
     m_robotContainer = new RobotContainer();
+
+
   }
 
   /**
@@ -57,6 +68,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -112,10 +125,26 @@ public class Robot extends TimedRobot {
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
+    m = MaceTrajectoryGenerator
+    .generateMaceTrajectory(
+        new MacePoint(Units.inchesToMeters(30), SimConstants.armRadToMeter(Units.degreesToRadians(-75))), 
+        new ArrayList<Translation2d>() {
+            {
+            add(new Translation2d(Units.inchesToMeters(4), SimConstants.armRadToMeter(Units.degreesToRadians(-75))));
+            add(new Translation2d(Units.inchesToMeters(10), SimConstants.armRadToMeter(Units.degreesToRadians(90))));
+            add(new Translation2d(Units.inchesToMeters(45), SimConstants.armRadToMeter(Units.degreesToRadians(90))));
+            }
+        }, 
+        new MacePoint(Units.inchesToMeters(4), SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
+        1, 
+
+        1);
+
   }
 
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
+    SmartDashboard.putNumber("timeofM", m.getTotalTimeSeconds());
   }
 }
