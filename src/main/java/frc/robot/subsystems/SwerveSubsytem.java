@@ -9,8 +9,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -59,7 +59,7 @@ public class SwerveSubsytem extends SubsystemBase {
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
 
     private final SwerveModuleNeoFalcon backRight = new SwerveModuleNeoFalcon(
-            DriveConstants.kBackRightDriveMotorPort, 
+            DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
@@ -82,8 +82,8 @@ public class SwerveSubsytem extends SubsystemBase {
         DriveConstants.kDriveKinematics, 
         new Rotation2d(0), // Rotation and Pose are 0 because auto sets them to a different value anyway. 
         modulePositions, 
-        new Pose2d()); // FIX add the starting pose estimate? 
-    
+        new Pose2d()); 
+
     private ChassisSpeeds robotSpeeds;
 
     private ShuffleboardLayout frontLeftData;
@@ -91,7 +91,6 @@ public class SwerveSubsytem extends SubsystemBase {
     private ShuffleboardLayout backLeftData;
     private ShuffleboardLayout backRightData;
     private Field2d m_field;
-
 
     public SwerveSubsytem() {
         new Thread(() -> {
@@ -125,15 +124,15 @@ public class SwerveSubsytem extends SubsystemBase {
     public double getPitch(){
         return Units.degreesToRadians((gyro.getPitch()));
     }
+
     public double getRoll(){
-        return Units.degreesToRadians((gyro.getRoll()));
+        return Units.degreesToRadians((gyro.getRoll() + 180));
     }
 
-
     public double getAlignmentHeading(){
-        return Units.degreesToRadians(gyro.getCompassHeading()); // need to find the difference between North and the direction of the Charge Station 
-    } // Might use getFusedHeading() instead of getCompassHeading(), not sure how they work yet
-
+        return Units.degreesToRadians(getHeading());
+    }
+    
     //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){
         poseEstimator.resetPosition(
@@ -168,13 +167,17 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-        //Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+        Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-        //poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+        poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
-        System.out.println(gyro.getPitch());
+
+        //For testing
+        System.out.println("Pitch " + gyro.getPitch());
+        System.out.println("Roll " + (gyro.getRoll() + 180));
+        System.out.println("Heading " + getHeading());
     }
 
     public void stopModules() {
@@ -207,8 +210,6 @@ public class SwerveSubsytem extends SubsystemBase {
 
         TabManager.getInstance().addFieldWidget(TabManager.getInstance().accessTab(SubsystemTab.AUTON), BuiltInWidgets.kField, "Pose", m_field,
         new int[] { 0, 0 }, new int[] { 6, 4 });
-       // KPLevel = TabManager.getInstance().addFieldWidget(TabManager.getInstance().accessTab(SubsystemTab.AUTON), BuiltInWidgets.kField, "Pose", m_field,
-        //new int[] { 0, 0 }, new int[] { 6, 4 });
     }
 
     private void fillList(SwerveModuleNeoFalcon module, ShuffleboardLayout layout){
@@ -218,9 +219,6 @@ public class SwerveSubsytem extends SubsystemBase {
         layout.withSize(2, 4);
     }
 
-    private void updateShuffleboard(){
-        
-    }
 
  
 }

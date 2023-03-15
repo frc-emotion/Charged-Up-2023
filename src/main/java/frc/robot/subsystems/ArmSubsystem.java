@@ -21,9 +21,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 public class ArmSubsystem extends SubsystemBase{
 
     private final CANSparkMax armMotor;
-    private final DutyCycleEncoder absoluteEncoder;
+    //private final DutyCycleEncoder absoluteEncoder;
     private final ArmFeedforward armFeedForward;
-    private final PIDController armController;
+    private final SparkMaxPIDController armController;
     private double pidVal, feedForwardVal;
     
 
@@ -43,17 +43,21 @@ public class ArmSubsystem extends SubsystemBase{
         armMotor.setSecondaryCurrentLimit(45);
         armMotor.setIdleMode(IdleMode.kBrake);
 
-        absoluteEncoder = new DutyCycleEncoder(ArmConstants.absoluteEncoderPort);
+        //absoluteEncoder = new DutyCycleEncoder(ArmConstants.absoluteEncoderPort);
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKV, ArmConstants.armKG);
-        armController = new PIDController(ArmConstants.armKP, ArmConstants.armKD, ArmConstants.armKI);
+        armController = armMotor.getPIDController();
+        armController.setP(ArmConstants.armKP);
+        armController.setD(ArmConstants.armKD);
+        armController.setI(ArmConstants.armKI);
     }
 
     public void setArmAngle(){
 
         if(RobotContainer.operatorController.getRightStickButtonPressed()){
-            armController.setSetpoint(ArmConstants.TOP_HEIGHT);
-            pidVal = armController.calculate(getAbsolutePosition());
             feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+            armController.setReference(ArmConstants.TOP_HEIGHT, ControlType.kPosition, 4, feedForwardVal);
+            
+            
 
             MathUtil.clamp(pidVal, 0, 12);
             setArmSpeeds(feedForwardVal + pidVal);
