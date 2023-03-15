@@ -75,7 +75,7 @@ public class ArmSubsystem extends SubsystemBase{
 
             angularSpeed = armMotor.getAppliedOutput();
             
-            MathUtil.clamp(angularSpeed, 0, 12);
+            MathUtil.clamp(angularSpeed, 0, 12); // Honestly considering the way the angularspeed is being used, might not even be needed
             setArmSpeeds(angularSpeed);
         }
         else if(RobotContainer.operatorController.getBackButtonPressed()){
