@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 import java.lang.Math;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -10,6 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,12 +33,22 @@ public class Elevator extends SubsystemBase{
     public Elevator(){
         feedForward = new ElevatorFeedforward(5, 5, 1);
         elevatorMotor = new CANSparkMax(0, MotorType.kBrushless);
-        elevatorController = new PIDController(Constants.ElevatorConstants.KP, Constants.ElevatorConstants.KD, Constants.ElevatorConstants.KI);
+        
+        elevatorController = new PIDController(SmartDashboard.getNumber("KP Value", Constants.ElevatorConstants.KP), 
+        SmartDashboard.getNumber("KD Value", Constants.ElevatorConstants.KD), 
+        SmartDashboard.getNumber("KI Value", Constants.ElevatorConstants.KI));
+
         positionSensor = new TimeOfFlight(Constants.ElevatorConstants.CANID);
 
-        low = Constants.ElevatorConstants.LOWLEVEL;
-        middle = Constants.ElevatorConstants.MIDDLELEVEL;
-        high = Constants.ElevatorConstants.HIGHLEVEL;
+        low = SmartDashboard.getNumber("Low Level", Constants.ElevatorConstants.LOWLEVEL);
+        middle = SmartDashboard.getNumber("Middle Level", Constants.ElevatorConstants.MIDDLELEVEL);
+        high = SmartDashboard.getNumber("High Level", Constants.ElevatorConstants.HIGHLEVEL);
+
+        
+
+        elevatorMotor.setSmartCurrentLimit(Constants.ElevatorConstants.CURRENT_LIMIT);
+        elevatorMotor.setSecondaryCurrentLimit(Constants.ElevatorConstants.SECOND_CURRENT_LIMIT);
+        elevatorMotor.setIdleMode(IdleMode.kBrake);
     }
 
     //the xbox controller buttons are temporary
@@ -104,6 +116,18 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("KP Constant", Constants.ElevatorConstants.KP);
         SmartDashboard.putNumber("KD Constant", Constants.ElevatorConstants.KD);
         SmartDashboard.putNumber("KI Constant", Constants.ElevatorConstants.KI);
+
+        SmartDashboard.putNumber("Low Level", Constants.ElevatorConstants.LOWLEVEL);
+        SmartDashboard.putNumber("Middle Level", Constants.ElevatorConstants.MIDDLELEVEL);
+        SmartDashboard.putNumber("High Level", Constants.ElevatorConstants.HIGHLEVEL);
+
+
+
+        
+
+        
+
+
 
         //get the height to the next setpoint periodically
         getHeight();
