@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LevelChargeStation;
 import frc.robot.commands.ManualArmCommand;
+import frc.robot.commands.ManualControlElevator;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.ClawCommand;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.util.vision.PoseEstimator;
 import com.kauailabs.navx.frc.AHRS;
+import frc.robot.subsystems.Elevator;
 
 
 /**
@@ -46,6 +48,7 @@ public class RobotContainer {
   public static AHRS gyro = new AHRS();
   private final PhotonCamera cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
   private final PoseEstimator poseEstimator = new PoseEstimator(cam); 
+  private final Elevator elevator = new Elevator();
 
 
   public RobotContainer() {
@@ -92,6 +95,11 @@ public class RobotContainer {
     () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
     ); 
    
+    elevator.setDefaultCommand(
+      new ManualControlElevator(
+        elevator, () -> operatorController.getRawAxis(Constants.ElevatorConstants.operatorElevatorAxis)
+      )
+   );
 
     configureButtonBindings();
     
