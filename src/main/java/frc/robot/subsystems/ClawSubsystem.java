@@ -20,8 +20,7 @@ public class ClawSubsystem extends SubsystemBase {
      claw.setSmartCurrentLimit(ClawConstants.CURRENT_LIMIT);
      claw.setSecondaryCurrentLimit(ClawConstants.SECOND_CURRENT_LIMIT);
      claw.setIdleMode(IdleMode.kBrake);
-     claw.setInverted(false); //check 
-     //claw.enableSoftLimit(null, false); //check
+     claw.setInverted(false); 
     }
 
     public void setClawMotor(double speed) {

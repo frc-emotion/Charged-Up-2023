@@ -77,7 +77,6 @@ public class RobotContainer {
     configureButtonBindings(); 
   
 
-
     armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
 
     new ManualArmCommand(
@@ -90,7 +89,7 @@ public class RobotContainer {
    clawSubsystem.setDefaultCommand(
     new ClawCommand(
     clawSubsystem,
-    () -> operatorController.getRawButton(OIConstants.kOperatorClawButtonIdx))
+    () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
     ); 
    
 

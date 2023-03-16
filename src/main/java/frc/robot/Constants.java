@@ -104,11 +104,11 @@ public final class Constants {
 
     public static class ClawConstants {
 
-        public static final int CLAW = 0; 
+        public static final int CLAW = 2; 
 
         //test to get correct values 
         public static final double closedClawCurrentThreshold = 45; 
-        public static final double clawNormalSpeed = 0.5; 
+        public static final double clawNormalSpeed = 0.25; 
 
         public static final int CURRENT_LIMIT = 45;
         public static final double SECOND_CURRENT_LIMIT = 45; 

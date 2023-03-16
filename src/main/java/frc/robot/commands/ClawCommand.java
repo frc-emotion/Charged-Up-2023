@@ -11,6 +11,8 @@ public class ClawCommand extends CommandBase{
     
     private final ClawSubsystem clawSubsystem;
     private final Supplier<Boolean> clawFunc;
+    boolean direction;
+    boolean stopped; 
 
     public ClawCommand(ClawSubsystem clawSubsystem, Supplier<Boolean> clawFunc){
         this.clawSubsystem = clawSubsystem;
@@ -18,34 +20,40 @@ public class ClawCommand extends CommandBase{
 
         addRequirements(clawSubsystem);
 
+        SmartDashboard.putNumber("Claw Current Limit", 35);
+        direction = false; 
+        stopped = true; 
+
     }
 
 
-        public void execute(){
-
-        boolean direction = false; 
+    public void execute(){
 
         SmartDashboard.putBoolean("Claw Direction", direction);
-        SmartDashboard.putNumber("Claw Current Limit", 35);
-
         double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 20);
 
-        if(clawFunc.get() && !direction){
-            if (clawSubsystem.getClawCurrent() < clawCurrentLimit){
+        if (clawFunc.get()){
+            direction = !direction; 
+            stopped = false; 
+        }
+
+        if(direction && !stopped){
+            clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
+            /*if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
                 clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
             }
-            else if (clawSubsystem.getClawCurrent() >= clawCurrentLimit){
+            else if (Math.abs(clawSubsystem.getClawCurrent()) >= clawCurrentLimit){
                 clawSubsystem.stopClaw();
-                direction = true; 
-            }
+                stopped = true; 
+            }*/
         }
-        else if(clawFunc.get() && direction){
-            if (clawSubsystem.getClawCurrent() < clawCurrentLimit){
+        else if(!direction && !stopped){
+            if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
                 clawSubsystem.setClawMotor(-ClawConstants.clawNormalSpeed);
             }
-            else if (clawSubsystem.getClawCurrent() >= clawCurrentLimit){
+            else if (Math.abs(clawSubsystem.getClawCurrent()) >= clawCurrentLimit){
                 clawSubsystem.stopClaw(); 
-                direction = false; 
+                stopped = true;
             }
         }
 
