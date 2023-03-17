@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.function.Supplier;
 
 public class ManualControlElevator extends CommandBase{
-    /*private Elevator myElevator;
+   /* private Elevator myElevator;
     private Supplier<Double> elevatorSpeedFunc;
 
     public ManualControlElevator(Elevator elevator, Supplier<Double> func){

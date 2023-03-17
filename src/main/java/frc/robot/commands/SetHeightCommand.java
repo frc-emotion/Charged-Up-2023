@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class SetHeightCommand extends CommandBase{
-   /*  private Elevator myElevator;
+  /*   private Elevator myElevator;
 
     public SetHeightCommand(Elevator elevator){
         myElevator = elevator;
@@ -32,5 +32,5 @@ public class SetHeightCommand extends CommandBase{
     public boolean isFinished(){
         return false;
     }
-    /* */
+    */
 }
