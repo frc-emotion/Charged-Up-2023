@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.Supplier;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ManualArmCommand extends CommandBase {
@@ -27,11 +28,14 @@ public class ManualArmCommand extends CommandBase {
     public void execute() {
         double angularSpeed = angularSpdFunc.get();
 
-        if(angularSpeed > 0.0){
+        if(angularSpeed > OIConstants.kDeadband){
             arm.setArmSpeeds(ArmConstants.ARM_SPEED);
         }
-        else if(angularSpeed < 0.0){
+        else if(angularSpeed < -OIConstants.kDeadband){
             arm.setArmSpeeds(-ArmConstants.ARM_SPEED);
+        }
+        else{
+            arm.stopArm();
         }
     }
 

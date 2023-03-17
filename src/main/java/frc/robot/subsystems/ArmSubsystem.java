@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -31,13 +33,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     
     public ArmSubsystem(){
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                //resetPosition();
-            } catch (Exception io) {
-            }
-        }).start();
+        
 
         armMotor = new CANSparkMax(ArmConstants.armMotorPort, MotorType.kBrushless);
         
@@ -54,7 +50,9 @@ public class ArmSubsystem extends SubsystemBase{
         armController.setD(SmartDashboard.getNumber("KD Constant", ArmConstants.armKD));
         armController.setI(SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
 
-
+        resetPosition();
+        convertToMeters();
+        SmartDashboard.putNumber("Arm Pose", 0);
         //armController = new PIDController(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP), SmartDashboard.getNumber("KD Constant", ArmConstants.armKD), SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
     }
 
@@ -99,7 +97,7 @@ public class ArmSubsystem extends SubsystemBase{
 
     //converts units to radians
     public void convertToMeters(){
-        armEncoder.setPositionConversionFactor((2 * Math.PI)  / ArmConstants.ARM_GEAR_RATIO);
+        armEncoder.setPositionConversionFactor(((2 * Math.PI) / ArmConstants.ARM_GEAR_RATIO));
         armEncoder.setVelocityConversionFactor((2 * Math.PI) / (60 * ArmConstants.ARM_GEAR_RATIO));
     }
 
@@ -107,9 +105,9 @@ public class ArmSubsystem extends SubsystemBase{
         return armEncoder.getPosition();
     }
 
-    //public void resetPosition(){
-        //armEncoder.reset();
-    //}
+    public void resetPosition(){
+        armEncoder.setPosition(0);
+    }
 
     //public void getPositionOffset(){
       //  absoluteEncoder.getPositionOffset();
@@ -129,6 +127,8 @@ public class ArmSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Top Height", ArmConstants.TOP_HEIGHT);
 
         //get the height to the next setpoint periodically
-        getPosition();
+        SmartDashboard.putNumber("Arm Pose", getPosition());
+
+        //System.out.println("Arm Position" + getPosition());
     }
 }

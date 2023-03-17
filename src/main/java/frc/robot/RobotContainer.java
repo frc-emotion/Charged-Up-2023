@@ -84,7 +84,7 @@ public class RobotContainer {
 
     new ManualArmCommand(
         armSubsystem, 
-        () -> operatorController.getRawAxis(OIConstants.kOperatorArmAxis))
+        () -> -operatorController.getRawAxis(OIConstants.kOperatorArmAxis))
    );
 
    configureButtonBindings();
@@ -95,11 +95,11 @@ public class RobotContainer {
     () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
     ); 
    
-    elevator.setDefaultCommand(
+  /*  elevator.setDefaultCommand(
       new ManualControlElevator(
         elevator, () -> operatorController.getRawAxis(Constants.ElevatorConstants.operatorElevatorAxis)
       )
-   );
+   );*/
 
     configureButtonBindings();
     
@@ -114,6 +114,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, XboxController.Button.kY.value).whileTrue(new LevelChargeStation(swerveSubsytem));
+    new JoystickButton(operatorController, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
 
 
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));

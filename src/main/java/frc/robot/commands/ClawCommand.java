@@ -29,7 +29,7 @@ public class ClawCommand extends CommandBase{
 
     public void execute(){
 
-        SmartDashboard.putBoolean("Claw Direction", direction);
+      /*   SmartDashboard.putBoolean("Claw Direction", direction);
         double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 20);
 
         if (clawFunc.get()){
@@ -39,13 +39,13 @@ public class ClawCommand extends CommandBase{
 
         if(direction && !stopped){
             clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
-            /*if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
+            if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
                 clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
             }
             else if (Math.abs(clawSubsystem.getClawCurrent()) >= clawCurrentLimit){
                 clawSubsystem.stopClaw();
                 stopped = true; 
-            }*/
+            }
         }
         else if(!direction && !stopped){
             if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
@@ -56,12 +56,13 @@ public class ClawCommand extends CommandBase{
                 stopped = true;
             }
         }
+        */
 
     }
 
     @Override
     public void end(boolean interrupted) {
-       clawSubsystem.stopClaw();
+      // clawSubsystem.stopClaw();
     }
 
     @Override
