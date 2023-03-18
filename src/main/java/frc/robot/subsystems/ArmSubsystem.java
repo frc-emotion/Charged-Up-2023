@@ -17,6 +17,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
@@ -27,9 +28,10 @@ public class ArmSubsystem extends SubsystemBase{
     //private final DutyCycleEncoder absoluteEncoder;
     private final RelativeEncoder armEncoder;
     private final ArmFeedforward armFeedForward;
-    private final SparkMaxPIDController armController;
+    private final PIDController armController;
     private double pidVal, feedForwardVal, angularSpeed;
-    
+    private static final TrapezoidProfile.Constraints armConstraints = new TrapezoidProfile.Constraints(ArmConstants.MAX_ARM_VELOCITY, ArmConstants.MAX_ARM_ACCELERATION);
+      
 
     
     public ArmSubsystem(){
@@ -44,46 +46,94 @@ public class ArmSubsystem extends SubsystemBase{
         armEncoder = armMotor.getEncoder();
         
         //absoluteEncoder = new DutyCycleEncoder(ArmConstants.absoluteEncoderPort);
-        armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKV, ArmConstants.armKG);
-        armController = armMotor.getPIDController();
-        armController.setP(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP));
-        armController.setD(SmartDashboard.getNumber("KD Constant", ArmConstants.armKD));
-        armController.setI(SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
+        
+        armFeedForward = new ArmFeedforward(SmartDashboard.getNumber("KS Constant", ArmConstants.armKS), SmartDashboard.getNumber("KV Constant", ArmConstants.armKV), SmartDashboard.getNumber("KG Constant", ArmConstants.armKG));
+        //armController = armMotor.getPIDController();
+
+        armController = new PIDController(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP), SmartDashboard.getNumber("KD Constant", ArmConstants.armKD), SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
 
         resetPosition();
         convertToMeters();
-        SmartDashboard.putNumber("Arm Pose", 0);
+        SmartDashboard.putNumber("KP Constant", ArmConstants.armKP);
+        SmartDashboard.putNumber("KD Constant", ArmConstants.armKD);
+        SmartDashboard.putNumber("KI Constant", ArmConstants.armKI);
+
+        
+        SmartDashboard.putNumber("KS Constant", ArmConstants.armKS);
+        SmartDashboard.putNumber("KV Constant", ArmConstants.armKV);
+        SmartDashboard.putNumber("KG Constant", ArmConstants.armKG);
+
+        SmartDashboard.putNumber("Arm speed", ArmConstants.ARM_SPEED);
+
+        SmartDashboard.putNumber("Low Height", ArmConstants.LOW_HEIGHT);
+        SmartDashboard.putNumber("Middle Height", ArmConstants.MIDDLE_HEIGHT);
+        SmartDashboard.putNumber("Top Height", ArmConstants.TOP_HEIGHT);
+
         //armController = new PIDController(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP), SmartDashboard.getNumber("KD Constant", ArmConstants.armKD), SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
     }
 
-    public void setArmAngle(){
+    /* public void setArmAngle(){
 
-        if(RobotContainer.operatorController.getRightStickButtonPressed()){
+        if(RobotContainer.operatorController.getRightBumper()){
             feedForwardVal = armFeedForward.calculate(SmartDashboard.getNumber("Top Height", ArmConstants.TOP_HEIGHT), ArmConstants.MAX_ARM_VELOCITY);
             armController.setReference(SmartDashboard.getNumber("Top Height", ArmConstants.TOP_HEIGHT), ControlType.kPosition, 4, feedForwardVal);
 
-            angularSpeed = armMotor.getAppliedOutput();
+            //angularSpeed = armMotor.getAppliedOutput();
             
-            MathUtil.clamp(angularSpeed, 0, 12);
-            setArmSpeeds(angularSpeed);
+            //MathUtil.clamp(angularSpeed, -12, 12);
+            //setArmSpeeds(angularSpeed);
         }
-        else if(RobotContainer.operatorController.getLeftStickButtonPressed()){
+        else if(RobotContainer.operatorController.getBButton()){
             feedForwardVal = armFeedForward.calculate(SmartDashboard.getNumber("Middle Height", ArmConstants.MIDDLE_HEIGHT), ArmConstants.MAX_ARM_VELOCITY);
-            armController.setReference(SmartDashboard.getNumber("Top Height", ArmConstants.MIDDLE_HEIGHT), ControlType.kPosition, 4, feedForwardVal);
+            armController.setReference(SmartDashboard.getNumber("Middle Height", ArmConstants.MIDDLE_HEIGHT), ControlType.kPosition, 4, feedForwardVal);
 
-            angularSpeed = armMotor.getAppliedOutput();
+            //angularSpeed = armMotor.getAppliedOutput();
             
-            MathUtil.clamp(angularSpeed, 0, 12); // Honestly considering the way the angularspeed is being used, might not even be needed
-            setArmSpeeds(angularSpeed);
+            //MathUtil.clamp(angularSpeed, -12, 12); // Honestly considering the way the angularspeed is being used, might not even be needed
+            //setArmSpeeds(angularSpeed);
         }
-        else if(RobotContainer.operatorController.getBackButtonPressed()){
+        else if(RobotContainer.operatorController.getAButton()){
             feedForwardVal = armFeedForward.calculate(SmartDashboard.getNumber("Low Height", ArmConstants.LOW_HEIGHT), ArmConstants.MAX_ARM_VELOCITY);
             armController.setReference(SmartDashboard.getNumber("Low Height", ArmConstants.LOW_HEIGHT), ControlType.kPosition, 4, feedForwardVal);
 
-            angularSpeed = armMotor.getAppliedOutput();
+            //angularSpeed = armMotor.getAppliedOutput();
             
-            MathUtil.clamp(angularSpeed, 0, 12);
-            setArmSpeeds(angularSpeed);
+            //MathUtil.clamp(angularSpeed, -12, 12);
+            //setArmSpeeds(angularSpeed);
+        }
+        else{
+            stopArm();
+        }
+    }  */
+
+    public void setArmAngle(){
+
+        if(RobotContainer.operatorController.getRightBumper()){
+            armController.setSetpoint(ArmConstants.TOP_HEIGHT);
+            pidVal = armController.calculate(getPosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            //MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
+        }
+        else if(RobotContainer.operatorController.getBButton()){
+            armController.setSetpoint(ArmConstants.MIDDLE_HEIGHT);
+            pidVal = armController.calculate(getPosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.MIDDLE_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            //MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
+        }
+        else if(RobotContainer.operatorController.getAButton()){
+            armController.setSetpoint(ArmConstants.LOW_HEIGHT);
+            pidVal = armController.calculate(getPosition());
+            feedForwardVal = armFeedForward.calculate(ArmConstants.LOW_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+            //MathUtil.clamp(pidVal, 0, 12);
+            setArmSpeeds(feedForwardVal + pidVal);
+        }
+        else{
+            stopArm();
         }
     }
     
@@ -93,6 +143,10 @@ public class ArmSubsystem extends SubsystemBase{
 
     public void stopArm(){
         armMotor.stopMotor();
+    }
+
+    public double getArmSpeeds(){
+        return armMotor.get();
     }
 
     //converts units to radians
@@ -106,7 +160,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public void resetPosition(){
-        armEncoder.setPosition(0);
+        armEncoder.setPosition(Math.PI/2);
     }
 
     //public void getPositionOffset(){
@@ -116,19 +170,13 @@ public class ArmSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         //put values on smart dashboard
-        SmartDashboard.putNumber("KP Constant", ArmConstants.armKP);
-        SmartDashboard.putNumber("KD Constant", ArmConstants.armKD);
-        SmartDashboard.putNumber("KI Constant", ArmConstants.armKI);
-
-        SmartDashboard.putNumber("Arm speed", ArmConstants.ARM_SPEED);
-
-        SmartDashboard.putNumber("Low Height", ArmConstants.LOW_HEIGHT);
-        SmartDashboard.putNumber("Middle Height", ArmConstants.MIDDLE_HEIGHT);
-        SmartDashboard.putNumber("Top Height", ArmConstants.TOP_HEIGHT);
+        //armController.setP(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP));
+        //armController.setD(SmartDashboard.getNumber("KD Constant", ArmConstants.armKD));
+        //armController.setI(SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
 
         //get the height to the next setpoint periodically
         SmartDashboard.putNumber("Arm Pose", getPosition());
 
-        //System.out.println("Arm Position" + getPosition());
+        //System.out.println("Arm Speeds " + getArmSpeeds());
     }
 }

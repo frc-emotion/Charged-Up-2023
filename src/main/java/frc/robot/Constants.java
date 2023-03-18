@@ -39,7 +39,7 @@ public final class Constants {
         public static final int kOperatorArmAxis = XboxController.Axis.kRightY.value;
 
 
-        public static final double kDeadband = 0.08;
+        public static final double kDeadband = 0.2;
     }
 
     public static final class ModuleConstants {
@@ -82,20 +82,21 @@ public final class Constants {
         public static final double ARM_SPEED = 0.2;
         public static final double TOP_HEIGHT = Math.PI / 2;
         public static final double MIDDLE_HEIGHT = Math.PI / 4;
-        public static final double LOW_HEIGHT = Math.PI / 6;
+        public static final double LOW_HEIGHT = Math.PI / 8;
 
         // For Feedfoward
-        public static final double armKS = 3;
-        public static final double armKG = 4;
-        public static final double armKV = 5;
+        public static final double armKS = 0.09;
+        public static final double armKG = 0.57;
+        public static final double armKV = 1.18;
+        public static final double armKA = 0.51;
 
         // For PID controller
-        public static final double armKP = 1;
-        public static final double armKD = 0;
+        public static final double armKP = 0.93;
+        public static final double armKD = 0.16;
         public static final double armKI = 0;
         public static final double COUNTS_PER_REVOLUTION = 4096;
-        public static final double MAX_ARM_VELOCITY = 1.0;
-        public static final double MAX_ARM_ACCELERATION = 2.0;
+        public static final double MAX_ARM_VELOCITY = 0.1;
+        public static final double MAX_ARM_ACCELERATION = 0.05;
         public static final double ARM_GEAR_RATIO = 56.33;
         public static final double ARM_SPROCKET_RADIUS = 0.01;
 

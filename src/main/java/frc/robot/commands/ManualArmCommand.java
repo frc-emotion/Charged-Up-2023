@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.Supplier;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.OIConstants;
 
 public class ManualArmCommand extends CommandBase {
 
@@ -29,10 +30,10 @@ public class ManualArmCommand extends CommandBase {
         double angularSpeed = angularSpdFunc.get();
 
         if(angularSpeed > OIConstants.kDeadband){
-            arm.setArmSpeeds(ArmConstants.ARM_SPEED);
+            arm.setArmSpeeds(SmartDashboard.getNumber("Arm speed", ArmConstants.ARM_SPEED));
         }
         else if(angularSpeed < -OIConstants.kDeadband){
-            arm.setArmSpeeds(-ArmConstants.ARM_SPEED);
+            arm.setArmSpeeds(-SmartDashboard.getNumber("Arm speed", ArmConstants.ARM_SPEED));
         }
         else{
             arm.stopArm();

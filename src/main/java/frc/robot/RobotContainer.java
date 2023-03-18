@@ -14,19 +14,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.LevelChargeStation;
 import frc.robot.commands.ManualArmCommand;
-import frc.robot.commands.ManualControlElevator;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
-import frc.robot.commands.ClawCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.util.vision.PoseEstimator;
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.subsystems.Elevator;
+import frc.robot.commands.MacroArmCommand;
 
 
 /**
@@ -38,7 +34,6 @@ import frc.robot.subsystems.Elevator;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
-  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
@@ -48,7 +43,6 @@ public class RobotContainer {
   public static AHRS gyro = new AHRS();
   private final PhotonCamera cam  = new PhotonCamera("cameraNameHere"); //FIX change camera name to what it is in Photon UI
   private final PoseEstimator poseEstimator = new PoseEstimator(cam); 
-  private final Elevator elevator = new Elevator();
 
 
   public RobotContainer() {
@@ -82,18 +76,16 @@ public class RobotContainer {
 
     armSubsystem.setDefaultCommand( // Not entirely sure if this is how axis input should work with default commands
 
-    new ManualArmCommand(
+   /*  new ManualArmCommand(
         armSubsystem, 
         () -> -operatorController.getRawAxis(OIConstants.kOperatorArmAxis))
-   );
+   ); */
+
+   new MacroArmCommand(
+        armSubsystem
+        ));
 
    configureButtonBindings();
-
-   clawSubsystem.setDefaultCommand(
-    new ClawCommand(
-    clawSubsystem,
-    () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
-    ); 
    
   /*  elevator.setDefaultCommand(
       new ManualControlElevator(
@@ -113,7 +105,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-    new JoystickButton(driverController, XboxController.Button.kY.value).whileTrue(new LevelChargeStation(swerveSubsytem));
+    
     new JoystickButton(operatorController, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
 
 
