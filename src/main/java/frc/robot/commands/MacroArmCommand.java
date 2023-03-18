@@ -8,8 +8,7 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class MacroArmCommand extends CommandBase {
 
-    private ArmSubsystem arm;
-    private Supplier<Double> angularSpdFunc;
+    private ArmSubsystem arm; 
 
     public MacroArmCommand(ArmSubsystem arm){
         this.arm = arm;
