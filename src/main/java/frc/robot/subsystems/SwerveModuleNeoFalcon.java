@@ -9,6 +9,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -59,6 +60,7 @@ public class SwerveModuleNeoFalcon {
         turningMotor.setSmartCurrentLimit(45);
         turningMotor.setSecondaryCurrentLimit(45);
         turningMotor.setInverted(turningMotorReversed);
+        turningMotor.setIdleMode(IdleMode.kBrake);
 
         turningEncoder = turningMotor.getEncoder();
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
