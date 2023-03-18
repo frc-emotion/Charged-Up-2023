@@ -44,13 +44,17 @@ public class MaceSim extends SubsystemBase{
 
     private Timer trajTimer = new Timer();
 
-
-
     double times = 0;
 
     private MaceTrajectory currentTraj = null;
 
     private MaceTrajectory t;
+    List<Double> values;
+
+    private double armHoldingPosition;
+    private double elevatorHoldingPostion;
+
+    private boolean startTraj = false;
 
 
     public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
@@ -85,44 +89,75 @@ public class MaceSim extends SubsystemBase{
         //SmartDashboard.putNumber("totalTime", 0);
         trajTimer.reset();
 
+        elevatorHoldingPostion = eSim.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(3));
+        armHoldingPosition = aSim.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(0));
+
         SmartDashboard.putNumber("ttR", t.totalTime());
         
     }
 
     private void runTrajectory(){
 
-        if (RobotContainer.simJoystick.getRawButton(3) && currentTraj == null){
             trajTimer.start();
-            currentTraj = t;
-            List<Double> values = currentTraj.sampleMace(trajTimer.get());
+            
+            
 
+       
+            
             //aSim.setArmVoltage(10);
-         //   aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
-         //       SimConstants.armMPSStoRadSS(values.get(2))) + aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+         aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
+                SimConstants.armMPSStoRadSS(values.get(2)))+ aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
 
 
-            eSim.setElevatorVoltage(eSim.getFeedForwardOutputVolts(values.get(4), values.get(5)) + eSim.getPIDOutputVolts(values.get(3)));
-        }
-
-        if (currentTraj != null) {
-            if (!currentTraj.isActive(trajTimer.get())){
-                currentTraj = null;
-                trajTimer.reset();
-            }
+            eSim.setElevatorVoltage(/*eSim.getFeedForwardOutputVolts(values.get(4), values.get(5))*/ + eSim.getPIDOutputVolts(values.get(3)));
         }
 
 
 
-    }
+
+
+    //}
+    /**
+     * if button presed:
+     * startTrajectory = true;
+     * current Traj = t;
+     * 
+     * if (startTrajectory = true){
+     *      values = currentTraj.sampleMace();
+     *      runTrajectory();
+     * }
+     * 
+     */
 
     @Override
     public void periodic() {
-        runTrajectory();
+        if (RobotContainer.simJoystick.getRawButtonPressed(3)){
+            //trajTimer.reset();
+            currentTraj = t;
+            startTraj = true;
+        }
 
+        if (startTraj){
+            values = currentTraj.sampleMace(trajTimer.get());
+            runTrajectory();
+        }
+
+        if (currentTraj != null && startTraj) {
+            if (!currentTraj.isActive(trajTimer.get())){
+                trajTimer.stop();
+                currentTraj = null;
+                startTraj = true;
+            }
+        }
+
+        if (values != null){
+            SmartDashboard.putNumber("elePose", Units.metersToInches(values.get(3)));
+            SmartDashboard.putNumber("armPose", Units.radiansToDegrees(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+        }
         SmartDashboard.putNumber("timer", trajTimer.get());
         SmartDashboard.putNumber("totalTime", t.getTotalTimeSeconds());
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
-        SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
+        SmartDashboard.putNumber("Height", (eSim.getPosition()));
     }
 
     @Override
@@ -133,7 +168,7 @@ public class MaceSim extends SubsystemBase{
         m_elevatorMech2d.setLength(eSim.getPosition());
 
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
-        SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
+        SmartDashboard.putNumber("Height", (eSim.getPosition()));
     }
 
 

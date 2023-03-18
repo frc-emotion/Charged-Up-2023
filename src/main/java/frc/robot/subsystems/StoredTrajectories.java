@@ -43,18 +43,18 @@ public class StoredTrajectories {
 
     public static final MaceTrajectory TEST_TRAJECTORY = MaceTrajectoryGenerator
     .generateMaceTrajectory(
-        new MacePoint(Units.inchesToMeters(30), SimConstants.armRadToMeter(Units.degreesToRadians(-75))), 
+        new MacePoint(Units.inchesToMeters(2), SimConstants.armRadToMeter(Units.degreesToRadians(-75))), 
         new ArrayList<Translation2d>() {
             {
-            add(new Translation2d(Units.inchesToMeters(4), SimConstants.armRadToMeter(Units.degreesToRadians(-75))));
-            add(new Translation2d(Units.inchesToMeters(10), SimConstants.armRadToMeter(Units.degreesToRadians(90))));
-            add(new Translation2d(Units.inchesToMeters(45), SimConstants.armRadToMeter(Units.degreesToRadians(90))));
+            add(new Translation2d(Units.inchesToMeters(45), SimConstants.armRadToMeter(Units.degreesToRadians(0))));
+            add(new Translation2d(Units.inchesToMeters(10), SimConstants.armRadToMeter(Units.degreesToRadians(20))));
+            add(new Translation2d(Units.inchesToMeters(2), SimConstants.armRadToMeter(Units.degreesToRadians(90))));
             }
         }, 
-        new MacePoint(Units.inchesToMeters(4), SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
-        1, 
+        new MacePoint(Units.inchesToMeters(2), SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
+        0.8, 
 
-        1);
+        0.3);
 
         double testTime(){
             return TEST_TRAJECTORY.totalTime();

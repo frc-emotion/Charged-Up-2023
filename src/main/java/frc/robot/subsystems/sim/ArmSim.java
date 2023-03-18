@@ -36,7 +36,7 @@ public class ArmSim implements Simulatable {
 
     private final Joystick m_joystick;
 
-    private static final double m_armReduction = 56;
+    private static final double m_armReduction = 56.8;
     private static final double m_armMass = Units.lbsToKilograms(7.4); // Kilograms
     private static final double m_armLength = Units.inchesToMeters(45);
 
