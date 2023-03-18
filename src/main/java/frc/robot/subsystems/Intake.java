@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,15 +21,15 @@ public class Intake extends SubsystemBase {
     private final CANSparkMax intakeMotor;
 
     private final ArmFeedforward feedforward;
-
-    private static TrapezoidProfile.Constraints pivotConstraints;
-    private final ProfiledPIDController pivotController;
+    private final PIDController pivotController;
 
     private static RelativeEncoder pivotEncoder;
 
-    public static boolean down = false;
+    public static boolean down;
 
     private final SlewRateLimiter rampLimiter;
+
+    private static double INTAKE_SPEED, kPPivot, kIPivot, kDPivot;
 
     public Intake(){
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
@@ -43,22 +43,28 @@ public class Intake extends SubsystemBase {
         pivotMotor.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
         pivotMotor.setIdleMode(IdleMode.kBrake);
 
-        feedforward = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kG, IntakeConstants.kV); // determine feedforward constants
-
-        pivotConstraints = new TrapezoidProfile.Constraints(IntakeConstants.MAX_INTAKE_VELOCITY, IntakeConstants.MAX_INTAKE_ACCELERATION); // CHANGE
-        pivotController = new ProfiledPIDController(IntakeConstants.kPPivot, IntakeConstants.kIPivot, IntakeConstants.kDPivot, pivotConstraints); // CHANGE 
-        
         pivotEncoder = pivotMotor.getEncoder();
 
+        feedforward = new ArmFeedforward(IntakeConstants.kS, IntakeConstants.kG, IntakeConstants.kV); // determine feedforward constants
+        pivotController = new PIDController(kPPivot, kIPivot, kDPivot); 
+        
+        down = false;
+
         rampLimiter = new SlewRateLimiter(-0.6, 0.6, 0.25);
+
+        SmartDashboard.putNumber("Intake Speed", IntakeConstants.INTAKE_SPEED);
+        SmartDashboard.putNumber("kP Pivot", IntakeConstants.kPPivot);
+        SmartDashboard.putNumber("kI Pivot", IntakeConstants.kIPivot);
+        SmartDashboard.putNumber("kD Pivot", IntakeConstants.kDPivot);
     }
 
+    // intake pivot methods
     public void pivot(){
         double pidVal = pivotController.calculate(pivotEncoder.getPosition());
         double ffVal = feedforward.calculate(pivotEncoder.getPosition(), pivotEncoder.getVelocity());
         double volts = pidVal + ffVal;
         
-        MathUtil.clamp(volts, 0, 8);
+        MathUtil.clamp(volts, 0, 8); // for PID testing
 
         pivotMotor.setVoltage(volts);
     }
@@ -67,33 +73,28 @@ public class Intake extends SubsystemBase {
         pivotMotor.set(0);
     }
 
-    public void setDownPosition(){
-        pivotController.setGoal(IntakeConstants.INTAKE_DOWN_POSITION);
-    }
-
-    public void setUpPosition(){
-        pivotController.setGoal(IntakeConstants.INTAKE_UP_POSITION);
-    }
-
     public void toggleEndState(){
         down = !down;
         if(down){
-            setDownPosition();
+            pivotController.setSetpoint(IntakeConstants.INTAKE_DOWN_POSITION);
         }
         if(!down){
-            setUpPosition();
+            pivotController.setSetpoint(IntakeConstants.INTAKE_UP_POSITION);
+        }
+    }
+
+    public void resetEncoder(){
+        if(down){
+            pivotEncoder.setPosition(IntakeConstants.INTAKE_DOWN_POSITION);
+        }
+        if(!down){
+            pivotEncoder.setPosition(IntakeConstants.INTAKE_UP_POSITION);
         }
     }
 
     public boolean checkCurrentSpike(){
         if(pivotMotor.getOutputCurrent() > IntakeConstants.CURRENT_SPIKE_THRESHOLD){
-            if(down){
-                pivotEncoder.setPosition(IntakeConstants.INTAKE_DOWN_POSITION);
-            }
-            if(!down){
-                pivotEncoder.setPosition(IntakeConstants.INTAKE_UP_POSITION);
-            }
-
+            resetEncoder();
             return true;
         }
         else{
@@ -101,12 +102,13 @@ public class Intake extends SubsystemBase {
         }
     }
 
+    // intake run methods
     public void intakeForward(){
-        intakeMotor.set(rampLimiter.calculate(SmartDashboard.getNumber("Intake Speed", IntakeConstants.INTAKE_SPEED)));
+        intakeMotor.set(rampLimiter.calculate(INTAKE_SPEED));
     }
 
     public void intakeReverse(){
-        intakeMotor.set(-rampLimiter.calculate(SmartDashboard.getNumber("Intake Speed", IntakeConstants.INTAKE_SPEED)));
+        intakeMotor.set(-rampLimiter.calculate(INTAKE_SPEED));
     }
 
     public void intakeStop(){
@@ -115,7 +117,11 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Intake Speed", IntakeConstants.INTAKE_SPEED);
+        INTAKE_SPEED = SmartDashboard.getNumber("Intake Speed", IntakeConstants.INTAKE_SPEED);
+        kPPivot = SmartDashboard.getNumber("kP Pivot", IntakeConstants.kPPivot);
+        kIPivot = SmartDashboard.getNumber("kI Pivot", IntakeConstants.kIPivot);
+        kDPivot = SmartDashboard.getNumber("kD Pivot", IntakeConstants.kDPivot);
+
     }
 }
     

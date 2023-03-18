@@ -20,18 +20,17 @@ public class RunIntake extends CommandBase {
     
     @Override
     public void execute() {
-        System.out.println("run");
-        if(RobotContainer.operatorController.getLeftBumperPressed()){
+        if(RobotContainer.operatorController.getRightBumperPressed()){
             intake.intakeForward();
         }
-        else if(RobotContainer.operatorController.getLeftBumperReleased()){
+        else if(RobotContainer.operatorController.getRightBumperReleased()){
             intake.intakeStop();
         }
 
-        if(RobotContainer.operatorController.getRightBumperPressed()){
+        if(RobotContainer.operatorController.getLeftBumperPressed()){
             intake.intakeReverse();
         }
-        else if(RobotContainer.operatorController.getRightBumperReleased()){
+        else if(RobotContainer.operatorController.getLeftBumperReleased()){
             intake.intakeStop();
         }
     }

@@ -41,10 +41,10 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private final Indexer indexer = new Indexer();
 
-  public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static XboxController operatorController = new XboxController(1);
   //public static Joystick arcadeStick = new Joystick(1);
-  public static Joystick arcadeStick2 = new Joystick(0);
+  //public static Joystick arcadeStick2 = new Joystick(0);
 
   public RobotContainer() {
     swerveSubsytem.setDefaultCommand(
@@ -77,7 +77,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
     /*
     new JoystickButton(operatorController, XboxController.Button.kA.value).whileTrue(new LimeLightAlign(swerveSubsytem, limelight));
@@ -85,14 +84,10 @@ public class RobotContainer {
     new JoystickButton(operatorController, XboxController.Button.kY.value).whileTrue(new LimeLightTurnStrafe(swerveSubsytem, limelight));
     */
 
-    //new JoystickButton(operatorController, XboxController.Button.kA.value).whenPressed(new PivotIntake(intake));
-
 
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-
-    /*Depreciated */
-    //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).whenPressed(() -> swerveSubsytem.zeroHeading());
-    //new JoystickButton(arcadeStick, 5).whenPressed(() -> swerveSubsytem.zeroHeading());
+    
+    new JoystickButton(operatorController, XboxController.Button.kY.value).onTrue(new PivotIntake(intake));
 
    
   }
@@ -106,13 +101,13 @@ public class RobotContainer {
     return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
   }
 
-  /*
   public Command runIntake(){
     return new RunIntake(intake);
   }
-  */
 
+  /* 
   public Command runIndexer(){
     return new RunIndexer(indexer);
   }
+  */
 }

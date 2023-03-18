@@ -16,6 +16,8 @@ public class Indexer extends SubsystemBase {
     private final CANSparkMax indexerMotorA;
     private final CANSparkMax indexerMotorB;
 
+    double INDEXER_SPEED;
+
     public Indexer(){
         indexerMotorA = new CANSparkMax(IndexerConstants.INDEXER_A_MOTOR_PORT, MotorType.kBrushless);
         indexerMotorB = new CANSparkMax(IndexerConstants.INDEXER_B_MOTOR_PORT, MotorType.kBrushless);
@@ -27,6 +29,8 @@ public class Indexer extends SubsystemBase {
         indexerMotorB.setSmartCurrentLimit(IntakeConstants.MAX_CURRENT);
         indexerMotorB.setSecondaryCurrentLimit(IntakeConstants.MAX_CURRENT);
         indexerMotorB.setIdleMode(IdleMode.kCoast);
+
+        SmartDashboard.putNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED);
     }
 
     public void indexerForward(){
@@ -34,7 +38,7 @@ public class Indexer extends SubsystemBase {
         indexerMotorB.set(-SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
     }
 
-    public void intakeReverse(){
+    public void indexerReverse(){
         indexerMotorA.set(-SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
         indexerMotorB.set(SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED));
     }
@@ -42,12 +46,11 @@ public class Indexer extends SubsystemBase {
     public void indexerStop(){
         indexerMotorA.set(0);
         indexerMotorB.set(0);
-
     }
     
     @Override
     public void periodic(){
-        SmartDashboard.putNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED);
+        INDEXER_SPEED = SmartDashboard.getNumber("Indexer Speed", IndexerConstants.INDEXER_SPEED);
     }
 }
     

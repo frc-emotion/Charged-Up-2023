@@ -20,17 +20,17 @@ public class RunIndexer extends CommandBase {
     
     @Override
     public void execute() {
-        if(RobotContainer.operatorController.getLeftBumperPressed()){
-            indexer.indexerForward();
-        }
-        else if(RobotContainer.operatorController.getLeftBumperReleased()){
-            indexer.indexerStop();
-        }
-
         if(RobotContainer.operatorController.getRightBumperPressed()){
             indexer.indexerForward();
         }
         else if(RobotContainer.operatorController.getRightBumperReleased()){
+            indexer.indexerStop();
+        }
+
+        if(RobotContainer.operatorController.getLeftBumperPressed()){
+            indexer.indexerReverse();
+        }
+        else if(RobotContainer.operatorController.getLeftBumperReleased()){
             indexer.indexerStop();
         }
     }

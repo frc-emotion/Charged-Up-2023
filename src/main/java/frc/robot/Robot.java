@@ -86,20 +86,19 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
 
-    //intake = m_robotContainer.runIntake();
-    indexer = m_robotContainer.runIndexer();
+    intake = m_robotContainer.runIntake();
+    //indexer = m_robotContainer.runIndexer();
 
-    /*
+    
     if (intake != null) {
       intake.schedule();
     }
-    */
+    
+    /* 
     if (indexer != null) {
       indexer.schedule();
     }
-    else{
-      System.out.println("not scheduled");
-    }
+    */
 
   }
 
