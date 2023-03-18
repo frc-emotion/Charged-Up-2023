@@ -17,6 +17,7 @@ import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.util.vision.LimeLight;
 import frc.robot.util.vision.LimeLightAlign;
+import frc.robot.util.vision.LimeLightAprilTags;
 import frc.robot.util.vision.LimeLightStrafe;
 import frc.robot.util.vision.LimeLightTurnStrafe;
 
@@ -56,6 +57,7 @@ public class RobotContainer {
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
     () -> driverController.getRightBumper()));
+
     configureButtonBindings();
   }
 
@@ -70,7 +72,7 @@ public class RobotContainer {
     new JoystickButton(operatorController, XboxController.Button.kA.value).whileTrue(new LimeLightAlign(swerveSubsytem, limelight));
     new JoystickButton(operatorController, XboxController.Button.kX.value).whileTrue(new LimeLightStrafe(swerveSubsytem, limelight));
     new JoystickButton(operatorController, XboxController.Button.kY.value).whileTrue(new LimeLightTurnStrafe(swerveSubsytem, limelight));
-
+    new JoystickButton(operatorController, XboxController.Button.kB.value).whileTrue(new LimeLightAprilTags(limelight, swerveSubsytem));
 
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 

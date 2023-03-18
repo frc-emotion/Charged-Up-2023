@@ -60,6 +60,11 @@ public final class Constants {
         public static final double CAMERA_XAXIS = 0.5;
         public static final double CAMERA_YAXIS = 0;
         public static final double CAMERA_ZAXIS = Units.inchesToMeters(6);
+        public static final double TARGET_RANGE = 0;
+        public static final double MAX_ALIGN_VELOCITY = 0;
+        public static final double MAX_ROTATE_VELOCITY = 0;
+        public static final double MAX_ALIGN_ACCELERATION = 0;
+        public static final double MAX_ROTATE_ACCELERATION = 0;
     }
 
 

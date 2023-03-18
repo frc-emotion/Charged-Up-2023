@@ -13,7 +13,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsytem;
 
 public class LimeLightTurnStrafe extends CommandBase{
-    private final SwerveSubsytem swerveSubsystem;
+   /*  private final SwerveSubsytem swerveSubsystem;
     private final LimeLight limelight;
     private ChassisSpeeds strafeSpeeds;
 
@@ -73,7 +73,7 @@ public class LimeLightTurnStrafe extends CommandBase{
     public boolean isFinished() {
         return false;
     }
-
+*/
 
 }
 

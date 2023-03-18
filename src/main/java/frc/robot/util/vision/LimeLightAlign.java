@@ -11,7 +11,7 @@ import frc.robot.subsystems.SwerveSubsytem;
 
 public class LimeLightAlign extends CommandBase {
 
-    private final SwerveSubsytem swerveSubsystem;
+/*     private final SwerveSubsytem swerveSubsystem;
     private final LimeLight limelight;
     private ChassisSpeeds alignmentSpeeds;
     private final PIDController alignmentController;
@@ -59,6 +59,6 @@ public class LimeLightAlign extends CommandBase {
     public boolean isFinished() {
         return false;
     }
-
+*/
 
 }

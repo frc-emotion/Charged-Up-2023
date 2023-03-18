@@ -2,23 +2,46 @@
 package frc.robot.util.vision;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 public class LimeLight extends SubsystemBase{
 
-    private String table; 
-    private double refrenceHeight = 24.125; // height to the middle of the RR tape on the lower bar, in inches
+    NetworkTable table;
+    private double referenceHeight = 24.125; // height to the middle of the RR tape on the lower bar, in inches
+    double[] botPose, cameraPose, tagID, targetPose; 
 
 
     public LimeLight(){
-        table = "limelight";
+        table = NetworkTableInstance.getDefault().getTable("limelight");
+        
     }
 
-    public double getEntry(String selector) {
-        return NetworkTableInstance.getDefault().getTable(table).getEntry(selector).getDouble(0);
+    public void periodic(){
+        //read values periodically
+         botPose = table.getEntry("botpose").getDoubleArray(new double[6]);
+         cameraPose = table.getEntry("camerapose_targetspace").getDoubleArray(new double[6]);
+         tagID = table.getEntry("tid").getDoubleArray(new double[6]);
+         targetPose = table.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+
+        //post to smart dashboard periodically
+        SmartDashboard.getEntry("botpose"); 
+        SmartDashboard.getEntry("camerapose_targetspace"); 
+        SmartDashboard.getEntry("tid"); 
+        SmartDashboard.getEntry("targetpose_robotspace"); 
+       
     }
+
+    public double[] getEntry(String selector) {
+        return table.getEntry(selector).getDoubleArray(new double[6]);
+    }
+
+/* 
 
     // LIMELIGHT TURN THEN STRAFE ------------------
 
@@ -59,13 +82,13 @@ public class LimeLight extends SubsystemBase{
     // GENERAL
 
     public double getHeight() {
-        return Units.inchesToMeters(refrenceHeight) - Constants.CameraConstants.CAMERA_ZAXIS; // camera constants need to be changed i think
+        return Units.inchesToMeters(referenceHeight) - Constants.CameraConstants.CAMERA_ZAXIS; // camera constants need to be changed i think
     }
 
     public double getAngle(double ty) {
         return ty + Constants.CameraConstants.CAMERA_PITCH;
     }
    
-
+*/
 
 }

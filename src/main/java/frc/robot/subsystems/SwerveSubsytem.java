@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
 import frc.robot.util.dashboard.TabManager.SubsystemTab;
+import frc.robot.util.vision.LimeLight;
 import frc.robot.util.vision.PoseEstimator;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 //import edu.wpi.first.math.Pair;
 //import java.util.Optional;
@@ -68,7 +70,8 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    public PoseEstimator visionPoseEstimator;
+   private final PoseEstimator visionPoseEstimator = new PoseEstimator(); 
+  // private final LimeLight limelight; 
 
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
@@ -155,10 +158,10 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-       // Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+       Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
 
         //Adds vision 
-      //  poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+       poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
     }
