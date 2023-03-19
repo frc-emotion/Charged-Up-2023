@@ -24,7 +24,7 @@ import com.playingwithfusion.TimeOfFlight;
 
 
 public class Elevator extends SubsystemBase{
-    private ElevatorFeedforward feedForward;
+ /*    private ElevatorFeedforward feedForward;
     private PIDController elevatorController;
     private CANSparkMax elevatorMotor;
     private double low, middle, high;
@@ -131,6 +131,6 @@ public class Elevator extends SubsystemBase{
 
         //get the height to the next setpoint periodically
     }
-    
+    */
 }   
 

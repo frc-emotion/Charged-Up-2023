@@ -175,9 +175,9 @@ public class SwerveSubsytem extends SubsystemBase {
         m_field.setRobotPose(getCurrentPose());
 
         //For testing
-        System.out.println("Pitch " + gyro.getPitch());
-        System.out.println("Roll " + (gyro.getRoll() + 180));
-        System.out.println("Heading " + getHeading());
+     //   System.out.println("Pitch " + gyro.getPitch());
+     ///   System.out.println("Roll " + (gyro.getRoll() + 180));
+     //   System.out.println("Heading " + getHeading());
     }
 
     public void stopModules() {
