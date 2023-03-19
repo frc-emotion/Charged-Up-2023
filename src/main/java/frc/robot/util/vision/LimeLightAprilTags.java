@@ -24,7 +24,8 @@ public class LimeLightAprilTags extends CommandBase {
     private final SwerveSubsytem swerve;
     private final LimeLight limelight;
     double [] botPose, targetId;
-    Pose2d targetPose, goalPose;
+    Pose3d targetPose;
+    Pose2d goalPose;
  
     public AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -34,27 +35,21 @@ public class LimeLightAprilTags extends CommandBase {
         new Rotation3d(0.0, 0.0, Math.PI));
 
     
-        private static final TrapezoidProfile.Constraints xConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
-        private static final TrapezoidProfile.Constraints yConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
-        private static final TrapezoidProfile.Constraints rotateConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ROTATE_VELOCITY, CameraConstants.MAX_ROTATE_ACCELERATION);
+    private static final TrapezoidProfile.Constraints xConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
+    private static final TrapezoidProfile.Constraints yConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
+    private static final TrapezoidProfile.Constraints rotateConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ROTATE_VELOCITY, CameraConstants.MAX_ROTATE_ACCELERATION);
     
-        private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, xConstraints); //FIX 
-        private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, yConstraints);
-        private final ProfiledPIDController rotateController = new ProfiledPIDController(2, 0, 0, rotateConstraints);
+    private final ProfiledPIDController xController = new ProfiledPIDController(3, 0, 0, xConstraints); //FIX 
+    private final ProfiledPIDController yController = new ProfiledPIDController(3, 0, 0, yConstraints);
+    private final ProfiledPIDController rotateController = new ProfiledPIDController(2, 0, 0, rotateConstraints);
     
+
     public LimeLightAprilTags(LimeLight limelight, SwerveSubsytem swerve){
         this.limelight = limelight;
         this.swerve = swerve;
 
         addRequirements(swerve);
         addRequirements(limelight);
-
-           //Gets Apriltag layout from JSON with IDs and poses.
-           try {
-            aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile); 
-        } catch (IOException e){
-            System.out.println(e);
-        } 
 
         xController.setTolerance(0.2);
         yController.setTolerance(0.2);
@@ -74,9 +69,9 @@ public class LimeLightAprilTags extends CommandBase {
     public void execute(){
             var robotPose2d = swerve.getCurrentPose();
      
-            targetPose = LimeLight.getBotPose(); //gets apriltag pose 
+            targetPose = LimeLight.getTargetPose(); //gets apriltag pose 
 
-            //goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();     //FIX gets goal pose from apriltag pose 
+            goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();     //FIX gets goal pose from apriltag pose 
             
          
 

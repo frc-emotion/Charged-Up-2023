@@ -2,6 +2,7 @@
 package frc.robot.util.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -16,10 +17,9 @@ public class LimeLight extends SubsystemBase{
     NetworkTable table;
 
     static Pose2d botPose;
-
+    static Pose3d targetPose;
     Pose2d cameraPose;
 
-    static Pose2d targetPose; 
     double[] tagID;
 
 
@@ -30,9 +30,8 @@ public class LimeLight extends SubsystemBase{
     public void periodic(){
 
         LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
-        botPose = llresults.fiducialResults.getRobotPose_FieldSpace2D();
-        cameraPose = llresults.fiducialResults.getCameraPose_TargetSpace2D();
-        targetPose = llresults.fiducialResults.getTargetPose_RobotSpace2D();
+        botPose = LimelightHelpers.getBotPose2d("limelight");
+        targetPose = llresults.fiducialResults.getTargetPose_RobotSpace();
 
         tagID = table.getEntry("tid").getDoubleArray(new double[6]);
 
@@ -41,6 +40,8 @@ public class LimeLight extends SubsystemBase{
         SmartDashboard.getEntry("camerapose_targetspace"); 
         SmartDashboard.getEntry("tid"); 
         SmartDashboard.getEntry("targetpose_robotspace");
+
+        System.out.println(botPose);
        
     }
 
@@ -48,7 +49,7 @@ public class LimeLight extends SubsystemBase{
         return botPose;
     }
 
-    public static Pose2d getTargetPose(){
+    public static Pose3d getTargetPose(){
         return targetPose;
     }
 

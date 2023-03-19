@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+//import edu.wpi.first.math.Pair;
+//import java.util.Optional;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,11 +24,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
 import frc.robot.util.dashboard.TabManager.SubsystemTab;
 import frc.robot.util.vision.LimeLight;
+import frc.robot.util.vision.LimelightHelpers;
 import frc.robot.util.vision.PoseEstimator;
-import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-//import edu.wpi.first.math.Pair;
-//import java.util.Optional;
 
 /**
  * Main Swerve Subsytem class
@@ -154,18 +154,18 @@ public class SwerveSubsytem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        //Updates with drivetrain sensors
+        /*
         poseEstimator.update(                   
             getRotation2d(), 
             getModulePositions());
+        */
 
        //Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
        //unnecessary since not using photon?
 
         //Adds vision 
-       //poseEstimator.addVisionMeasurement(LimeLight.getBotPose(), Timer.getFPGATimestamp()); 
-
-        m_field.setRobotPose(getCurrentPose());
+       poseEstimator.addVisionMeasurement(LimeLight.getBotPose(), Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Pipeline("")); 
+       m_field.setRobotPose(getCurrentPose());
     }
 
     public void stopModules() {
