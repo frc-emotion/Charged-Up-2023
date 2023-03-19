@@ -26,13 +26,9 @@ public class ManualArmCommand extends CommandBase {
     @Override
     public void execute() {
         double angularSpeed = angularSpdFunc.get();
+            arm.stopArm();
 
-        if(angularSpeed > 0.0){
-            arm.setArmSpeeds(ArmConstants.ARM_SPEED);
-        }
-        else if(angularSpeed < 0.0){
-            arm.setArmSpeeds(-ArmConstants.ARM_SPEED);
-        }
+
     }
 
     @Override

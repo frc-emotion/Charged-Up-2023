@@ -17,6 +17,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LevelChargeStation;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.ManualControlElevator;
+import frc.robot.commands.SetHeightCommand;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.ClawCommand;
@@ -96,8 +97,8 @@ public class RobotContainer {
     ); 
    
     elevator.setDefaultCommand(
-      new ManualControlElevator(
-        elevator, () -> operatorController.getRawAxis(Constants.ElevatorConstants.operatorElevatorAxis)
+      new SetHeightCommand(
+        elevator
       )
    );
 

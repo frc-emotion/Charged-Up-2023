@@ -39,7 +39,7 @@ public final class Constants {
         public static final int kOperatorArmAxis = XboxController.Axis.kRightY.value;
 
 
-        public static final double kDeadband = 0.4;
+        public static final double kDeadband = 0.2;
     }
 
     public static final class ModuleConstants {
@@ -76,7 +76,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         
-        public static final int armMotorPort = 100;
+        public static final int armMotorPort = 23;
         public static final int absoluteEncoderPort = 9;
 
         public static final double ARM_SPEED = 0.5;
@@ -104,7 +104,7 @@ public final class Constants {
 
     public static class ClawConstants {
 
-        public static final int CLAW = 0; 
+        public static final int CLAW = 26; 
 
         //test to get correct values 
         public static final double closedClawCurrentThreshold = 45; 
@@ -249,22 +249,30 @@ public final class Constants {
     }
     public static final class ElevatorConstants{
         //constants for levels may vary
-        public static final double MINLEVEL = 1;
-        public static final double LOWLEVEL = 2;
-        public static final double MIDDLELEVEL = 7;
-        public static final double HIGHLEVEL = 12;
-        public static final double MAXLEVEL = 15;
-        public static final double ELEVATORMOTORSPEED = 10;
-        public static final double KP = 0;
-        public static final double KD = 1;
-        public static final double KI = 1;
+        public static final double MINLEVEL = 0.04;
+        public static final double LOWLEVEL = 0.1;
+        public static final double MIDDLELEVEL = 0.3;
+        public static final double HIGHLEVEL = 0.5;
+        public static final double MAXLEVEL = 0.6;
+        public static final double ELEVATORMOTORSPEED = 0.2;
+        public static final double KP = 2;
+        public static final double KD = 9.9513;
+        public static final double KI = 0;
         public static final double PIDVALUE = 0.5;
         public static final int CANID = 0;
         public static final double MINTHRESHOLD = 0.5;
         public static final double FACTOR = 1 / 39.37;
         public static final int CURRENT_LIMIT = 45;
         public static final double SECOND_CURRENT_LIMIT = 45;
-        public static int operatorElevatorAxis = 1;
+        public static final double SPROCKETRADIUS = 2 / Math.PI;
+        public static int operatorElevatorAxis = XboxController.Axis.kLeftY.value;
+        public static int ELEVATORMOTOR_ID = 22;
+
+        public static double KS = 0.12212;
+        public static double KA = 0.36817;
+        public static double KV = 7.1818;
+        public static double KG = 0.25774;
+        
 
 
     }
