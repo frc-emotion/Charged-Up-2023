@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -158,10 +159,11 @@ public class SwerveSubsytem extends SubsystemBase {
             getRotation2d(), 
             getModulePositions());
 
-       Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+       //Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
+       //unnecessary since not using photon?
 
         //Adds vision 
-       poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
+       //poseEstimator.addVisionMeasurement(LimeLight.getBotPose(), Timer.getFPGATimestamp()); 
 
         m_field.setRobotPose(getCurrentPose());
     }

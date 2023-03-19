@@ -16,10 +16,7 @@ import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.util.vision.LimeLight;
-import frc.robot.util.vision.LimeLightAlign;
 import frc.robot.util.vision.LimeLightAprilTags;
-import frc.robot.util.vision.LimeLightStrafe;
-import frc.robot.util.vision.LimeLightTurnStrafe;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,9 +66,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-    new JoystickButton(operatorController, XboxController.Button.kA.value).whileTrue(new LimeLightAlign(swerveSubsytem, limelight));
-    new JoystickButton(operatorController, XboxController.Button.kX.value).whileTrue(new LimeLightStrafe(swerveSubsytem, limelight));
-    new JoystickButton(operatorController, XboxController.Button.kY.value).whileTrue(new LimeLightTurnStrafe(swerveSubsytem, limelight));
     new JoystickButton(operatorController, XboxController.Button.kB.value).whileTrue(new LimeLightAprilTags(limelight, swerveSubsytem));
 
     //new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));

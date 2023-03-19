@@ -8,9 +8,12 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.CameraConstants;
+import frc.robot.Constants.DriveConstants;
 
 import java.io.IOException;
 
@@ -20,7 +23,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 public class LimeLightAprilTags extends CommandBase {
     private final SwerveSubsytem swerve;
     private final LimeLight limelight;
-    double [] botPose, targetId, targetPose;
+    double [] botPose, targetId;
+    Pose2d targetPose, goalPose;
  
     public AprilTagFieldLayout aprilTagFieldLayout;
 
@@ -70,7 +74,7 @@ public class LimeLightAprilTags extends CommandBase {
     public void execute(){
             var robotPose2d = swerve.getCurrentPose();
      
-            targetPose = limelight.getEntry("targetpose_robotspace");  //gets apriltag pose 
+            targetPose = LimeLight.getBotPose(); //gets apriltag pose 
 
             //goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();     //FIX gets goal pose from apriltag pose 
             
@@ -85,12 +89,12 @@ public class LimeLightAprilTags extends CommandBase {
 
 
         // Drive to the target
-        var xSpeed = xController.calculate(robotPose.getX());
+        var xSpeed = xController.calculate(robotPose2d.getX());
         if (xController.atGoal()) {
             xSpeed = 0;
         }
 
-        var ySpeed = yController.calculate(robotPose.getY());
+        var ySpeed = yController.calculate(robotPose2d.getY());
         if (yController.atGoal()) {
             ySpeed = 0;
         }
