@@ -14,6 +14,11 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase{
 
+     //roll --> -25 degrees from vertical 
+    //30.5 inches high 
+    //6.5 inches to the left of the center of robot  
+    //13.5 inches forward from center of robot
+
     NetworkTable table;
 
     static Pose2d botPose;
