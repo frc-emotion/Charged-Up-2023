@@ -96,15 +96,9 @@ public class RobotContainer {
     () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
     ); 
    
-<<<<<<< HEAD
-    elevator.setDefaultCommand(
-      new SetHeightCommand(
-        elevator
-=======
   /*  elevator.setDefaultCommand(
       new ManualControlElevator(
         elevator, () -> operatorController.getRawAxis(Constants.ElevatorConstants.operatorElevatorAxis)
->>>>>>> e7ba19096697bc42d72de0379a9c13dba750d47a
       )
    );*/
 

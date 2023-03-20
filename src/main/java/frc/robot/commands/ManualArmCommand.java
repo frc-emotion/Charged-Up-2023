@@ -30,8 +30,6 @@ public class ManualArmCommand extends CommandBase {
             arm.stopArm();
 
 
-<<<<<<< HEAD
-=======
         if(angularSpeed > OIConstants.kDeadband){
             arm.setArmSpeeds(ArmConstants.ARM_SPEED);
         }
@@ -41,7 +39,6 @@ public class ManualArmCommand extends CommandBase {
         else{
             arm.stopArm();
         }
->>>>>>> e7ba19096697bc42d72de0379a9c13dba750d47a
     }
 
     @Override
