@@ -93,7 +93,8 @@ public class RobotContainer {
    clawSubsystem.setDefaultCommand(
     new ClawCommand(
     clawSubsystem,
-    () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx))
+    () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawButtonIdx),
+    () -> operatorController.getRawButtonPressed(OIConstants.kOperatorClawStopIdx))
     ); 
    
   /*  elevator.setDefaultCommand(
@@ -115,12 +116,11 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, XboxController.Button.kY.value).whileTrue(new LevelChargeStation(swerveSubsytem));
-    new JoystickButton(operatorController, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
+   // new JoystickButton(operatorController, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
 
 
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
-
     //new JoystickButton(driverController, XboxController.Button.kA).onTrue(command); FIX 
     
 

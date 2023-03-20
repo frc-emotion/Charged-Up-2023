@@ -36,6 +36,7 @@ public final class Constants {
 
         //change to match operator button map 
         public static final int kOperatorClawButtonIdx = XboxController.Button.kX.value;
+        public static final int kOperatorClawStopIdx = XboxController.Button.kRightBumper.value; 
         public static final int kOperatorArmAxis = XboxController.Axis.kRightY.value;
 
 
@@ -108,7 +109,7 @@ public final class Constants {
 
         //test to get correct values 
         public static final double closedClawCurrentThreshold = 45; 
-        public static final double clawNormalSpeed = 0.5; 
+        public static final double clawNormalSpeed = 0.1; 
 
         public static final int CURRENT_LIMIT = 45;
         public static final double SECOND_CURRENT_LIMIT = 45; 
