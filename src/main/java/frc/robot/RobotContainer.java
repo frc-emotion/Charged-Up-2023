@@ -11,10 +11,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.ClawCommand;
+import frc.robot.commands.MaceCommand;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
+import frc.robot.subsystems.mace.Mace;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,7 +31,11 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  private ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final Mace mSub = new Mace(armSubsystem, new ElevatorSubsystem());
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public static ClawSubsystem clawSubsytem = new ClawSubsystem();
+  public static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   //public static Joystick arcadeStick = new Joystick(1);
   //public static Joystick arcadeStick2 = new Joystick(0);
 
@@ -53,6 +63,16 @@ public class RobotContainer {
     
     );
     configureButtonBindings();
+
+    mSub.setDefaultCommand(
+      new MaceCommand(mSub, () -> operatorController.getYButtonPressed())
+    );
+
+    clawSubsytem.setDefaultCommand(
+      new ClawCommand(clawSubsytem, 
+      () -> operatorController.getLeftBumperPressed(), 
+      () -> operatorController.getLeftBumper())
+    );
   }
 
   /**
@@ -62,6 +82,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    new JoystickButton(operatorController, XboxController.Button.kX.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 

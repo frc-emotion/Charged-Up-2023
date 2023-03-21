@@ -22,6 +22,7 @@ public final class Constants {
     //Add all Driver/Teleop Controller here
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
 
         //Change to match driver button map 
         public static final int kDriverYAxis = 1;
@@ -53,7 +54,7 @@ public final class Constants {
         public static final double drivekA = 0;
     }
 
-    public static final class CameraConstants {
+    /*public static final class CameraConstants {
         
         // currently Cam mounted facing forward, half a meter forward of center, half a meter up from center.
         
@@ -64,7 +65,7 @@ public final class Constants {
         public static final double CAMERA_XAXIS = 0.5;
         public static final double CAMERA_YAXIS = 0;
         public static final double CAMERA_ZAXIS = 0.5;
-    }
+    } */
 
 
     public static final class DriveConstants {
@@ -180,10 +181,104 @@ public final class Constants {
     }
 
 
-    public static class SimConstants{
+    public static final class CameraConstants {
+       
+        // currently Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+        public static final double CAMERA_ROLL = 0;
+        public static final double CAMERA_PITCH = 0;
+        public static final double CAMERA_YAW = 0;
 
-        
+
+        public static final double CAMERA_XAXIS = 0.24;
+        public static final double CAMERA_YAXIS = 0;
+        public static final double CAMERA_ZAXIS = 0;
+
+
+        public static final double TARGET_RANGE = 1.0; //how far in front of the target we want to align to
+       
+        public static final double MAX_ALIGN_VELOCITY = 1; //FIX mps
+        public static final double MAX_ALIGN_ACCELERATION = 3; //FIX ?
+        public static final double MAX_ROTATE_VELOCITY = 1; //FIX  
+        public static final double MAX_ROTATE_ACCELERATION = 3; //FIX
     }
 
+    public static final class ArmConstants {
+       
+        public static final int armMotorPort = 23;
+        public static final int absoluteEncoderPort = 9;
+
+
+        public static final double ARM_SPEED = 0.2;
+        public static final double TOP_HEIGHT = Math.PI / 2;
+        public static final double MIDDLE_HEIGHT = Math.PI / 4;
+        public static final double LOW_HEIGHT = Math.PI / 8;
+
+
+        // For Feedfoward
+        public static final double armKS = 0.09;
+        public static final double armKG = 0.57;
+        public static final double armKV = 1.18;
+        public static final double armKA = 0.51;
+
+
+        // For PID controller
+        public static final double armKP = 0.81;
+        public static final double armKD = 0.16;
+        public static final double armKI = 0;
+        public static final double COUNTS_PER_REVOLUTION = 4096;
+        public static final double MAX_ARM_VELOCITY = 0.1;
+        public static final double MAX_ARM_ACCELERATION = 0.05;
+        public static final double ARM_GEAR_RATIO = 56.33;
+        public static final double ARM_SPROCKET_RADIUS = 0.01;
+
+
+       
+    }
+
+
+    public static class ClawConstants {
+
+
+        public static final int CLAW = 26;
+
+
+        //test to get correct values
+        public static final double closedClawCurrentThreshold = 45;
+        public static final double clawNormalSpeed = 0.5;
+
+
+        public static final int CURRENT_LIMIT = 45;
+        public static final double SECOND_CURRENT_LIMIT = 45;
+
+
+    }
+
+    public static final class ElevatorConstants{
+        //constants for levels may vary
+        public static final double MINLEVEL = 0.04;
+        public static final double LOWLEVEL = 0.1;
+        public static final double MIDDLELEVEL = 0.3;
+        public static final double HIGHLEVEL = 0.5;
+        public static final double MAXLEVEL = 0.6;
+        public static final double ELEVATORMOTORSPEED = 0.2;
+        public static final double KP = 2;
+        public static final double KD = 9.9513;
+        public static final double KI = 0;
+        public static final double PIDVALUE = 0.5;
+        public static final int CANID = 0;
+        public static final double MINTHRESHOLD = 0.5;
+        public static final double FACTOR = 1 / 39.37;
+        public static final int CURRENT_LIMIT = 45;
+        public static final double SECOND_CURRENT_LIMIT = 45;
+        public static final double SPROCKETRADIUS = 2 / Math.PI;
+        public static int operatorElevatorAxis = XboxController.Axis.kLeftY.value;
+        public static int ELEVATORMOTOR_ID = 22;
+
+        public static double KS = 0.12212;
+        public static double KA = 0.36817;
+        public static double KV = 7.1818;
+        public static double KG = 0.25774;
+        
+    }
 
 }
