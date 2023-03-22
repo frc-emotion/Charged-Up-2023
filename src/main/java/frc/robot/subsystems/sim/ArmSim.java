@@ -3,7 +3,9 @@ package frc.robot.subsystems.sim;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.SimConstants;
 import frc.robot.SimConstants.ArmValues;
 
@@ -27,8 +30,11 @@ import frc.robot.SimConstants.ArmValues;
 public class ArmSim implements Simulatable {
 
     private final DCMotor m_armGearbox = DCMotor.getNEO(1);
-    private final PIDController m_controller = new PIDController(SimConstants.ArmValues.kArmKp, 0,
-            SimConstants.ArmValues.kArmKd);
+
+
+    TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3, 1.5);
+    private final ProfiledPIDController m_controller = new ProfiledPIDController(SimConstants.ArmValues.kArmKp, 0, SimConstants.ArmValues.kArmKd, constraints);
+
     private final Encoder m_encoder = new Encoder(SimConstants.ArmValues.kEncoderAChannel,
             SimConstants.ArmValues.kEncoderBChannel);
 
@@ -47,7 +53,7 @@ public class ArmSim implements Simulatable {
             m_armReduction,
             SingleJointedArmSim.estimateMOI(m_armLength, m_armMass),
             m_armLength,
-            Units.degreesToRadians(-90),
+            Units.degreesToRadians(-35),
             Units.degreesToRadians(270),
             m_armMass,
             true,

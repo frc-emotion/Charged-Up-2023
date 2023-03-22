@@ -48,13 +48,14 @@ public class MaceSim extends SubsystemBase{
 
     private MaceTrajectory currentTraj = null;
 
-    private MaceTrajectory t;
+    private MaceTrajectory t, b;
     List<Double> values;
 
     private double armHoldingPosition;
     private double elevatorHoldingPostion;
 
     private boolean startTraj = false;
+    private boolean backTraj = false;
 
 
     public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
@@ -80,6 +81,7 @@ public class MaceSim extends SubsystemBase{
         eSim.onInit();
 
         t = StoredTrajectories.TEST_TRAJECTORY;
+        b = StoredTrajectories.BACK_HIGH_TRAJECTORY;
 
 
         SmartDashboard.putData("Arm Sim", m_mech2d);
@@ -100,17 +102,12 @@ public class MaceSim extends SubsystemBase{
 
             trajTimer.start();
             
-            
-
-       
-            
-            //aSim.setArmVoltage(10);
-         aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
+            aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
                 SimConstants.armMPSStoRadSS(values.get(2)))+ aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
 
 
             eSim.setElevatorVoltage(/*eSim.getFeedForwardOutputVolts(values.get(4), values.get(5))*/ + eSim.getPIDOutputVolts(values.get(3)));
-        }
+    }
 
 
 
@@ -131,10 +128,22 @@ public class MaceSim extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if (RobotContainer.simJoystick.getRawButtonPressed(3)){
-            //trajTimer.reset();
+
+        if (currentTraj == t && RobotContainer.simJoystick.getRawButtonPressed(3) && !currentTraj.isActive(trajTimer.get())){
+            startTraj = false;
+            trajTimer.reset();
+            currentTraj = b;
+            backTraj = true;
+
+        } else if (RobotContainer.simJoystick.getRawButtonPressed(3) && (currentTraj == null || currentTraj == b)){
+            trajTimer.reset();
             currentTraj = t;
             startTraj = true;
+        }
+
+        if (backTraj){
+            values = currentTraj.sampleMace(trajTimer.get());
+            runTrajectory();
         }
 
         if (startTraj){
@@ -142,11 +151,9 @@ public class MaceSim extends SubsystemBase{
             runTrajectory();
         }
 
-        if (currentTraj != null && startTraj) {
+        if (currentTraj != null && (startTraj || backTraj)) {
             if (!currentTraj.isActive(trajTimer.get())){
                 trajTimer.stop();
-                currentTraj = null;
-                startTraj = true;
             }
         }
 
