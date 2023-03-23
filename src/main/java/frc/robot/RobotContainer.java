@@ -70,8 +70,8 @@ public class RobotContainer {
 
     clawSubsytem.setDefaultCommand(
       new ClawCommand(clawSubsytem, 
-      () -> operatorController.getLeftBumperPressed(), 
-      () -> operatorController.getLeftBumper())
+      () -> operatorController.getLeftBumper(), 
+      () -> operatorController.getRightBumper())
     );
   }
 

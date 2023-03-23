@@ -216,14 +216,14 @@ public final class Constants {
 
         // For Feedfoward
         public static final double armKS = 0.09;
-        public static final double armKG = 0.57;
+        public static final double armKG = 0.27;
         public static final double armKV = 1.18;
         public static final double armKA = 0.51;
 
 
         // For PID controller
-        public static final double armKP = 0.81;
-        public static final double armKD = 0.16;
+        public static final double armKP = 1.23;
+        public static final double armKD = 0;
         public static final double armKI = 0;
         public static final double COUNTS_PER_REVOLUTION = 4096;
         public static final double MAX_ARM_VELOCITY = 0.1;

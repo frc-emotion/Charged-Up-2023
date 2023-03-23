@@ -34,7 +34,7 @@ public class ArmSubsystem extends SubsystemBase{
     //private final DutyCycleEncoder absoluteEncoder;
     private final RelativeEncoder armEncoder;
     private final ArmFeedforward armFeedForward;
-    private final PIDController armController;
+    private final ProfiledPIDController armController;
     private double pidVal, feedForwardVal, angularSpeed;
    
     public ArmSubsystem(){
@@ -52,11 +52,13 @@ public class ArmSubsystem extends SubsystemBase{
        
         //absoluteEncoder = new DutyCycleEncoder(ArmConstants.absoluteEncoderPort);
        
-        armFeedForward = new ArmFeedforward(SmartDashboard.getNumber("KS Constant", ArmConstants.armKS), SmartDashboard.getNumber("KV Constant", ArmConstants.armKV), SmartDashboard.getNumber("KG Constant", ArmConstants.armKG));
+        armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
         //armController = armMotor.getPIDController();
 
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(1.5, 0.5);
 
-        armController = new PIDController(SmartDashboard.getNumber("KP Constant", ArmConstants.armKP), SmartDashboard.getNumber("KD Constant", ArmConstants.armKD), SmartDashboard.getNumber("KI Constant", ArmConstants.armKI));
+        armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
+        constraints);
 
 
         resetPosition();
@@ -128,7 +130,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public double getPIDOutputVolts(double setpoint){
-        armController.setSetpoint(setpoint);
+        armController.setGoal(setpoint);
         return armController.calculate(getPosition());
     }
 
@@ -137,8 +139,8 @@ public class ArmSubsystem extends SubsystemBase{
 
     }
     public void setArmAngle(){
-        if(RobotContainer.operatorController.getRightBumper()){
-            armController.setSetpoint(ArmConstants.TOP_HEIGHT);
+    /*     if(RobotContainer.operatorController.getRightBumper()){
+            armController.setGoal(ArmConstants.TOP_HEIGHT);
             pidVal = armController.calculate(getPosition());
             feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
 
@@ -147,7 +149,7 @@ public class ArmSubsystem extends SubsystemBase{
             setArmSpeeds(feedForwardVal + pidVal);
         }
         else if(RobotContainer.operatorController.getBButton()){
-            armController.setSetpoint(ArmConstants.MIDDLE_HEIGHT);
+            armController.setGoal(ArmConstants.MIDDLE_HEIGHT);
             pidVal = armController.calculate(getPosition());
             feedForwardVal = armFeedForward.calculate(ArmConstants.MIDDLE_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
 
@@ -156,7 +158,7 @@ public class ArmSubsystem extends SubsystemBase{
             setArmSpeeds(feedForwardVal + pidVal);
         }
         else if(RobotContainer.operatorController.getAButton()){
-            armController.setSetpoint(ArmConstants.LOW_HEIGHT);
+            armController.setGoal(ArmConstants.LOW_HEIGHT);
             pidVal = armController.calculate(getPosition());
             feedForwardVal = armFeedForward.calculate(ArmConstants.LOW_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
 
@@ -165,7 +167,7 @@ public class ArmSubsystem extends SubsystemBase{
         }
         else{
             stopArm();
-        }
+        }*/
     }
    
     public void setArmSpeeds(double armSpeeds){
@@ -214,7 +216,7 @@ public class ArmSubsystem extends SubsystemBase{
 
 
         //get the height to the next setpoint periodically
-        SmartDashboard.putNumber("Arm Pose", getPosition());
+        SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
 
 
         //System.out.println("Arm Speeds " + getArmSpeeds());

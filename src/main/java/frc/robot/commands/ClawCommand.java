@@ -38,24 +38,12 @@ public class ClawCommand extends CommandBase{
         } */
 
 
-        if (clawFuncL.get()){
-            direction = !direction;
-        } 
+    
         if (clawFuncR.get()){
-            clawSubsystem.setClawMotor(0.1);
-            stopped = false;
-        } else {
-            if (clawSubsystem.signedOutputCurrent() < -25 && stopped == false){
-                stopped = true;
-            } else{
-                clawSubsystem.setClawMotor(-0.05);
-            }
+            clawSubsystem.setClawMotor(0.2);
+        } else if (clawFuncL.get()) {
+            clawSubsystem.setClawMotor(-0.1);
         }
-
-        if (stopped){
-            clawSubsystem.stopClaw();
-        }
-                
 
         /*if (direction && !stopped){
             clawSubsystem.setClawMotor(0.1);
