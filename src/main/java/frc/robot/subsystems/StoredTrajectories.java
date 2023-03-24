@@ -44,7 +44,7 @@ public class StoredTrajectories {
                 add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(180))));
                 add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(150))));
                 add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(90))));
-                add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(20))));
+                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(20))));
                 add(new Translation2d(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(0))));
                 add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(-15))));  
                 add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(-40))));  
