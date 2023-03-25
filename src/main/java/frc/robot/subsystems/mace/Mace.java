@@ -36,8 +36,8 @@ import frc.robot.subsystems.mace.StoredTrajectories;
 
 public class Mace extends SubsystemBase{
 
-    private final ArmSubsystem aSystem;
-    private final ElevatorSubsystem eSystem;
+    //private final ArmSubsystem aSystem;
+    //private final ElevatorSubsystem eSystem;
     private Timer trajTimer = new Timer();
 
     double times = 0;
@@ -54,11 +54,11 @@ public class Mace extends SubsystemBase{
     private boolean backTraj = false;
 
 
-    public Mace(ArmSubsystem aSystem, ElevatorSubsystem eSystem){
-        this.aSystem = aSystem;
+   // public Mace(ArmSubsystem aSystem, ElevatorSubsystem eSystem){
+     /*    this.aSystem = aSystem;
         this.eSystem = eSystem;
-        test = StoredTrajectories.TEST_TRAJECTORY;
-        back = StoredTrajectories.BACK_HIGH_TRAJECTORY;
+        //test = StoredTrajectories.HIGH_MACE_TRAJECTORY;
+        //back = StoredTrajectories.BACK_HIGH_TRAJECTORY;
 
         SmartDashboard.putNumber("Height", eSystem.getHeight());
         SmartDashboard.putNumber("timer", trajTimer.get());
@@ -66,11 +66,13 @@ public class Mace extends SubsystemBase{
         trajTimer.reset();
 
 
-        //elevatorHoldingPostion = eSim.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(3));
-        //armHoldingPosition = aSystem.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(0));
-
         SmartDashboard.putNumber("ttR", test.totalTime());
         
+    }
+
+    public void stopAll(){
+        aSystem.setArmSpeeds(0);
+        eSystem.setElevatorVoltage(0);
     }
 
     private void runTrajectory(){
@@ -78,12 +80,11 @@ public class Mace extends SubsystemBase{
             trajTimer.start();
             
             //aSim.s(10);
-           aSystem.setArmSpeeds(/*aSystem.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
-                SimConstants.armMPSStoRadSS(values.get(2)))+*/  aSystem.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+           aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
 
 
-            eSystem.setElevatorVoltage(/*eSim.getFeedForwardOutputVolts(values.get(4), values.get(5))*/eSystem.getPIDOutputVolts(values.get(3)));
-    }
+            eSystem.setElevatorVoltage(/*eSim.getFeedForwardOutputVolts(values.get(4), values.get(5))*///eSystem.getPIDOutputVolts(values.get(3)));
+
 
 
 
@@ -102,40 +103,44 @@ public class Mace extends SubsystemBase{
      * 
      */
 
-    public void runMace(Supplier<Boolean> func) {
-        if (currentTraj == test && func.get() && !currentTraj.isActive(trajTimer.get())){
-            startTraj = false;
-            trajTimer.reset();
-            currentTraj = back;
-            backTraj = true;
+    public void runMace(Supplier<Boolean> func, Supplier<Double> prep, MaceTrajectory front, MaceTrajectory backT) {
+/* 
+        if (prep.get() > 0.4){
+            if (currentTraj == front && func.get() && !currentTraj.isActive(trajTimer.get())){
+                startTraj = false;
+                trajTimer.reset();
+                currentTraj = backT;
+                backTraj = true;
 
-        } else if (func.get() && (currentTraj == null || currentTraj == back)){
-            trajTimer.reset();
-            currentTraj = test;
-            startTraj = true;
-        }
-
-        if (backTraj){
-            values = currentTraj.sampleMace(trajTimer.get());
-            runTrajectory();
-        }
-
-        if (startTraj){
-            values = currentTraj.sampleMace(trajTimer.get());
-            runTrajectory();
-        }
-
-        if (currentTraj != null && (startTraj || backTraj)) {
-            if (!currentTraj.isActive(trajTimer.get())){
-                trajTimer.stop();
+            } else if (func.get() && (currentTraj == null || currentTraj == backT)){
+                backTraj = false;
+                trajTimer.reset();
+                currentTraj = front;
+                startTraj = true;
             }
-        }
 
-        if (values != null){
-            SmartDashboard.putNumber("elePose", Units.metersToInches(values.get(3)));
-            SmartDashboard.putNumber("armPose", Units.radiansToDegrees(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
-        }
-        SmartDashboard.putNumber("timer", trajTimer.get());
-        SmartDashboard.putNumber("totalTime", test.getTotalTimeSeconds());
+
+            if (backTraj){
+                values = currentTraj.sampleMace(trajTimer.get());
+                runTrajectory();
+            }
+
+            if (startTraj){
+                values = currentTraj.sampleMace(trajTimer.get());
+                runTrajectory();
+            }
+
+            if (currentTraj != null && (startTraj || backTraj)) {
+                if (!currentTraj.isActive(trajTimer.get())){
+                    trajTimer.stop();
+                }
+            }
+    } else {
+        stopAll();
+        currentTraj = null;
+        startTraj = false;
+        backTraj = false;
+    }
+    } */
     }
 }

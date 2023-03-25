@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -38,10 +38,10 @@ public class ArmSubsystem extends SubsystemBase{
     private double pidVal, feedForwardVal, angularSpeed;
    
     public ArmSubsystem(){
-       
 
 
         armMotor = new CANSparkMax(ArmConstants.armMotorPort, MotorType.kBrushless);
+        armMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, 10);
        
         armMotor.setSmartCurrentLimit(45);
         armMotor.setSecondaryCurrentLimit(45);
@@ -55,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase{
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
         //armController = armMotor.getPIDController();
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(1.5, 0.5);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(2.5, 1.0);
 
         armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
         constraints);
@@ -139,16 +139,16 @@ public class ArmSubsystem extends SubsystemBase{
 
     }
     public void setArmAngle(){
-    /*     if(RobotContainer.operatorController.getRightBumper()){
-            armController.setGoal(ArmConstants.TOP_HEIGHT);
+        if(RobotContainer.operatorController.getBButton()){
+            armController.setGoal(Units.degreesToRadians(-30));
             pidVal = armController.calculate(getPosition());
-            feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+            //feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
 
 
             //MathUtil.clamp(pidVal, 0, 12);
-            setArmSpeeds(feedForwardVal + pidVal);
+            setArmSpeeds(pidVal);
         }
-        else if(RobotContainer.operatorController.getBButton()){
+      /*   else if(RobotContainer.operatorController.getBButton()){
             armController.setGoal(ArmConstants.MIDDLE_HEIGHT);
             pidVal = armController.calculate(getPosition());
             feedForwardVal = armFeedForward.calculate(ArmConstants.MIDDLE_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
@@ -164,10 +164,10 @@ public class ArmSubsystem extends SubsystemBase{
 
             //MathUtil.clamp(pidVal, 0, 12);
             setArmSpeeds(feedForwardVal + pidVal);
-        }
+        }/* */
         else{
             stopArm();
-        }*/
+        }
     }
    
     public void setArmSpeeds(double armSpeeds){
@@ -216,7 +216,7 @@ public class ArmSubsystem extends SubsystemBase{
 
 
         //get the height to the next setpoint periodically
-        SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
+        //SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
 
 
         //System.out.println("Arm Speeds " + getArmSpeeds());

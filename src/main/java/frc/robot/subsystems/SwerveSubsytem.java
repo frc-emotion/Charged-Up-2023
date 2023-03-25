@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
 import frc.robot.util.dashboard.TabManager.SubsystemTab;
-import frc.robot.util.vision.PoseEstimator;
+//import frc.robot.util.vision.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.Pair;
 import java.util.Optional;
@@ -68,7 +69,7 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    private final PoseEstimator visionPoseEstimator = new PoseEstimator();
+   // private final PoseEstimator visionPoseEstimator = new PoseEstimator();
 
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
@@ -103,6 +104,14 @@ public class SwerveSubsytem extends SubsystemBase {
         initShuffleboard();
 
 
+    }
+
+    public double getPitch(){
+        return Units.degreesToRadians((gyro.getPitch()));
+    }
+
+    public double getRoll(){
+        return Units.degreesToRadians((gyro.getRoll()));
     }
 
     public void zeroHeading() {

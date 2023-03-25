@@ -1,3 +1,4 @@
+
 package frc.robot.commands;
 
 import java.util.function.Supplier;
@@ -10,68 +11,54 @@ import frc.robot.subsystems.ClawSubsystem;
 public class ClawCommand extends CommandBase{
     
     private final ClawSubsystem clawSubsystem;
-    private final Supplier<Boolean> clawFuncL, clawFuncR;
-    boolean direction;
-    boolean stopped; 
+    private final Supplier<Boolean> clawFunc, clawStop;
+    boolean direction, stopped; 
 
-    public ClawCommand(ClawSubsystem clawSubsystem, Supplier<Boolean> clawFuncL, Supplier<Boolean> clawFuncR){
+    public ClawCommand(ClawSubsystem clawSubsystem, Supplier<Boolean> clawFunc, Supplier<Boolean> clawStop){
+       
         this.clawSubsystem = clawSubsystem;
-        this.clawFuncL = clawFuncL;
-        this.clawFuncR = clawFuncR;
-
+        this.clawFunc = clawFunc;
+        this.clawStop = clawStop; 
         addRequirements(clawSubsystem);
-
+        
         direction = false; 
         stopped = true; 
 
+        SmartDashboard.putBoolean("Claw Direction", direction);
+        SmartDashboard.putBoolean("Stopped", stopped);
+        SmartDashboard.putNumber("Claw Current Limit", 35);
+        SmartDashboard.putNumber("Claw Forward Speed", 0.1);
     }
 
+
     public void execute(){
-
-
-        /*if (clawFuncL.get()){
-            clawSubsystem.setClawMotor(-0.1);
-        } else if (clawFuncR.get()){
-            clawSubsystem.setClawMotor(0.1);
-        } else {
-            clawSubsystem.stopClaw();
-        } */
-
-
-    
-        if (clawFuncR.get()){
-            clawSubsystem.setClawMotor(0.2);
-        } else if (clawFuncL.get()) {
-            clawSubsystem.setClawMotor(-0.1);
-        }
-
-        /*if (direction && !stopped){
-            clawSubsystem.setClawMotor(0.1);
-        } else if (!direction && !stopped){
-            clawSubsystem.setClawMotor(-0.1);
-        }*/
-
-        SmartDashboard.putNumber("claw current 2.0", clawSubsystem.signedOutputCurrent());
-        SmartDashboard.putNumber("claww speed", clawSubsystem.getSpeed());
-        
-
-
-
-      /*   SmartDashboard.putBoolean("Claw Direction", direction);
-        double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 20);
+        SmartDashboard.putBoolean("Claw Direction", direction);
+        SmartDashboard.putBoolean("Stopped", stopped);
+        double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 35);  
+        double clawSpeed = SmartDashboard.getNumber("Claw Forward Speed", 0.1);
+         
         if (clawFunc.get()){
             direction = !direction; 
             stopped = false; 
         }
+
+        if (clawStop.get()){
+            stopped = true; 
+        }
+
+        if (direction && !stopped){
+                clawSubsystem.setClawMotor(0.24);
+        }
+        else if (!direction && !stopped){
+                clawSubsystem.setClawMotor(-0.25);
+        }
+        else if (stopped){
+            clawSubsystem.stopClaw();
+        }
+
+        /* 
         if(direction && !stopped){
-            clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
-            if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
                 clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
-            }
-            else if (Math.abs(clawSubsystem.getClawCurrent()) >= clawCurrentLimit){
-                clawSubsystem.stopClaw();
-                stopped = true; 
-            }
         }
         else if(!direction && !stopped){
             if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
@@ -83,12 +70,11 @@ public class ClawCommand extends CommandBase{
             }
         }
         */
-
     }
 
     @Override
     public void end(boolean interrupted) {
-      // clawSubsystem.stopClaw();
+       clawSubsystem.stopClaw();
     }
 
     @Override

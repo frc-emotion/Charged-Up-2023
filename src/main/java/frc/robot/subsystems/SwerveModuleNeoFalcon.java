@@ -6,11 +6,13 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -46,10 +48,13 @@ public class SwerveModuleNeoFalcon {
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
 
+        
         absoluteEncoder = new CANCoder(absoluteEncoderId);
         absoluteEncoder.configMagnetOffset(Units.radiansToDegrees(absoluteEncoderOffsetRad));
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         absoluteEncoder.configSensorDirection(absoluteEncoderReversed);
+        absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 20);
+        absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 100, 200);
 
         driveMotor = new WPI_TalonFX(driveMotorId);
         driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -61,6 +66,8 @@ public class SwerveModuleNeoFalcon {
         turningMotor.setSecondaryCurrentLimit(45);
         turningMotor.setInverted(turningMotorReversed);
         turningMotor.setIdleMode(IdleMode.kBrake);
+
+
 
         turningEncoder = turningMotor.getEncoder();
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
@@ -134,8 +141,8 @@ public class SwerveModuleNeoFalcon {
         if (isOpenLoop){
             driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         } else {
-            double velocity = MPSToFalcon(state.speedMetersPerSecond, (((ModuleConstants.kWheelDiameterMeters / 2)) * 2 * Math.PI), 1 / (ModuleConstants.kDriveMotorGearRatio));
-            driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(state.speedMetersPerSecond));
+          //  double velocity = MPSToFalcon(state.speedMetersPerSecond, (((ModuleConstants.kWheelDiameterMeters / 2)) * 2 * Math.PI), 1 / (ModuleConstants.kDriveMotorGearRatio));
+          //  driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(state.speedMetersPerSecond));
         }
     }
 

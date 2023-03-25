@@ -34,7 +34,7 @@ public final class Constants {
         public static final int kDriverSlowButtonIdx = XboxController.Button.kLeftBumper.value;
         public static final int kDriverTurboButtonIdx = XboxController.Button.kRightBumper.value;
 
-        public static final double kDeadband = 0.4;
+        public static final double kDeadband = 0.08;
     }
 
     public static final class ModuleConstants {
@@ -155,6 +155,14 @@ public final class Constants {
 
         public static final double kTeleDriveSlowAccelerationUnitsPerSecond = 3;
         public static final double kTeleDriveSlowAngularAccelerationUnitsPerSecond = 3;
+
+        public static final double TARGET_ANGLE = 0;
+        public static final double MAX_LEVEL_VELOCITY = 1; //FIX mps 
+        public static final double MAX_LEVEL_ACCELERATION = 2; //Fix with testing
+        public static final double THRESHOLD = Math.PI / 45;
+        public static final double KPLevel = 6;
+        public static final double KDLevel = 0.5;
+        public static final double KILevel = 0;
     }
 
     public static class AutoConstants {
@@ -257,10 +265,10 @@ public final class Constants {
         //constants for levels may vary
         public static final double MINLEVEL = 0.04;
         public static final double LOWLEVEL = 0.1;
-        public static final double MIDDLELEVEL = 0.3;
+        public static final double MIDDLELEVEL = 0.4;
         public static final double HIGHLEVEL = 0.5;
         public static final double MAXLEVEL = 0.6;
-        public static final double ELEVATORMOTORSPEED = 0.2;
+        public static final double ELEVATORMOTORSPEED = 0.15;
         public static final double KP = 2;
         public static final double KD = 9.9513;
         public static final double KI = 0;
