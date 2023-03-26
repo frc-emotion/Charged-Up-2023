@@ -35,7 +35,7 @@ public class MaceCommand extends CommandBase {
     
        // mSub.runMace(buttonLow, buttonPress, StoredTrajectories.LOW_MACE_TRAJECTORY, StoredTrajectories.LOW_BACK_MACE_TRAJECTORY);
 
-       // mSub.runMace(buttonHigh, buttonPress, StoredTrajectories.HIGH_MACE_TRAJECTORY, StoredTrajectories.BACK_HIGH_TRAJECTORY);
+       mSub.runMace(buttonHigh, buttonPress, StoredTrajectories.HIGH_MACE_TRAJECTORY, StoredTrajectories.BACK_HIGH_TRAJECTORY);
     }
 
     @Override

@@ -13,7 +13,7 @@ public class LevelChargeStationAuto extends SequentialCommandGroup {
     public LevelChargeStationAuto(SwerveSubsytem swerveSubsytem, PathPlannerTrajectory path){
 
         addCommands(new SequentialCommandGroup(SwerveController.followTrajectoryCommand(path, true, swerveSubsytem), 
-                                                new LevelChargeStation(swerveSubsytem)).withTimeout(6)
+                                                new LevelChargeStation(swerveSubsytem)).withTimeout(10)
     
 
         );

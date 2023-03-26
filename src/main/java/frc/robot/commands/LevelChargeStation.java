@@ -63,7 +63,7 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        //return Math.abs(DriveConstants.TARGET_ANGLE - gyro.getPitch()) < DriveConstants.THRESHOLD; //Maybe have it end the command when the specified threshold is met and the robot is 'flat'?
-        return false;
+        return Math.abs(DriveConstants.TARGET_ANGLE - -swerve.getPitch() * Math.cos(Units.degreesToRadians(swerve.getHeading()))) - (swerve.getRoll() * Math.sin(Units.degreesToRadians(swerve.getHeading()))) < DriveConstants.THRESHOLD; //Maybe have it end the command when the specified threshold is met and the robot is 'flat'?
+        //return false;
     }
 }
