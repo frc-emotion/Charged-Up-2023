@@ -55,6 +55,9 @@
         "open": true
       },
       "SmartDashboard": {
+        "Arm Sim": {
+          "open": true
+        },
         "open": true
       }
     }

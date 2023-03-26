@@ -29,18 +29,16 @@ import frc.robot.subsystems.MaceTrajectory;
 import frc.robot.subsystems.MaceTrajectoryGenerator;
 import frc.robot.subsystems.StoredTrajectories;
 
-public class MaceSim extends SubsystemBase{
+public class MaceSim extends SubsystemBase {
 
     private final ArmSim aSim;
     private final ElevatorSimulator eSim;
 
-    
     private final Mechanism2d m_mech2d = new Mechanism2d(60, 60);
     private final MechanismRoot2d m_elevator = m_mech2d.getRoot("Elevator", 30, 30);
 
     private final MechanismLigament2d m_elevatorMech2d;
     private final MechanismLigament2d m_arm;
-
 
     private Timer trajTimer = new Timer();
 
@@ -57,24 +55,23 @@ public class MaceSim extends SubsystemBase{
     private boolean startTraj = false;
     private boolean backTraj = false;
 
-
-    public MaceSim(ArmSim aSim, ElevatorSimulator eSim){
+    public MaceSim(ArmSim aSim, ElevatorSimulator eSim) {
         this.aSim = aSim;
         this.eSim = eSim;
- 
+
         m_elevatorMech2d = m_elevator.append(
-            new MechanismLigament2d(
-                "Elevator", Units.metersToInches(eSim.getPosition()), 90));
-        
+                new MechanismLigament2d(
+                        "Elevator", Units.metersToInches(eSim.getPosition()), 90));
+
         m_elevatorMech2d.setColor(new Color8Bit(Color.kBlue));
 
         m_arm = m_elevatorMech2d.append(
-            new MechanismLigament2d(
-                "Arm",
-                30,
-                aSim.getArmAngle(),
-                6,
-                new Color8Bit(Color.kYellow)));
+                new MechanismLigament2d(
+                        "Arm",
+                        30,
+                        aSim.getArmAngle(),
+                        6,
+                        new Color8Bit(Color.kYellow)));
 
         aSim.onInit();
 
@@ -83,45 +80,38 @@ public class MaceSim extends SubsystemBase{
         t = StoredTrajectories.TEST_TRAJECTORY;
         b = StoredTrajectories.BACK_HIGH_TRAJECTORY;
 
-
         SmartDashboard.putData("Arm Sim", m_mech2d);
         SmartDashboard.putNumber("Angle", aSim.getArmAngle());
         SmartDashboard.putNumber("Height", Units.inchesToMeters(eSim.getPosition()));
         SmartDashboard.putNumber("timer", trajTimer.get());
-        //SmartDashboard.putNumber("totalTime", 0);
+        // SmartDashboard.putNumber("totalTime", 0);
         trajTimer.reset();
 
         elevatorHoldingPostion = eSim.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(3));
         armHoldingPosition = aSim.getPIDOutputVolts(t.sampleMace(t.totalTime()).get(0));
 
         SmartDashboard.putNumber("ttR", t.totalTime());
-        
+
     }
 
-    private void runTrajectory(){
+    private void runTrajectory() {
 
-            trajTimer.start();
-            
-            aSim.setArmVoltage(aSim.getFeedForwardOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0))), Units.rotationsPerMinuteToRadiansPerSecond(SimConstants.armMPStoRPM(values.get(1))),
-                SimConstants.armMPSStoRadSS(values.get(2)))+ aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+        trajTimer.start();
 
+        aSim.setArmVoltage(aSim.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
 
-            eSim.setElevatorVoltage(/*eSim.getFeedForwardOutputVolts(values.get(4), values.get(5))*/ + eSim.getPIDOutputVolts(values.get(3)));
+        eSim.setElevatorVoltage(eSim.getPIDOutputVolts(values.get(3)));
     }
 
-
-
-
-
-    //}
+    // }
     /**
      * if button presed:
      * startTrajectory = true;
      * current Traj = t;
      * 
      * if (startTrajectory = true){
-     *      values = currentTraj.sampleMace();
-     *      runTrajectory();
+     * values = currentTraj.sampleMace();
+     * runTrajectory();
      * }
      * 
      */
@@ -129,37 +119,54 @@ public class MaceSim extends SubsystemBase{
     @Override
     public void periodic() {
 
-        if (currentTraj == t && RobotContainer.simJoystick.getRawButtonPressed(3) && !currentTraj.isActive(trajTimer.get())){
+
+        if (currentTraj == t && RobotContainer.simJoystick.getRawButton(2)
+            && !currentTraj.isActive(trajTimer.get())) {
+                startTraj = false;
+                aSim.setArmVoltage(aSim.getPIDOutputVolts(Units.degreesToRadians(177)));
+                eSim.setElevatorVoltage(eSim.getPIDOutputVolts(0.22));
+        }
+        if (currentTraj == t && RobotContainer.simJoystick.getRawButton(1)
+        && !currentTraj.isActive(trajTimer.get())) {
+            startTraj = false;
+            aSim.setArmVoltage(aSim.getPIDOutputVolts(Units.degreesToRadians(247)));
+            eSim.setElevatorVoltage(eSim.getPIDOutputVolts(0.423));
+        }
+
+        if (currentTraj == t && RobotContainer.simJoystick.getRawButtonPressed(3)
+                && !currentTraj.isActive(trajTimer.get())) {
             startTraj = false;
             trajTimer.reset();
             currentTraj = b;
             backTraj = true;
 
-        } else if (RobotContainer.simJoystick.getRawButtonPressed(3) && (currentTraj == null || currentTraj == b)){
+        } else if (RobotContainer.simJoystick.getRawButtonPressed(3) && (currentTraj == null || currentTraj == b)) {
             trajTimer.reset();
             currentTraj = t;
             startTraj = true;
+            backTraj = false;
         }
 
-        if (backTraj){
+        if (backTraj) {
             values = currentTraj.sampleMace(trajTimer.get());
             runTrajectory();
         }
 
-        if (startTraj){
+        if (startTraj) {
             values = currentTraj.sampleMace(trajTimer.get());
             runTrajectory();
         }
 
         if (currentTraj != null && (startTraj || backTraj)) {
-            if (!currentTraj.isActive(trajTimer.get())){
+            if (!currentTraj.isActive(trajTimer.get())) {
                 trajTimer.stop();
             }
         }
 
-        if (values != null){
+        if (values != null) {
             SmartDashboard.putNumber("elePose", Units.metersToInches(values.get(3)));
-            SmartDashboard.putNumber("armPose", Units.radiansToDegrees(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
+            SmartDashboard.putNumber("armPose",
+                    Units.radiansToDegrees(Units.rotationsToRadians(SimConstants.armMeterToRot(values.get(0)))));
         }
         SmartDashboard.putNumber("timer", trajTimer.get());
         SmartDashboard.putNumber("totalTime", t.getTotalTimeSeconds());
@@ -178,30 +185,28 @@ public class MaceSim extends SubsystemBase{
         SmartDashboard.putNumber("Height", (eSim.getPosition()));
     }
 
-
     public MaceTrajectory generateTrajectory() {
 
         // 2018 cross scale auto waypoints.
         var sideStart = new Pose2d(Units.feetToMeters(1.54), Units.feetToMeters(23.23),
-            Rotation2d.fromDegrees(-180));
+                Rotation2d.fromDegrees(-180));
         var crossScale = new Pose2d(Units.feetToMeters(23.7), Units.feetToMeters(6.8),
-            Rotation2d.fromDegrees(-160));
-    
+                Rotation2d.fromDegrees(-160));
+
         var interiorWaypoints = new ArrayList<Translation2d>();
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(14.54), Units.feetToMeters(23.23)));
         interiorWaypoints.add(new Translation2d(Units.feetToMeters(21.04), Units.feetToMeters(18.23)));
-    
+
         TrajectoryConfig config = new TrajectoryConfig(Units.feetToMeters(12), Units.feetToMeters(12));
         config.setReversed(true);
-    
+
         var trajectory = TrajectoryGenerator.generateTrajectory(
-            sideStart,
-            interiorWaypoints,
-            crossScale,
-            config);
+                sideStart,
+                interiorWaypoints,
+                crossScale,
+                config);
 
         return new MaceTrajectory(trajectory);
-      }
+    }
 
-    
 }

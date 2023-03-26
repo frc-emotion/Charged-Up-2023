@@ -3,7 +3,9 @@ package frc.robot.subsystems.sim;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
@@ -21,7 +23,11 @@ public class ElevatorSimulator implements Simulatable {
     private final DCMotor m_elevatorGearbox = DCMotor.getNEO(1);
 
     // Standard classes for controlling our elevator
-    private final PIDController m_controller = new PIDController(SimConstants.ElevatorValues.kElevatorKp, 0, 0);
+    private final ProfiledPIDController m_controller = new ProfiledPIDController(SimConstants.ElevatorValues.kElevatorKp, 0, 0,
+    
+    new TrapezoidProfile.Constraints(3, 0.8));
+
+    
     private final Encoder m_encoder = new Encoder(SimConstants.ElevatorValues.kEncoderAChannel,
             SimConstants.ElevatorValues.kEncoderBChannel);
     private final PWMSparkMax m_motor = new PWMSparkMax(SimConstants.ElevatorValues.kMotorPort);

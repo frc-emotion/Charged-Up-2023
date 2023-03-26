@@ -18,49 +18,29 @@ public class StoredTrajectories {
 
     public static final MaceTrajectory TEST_TRAJECTORY = MaceTrajectoryGenerator
     .generateMaceTrajectory(
-        new MacePoint(0.04, SimConstants.armRadToMeter(Units.degreesToRadians(-75))), 
+        new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-33))), 
         new ArrayList<Translation2d>() {
             {
-            add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-60))));     
-            add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(-40))));    
-            add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(-15))));    
-            add(new Translation2d(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(0))));
-            add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(20))));
-            add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(90))));
-            add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(150))));
-            add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(180))));
+            add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(180))));     
             }
         }, 
         new MacePoint(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
-        0.8, 
+        0.5, 
 
-        0.5);
+        0.4);
 
         public static final MaceTrajectory BACK_HIGH_TRAJECTORY = MaceTrajectoryGenerator
         .generateMaceTrajectory(
             new MacePoint(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
             new ArrayList<Translation2d>() {
                 {
-                add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(180))));
-                add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(150))));
-                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(90))));
-                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(20))));
-                add(new Translation2d(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(0))));
-                add(new Translation2d(0.3, SimConstants.armRadToMeter(Units.degreesToRadians(-15))));  
-                add(new Translation2d(0.2, SimConstants.armRadToMeter(Units.degreesToRadians(-40))));  
-                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-60))));     
+                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(180))));
                 }
+
             }, 
-            new MacePoint(0.04, SimConstants.armRadToMeter(Units.degreesToRadians(-75))), 
-            0.8, 
+            new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-33))), 
+            0.5, 
     
-            0.5);
-
-
-        double testTime(){
-            return TEST_TRAJECTORY.totalTime();
-        }
-
-        double x = testTime();
+            0.4);
 
 }
