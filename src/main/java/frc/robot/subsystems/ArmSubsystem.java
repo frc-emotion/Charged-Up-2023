@@ -55,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase{
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
         //armController = armMotor.getPIDController();
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(2.5, 1.0);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3.0, 1.5);
 
         armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
         constraints);
@@ -63,6 +63,8 @@ public class ArmSubsystem extends SubsystemBase{
 
         resetPosition();
         convertToMeters();
+        //SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
+
         SmartDashboard.putNumber("KP Constant", ArmConstants.armKP);
         SmartDashboard.putNumber("KD Constant", ArmConstants.armKD);
         SmartDashboard.putNumber("KI Constant", ArmConstants.armKI);
@@ -216,7 +218,7 @@ public class ArmSubsystem extends SubsystemBase{
 
 
         //get the height to the next setpoint periodically
-        //SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
+        SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
 
 
         //System.out.println("Arm Speeds " + getArmSpeeds());

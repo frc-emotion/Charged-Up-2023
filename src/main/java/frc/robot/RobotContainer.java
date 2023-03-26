@@ -67,7 +67,6 @@ public class RobotContainer {
     
     );
     configureButtonBindings();
-
    /* mSub.setDefaultCommand(
       new MaceCommand(mSub, 
       () -> operatorController.getYButtonPressed(),
@@ -80,15 +79,15 @@ public class RobotContainer {
 
     
     eSubsystem.setDefaultCommand(new ManualControlElevator(eSubsystem, () -> -operatorController.getRightY()));
-    armSubsystem.setDefaultCommand(new ManualArmCommand(armSubsystem, () -> -operatorController.getLeftY()));
+   armSubsystem.setDefaultCommand(new ManualArmCommand(armSubsystem, () -> -operatorController.getLeftY()));
 
     clawSubsytem.setDefaultCommand(
       new ClawCommand(clawSubsytem, 
       () -> operatorController.getLeftBumperPressed(), 
       () -> operatorController.getRightBumperPressed())
-    );
-  }
-
+   );
+ }
+  
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -97,7 +96,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(operatorController, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
+    //new JoystickButton(operatorController, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 

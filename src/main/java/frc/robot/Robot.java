@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
 
 
     m_chooser.setDefaultOption("Taxi - Blue", 1);
-    m_chooser.setDefaultOption("Taxi - Red", 2);
+    m_chooser.addOption("Taxi - Red", 2);
     m_chooser.addOption("Level + forward", 3);
 
     SmartDashboard.putData("Auto Path?", m_chooser);
