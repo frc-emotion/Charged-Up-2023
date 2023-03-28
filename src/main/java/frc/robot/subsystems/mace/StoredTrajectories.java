@@ -21,20 +21,20 @@ public class StoredTrajectories {
         new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-33))), 
         new ArrayList<Translation2d>() {
             {
-            add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(180))));     
+            add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(170))));     
             }
         }, 
-        new MacePoint(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
+        new MacePoint(0.63, SimConstants.armRadToMeter(Units.degreesToRadians(170))), 
         0.5, 
 
         0.4);
 
         public static final MaceTrajectory BACK_HIGH_TRAJECTORY = MaceTrajectoryGenerator
         .generateMaceTrajectory(
-            new MacePoint(0.4, SimConstants.armRadToMeter(Units.degreesToRadians(180))), 
+            new MacePoint(0.63, SimConstants.armRadToMeter(Units.degreesToRadians(170))), 
             new ArrayList<Translation2d>() {
                 {
-                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(180))));
+                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(170))));
                 }
 
             }, 

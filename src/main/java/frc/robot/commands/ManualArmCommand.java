@@ -41,11 +41,12 @@ public class ManualArmCommand extends CommandBase {
             arm.setArmSpeeds(arm.getPIDOutputVolts(Units.degreesToRadians(-30)));
         } else if(RobotContainer.operatorController.getBButton()){
             arm.setArmSpeeds(arm.getPIDOutputVolts(Units.degreesToRadians(180)));
-        } else if (RobotContainer.operatorController.getLeftTriggerAxis() > 0.1){
-            arm.setArmSpeeds(arm.getPIDOutputVolts(Units.degreesToRadians(270)));
         }
+       /* } else if (RobotContainer.operatorController.getLeftTriggerAxis() > 0.1){
+            arm.setArmSpeeds(arm.getPIDOutputVolts(Units.degreesToRadians(270)));
+        }*/
         else{
-            arm.stopArm();
+            arm.setArmSpeeds(0);
         }
     }
 

@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     //load Trajectories here
     examplePath = PathPlanner.loadPath("Taxi1R", 2, 1);
 
-    taxiBlue = PathPlanner.loadPath("TaxiL", 2, 1);
+    taxiBlue = PathPlanner.loadPath("Taxi1B", 2, 1);
 
 
     levelcenter = PathPlanner.loadPath("Levelforward", 1, 1);

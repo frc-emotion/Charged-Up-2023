@@ -55,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase{
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
         //armController = armMotor.getPIDController();
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3.0, 1.5);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(2.0, 2);
 
         armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
         constraints);
@@ -132,8 +132,7 @@ public class ArmSubsystem extends SubsystemBase{
     }
 
     public double getPIDOutputVolts(double setpoint){
-        armController.setGoal(setpoint);
-        return armController.calculate(getPosition());
+        return armController.calculate(getPosition(), setpoint);
     }
 
     public double getFeedForwardOutputVolts(double d, double v, double a){

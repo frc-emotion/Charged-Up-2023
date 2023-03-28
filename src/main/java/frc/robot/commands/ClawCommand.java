@@ -47,7 +47,7 @@ public class ClawCommand extends CommandBase{
         }
 
         if (direction && !stopped){
-                clawSubsystem.setClawMotor(0.35);
+            clawSubsystem.setClawMotor(0.5);
         }
         else if (!direction && !stopped){
                 clawSubsystem.setClawMotor(-0.25);

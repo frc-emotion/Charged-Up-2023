@@ -21,7 +21,7 @@ public class ManualControlElevator extends CommandBase{
     
     @Override
     public void execute(){
-        myElevator.setHeight();
+        myElevator.manualMove(elevatorSpeedFunc);
 
 
     }

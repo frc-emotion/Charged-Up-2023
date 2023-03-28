@@ -63,7 +63,7 @@ public class Mace extends SubsystemBase {
         // SmartDashboard.putNumber("totalTime", 0);
         trajTimer.reset();
 
-        SmartDashboard.putNumber("ttR", test.totalTime());
+        //SmartDashboard.putNumber("ttR", test.totalTime());
 
     }
 
@@ -112,6 +112,12 @@ public class Mace extends SubsystemBase {
                 startTraj = false;
                 aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(247)));
                 eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.423));
+            }
+            if (currentTraj == front && RobotContainer.operatorController.getBButton()
+                && !currentTraj.isActive(trajTimer.get())) {
+                startTraj = false;
+                aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(175)));
+                eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.23));
             }
 
             if (currentTraj == front && func.get() && !currentTraj.isActive(trajTimer.get())) {

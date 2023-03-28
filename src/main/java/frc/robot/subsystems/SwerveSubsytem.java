@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
@@ -170,6 +171,8 @@ public class SwerveSubsytem extends SubsystemBase {
        // poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
         m_field.setRobotPose(getCurrentPose());
+
+        SmartDashboard.putNumber("Pitch", getPitch());
     }
 
     public void stopModules() {

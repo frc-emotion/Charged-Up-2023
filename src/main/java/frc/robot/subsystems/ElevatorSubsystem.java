@@ -36,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public ElevatorSubsystem() {
         elevatorMotor = new CANSparkMax(Constants.ElevatorConstants.ELEVATORMOTOR_ID, MotorType.kBrushless);
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3.5, 0.7);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(3.5, 1.5);
 
         elevatorController = new ProfiledPIDController(2, 0, 0, constraints);
         positionSensor = new TimeOfFlight(Constants.ElevatorConstants.CANID);
@@ -92,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     // allows for manual control as backup
-    public void manualMove(Supplier<Double> func, Mace mSub) {
+    public void manualMove(Supplier<Double> func) {
         {
             if (func.get() > OIConstants.kDeadband) {
                 elevatorMotor.set(Constants.ElevatorConstants.ELEVATORMOTORSPEED);
@@ -147,6 +147,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void resetHeight() {
         elevatorMotor.getEncoder().setPosition(getHeight());
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Range from sensor", getHeight());
     }
 
 }
