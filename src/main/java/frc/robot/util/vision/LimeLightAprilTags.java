@@ -16,6 +16,7 @@ import frc.robot.Constants.CameraConstants;
 import frc.robot.Constants.DriveConstants;
 
 import java.io.IOException;
+import java.util.function.Supplier;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -26,14 +27,6 @@ public class LimeLightAprilTags extends CommandBase {
     double [] botPose, targetId;
     Pose3d targetPose;
     Pose2d goalPose;
- 
-    public AprilTagFieldLayout aprilTagFieldLayout;
-
-    private static final Transform3d TAG_TO_GOAL = 
-    new Transform3d(
-        new Translation3d(CameraConstants.TARGET_RANGE, 0.0, 0.0),
-        new Rotation3d(0.0, 0.0, Math.PI));
-
     
     private static final TrapezoidProfile.Constraints xConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
     private static final TrapezoidProfile.Constraints yConstraints = new TrapezoidProfile.Constraints(CameraConstants.MAX_ALIGN_VELOCITY, CameraConstants.MAX_ALIGN_ACCELERATION);
@@ -44,7 +37,7 @@ public class LimeLightAprilTags extends CommandBase {
     private final ProfiledPIDController rotateController = new ProfiledPIDController(2, 0, 0, rotateConstraints);
     
 
-    public LimeLightAprilTags(LimeLight limelight, SwerveSubsytem swerve){
+    public LimeLightAprilTags(LimeLight limelight, SwerveSubsytem swerve, Supplier<Boolean> Xfunc){
         this.limelight = limelight;
         this.swerve = swerve;
 
@@ -69,18 +62,16 @@ public class LimeLightAprilTags extends CommandBase {
     public void execute(){
             var robotPose2d = swerve.getCurrentPose();
      
-            targetPose = LimeLight.getTargetPose(); //gets apriltag pose 
+            targetPose = LimeLight.getTargetPose(); //gets apriltag pose + 1m 
 
-            goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();     //FIX gets goal pose from apriltag pose 
+            goalPose = targetPose.toPose2d(); 
             
-         
 
         if(goalPose != null){
             xController.setGoal(goalPose.getX());
             yController.setGoal(goalPose.getY());
             rotateController.setGoal(goalPose.getRotation().getRadians()); 
         }
-
 
 
         // Drive to the target

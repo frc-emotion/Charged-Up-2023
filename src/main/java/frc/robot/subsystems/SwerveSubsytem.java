@@ -31,6 +31,7 @@ import frc.robot.util.vision.PoseEstimator;
  * Main Swerve Subsytem class
  * Holds gyro and odometry methods
  */
+
 public class SwerveSubsytem extends SubsystemBase {
 
     private final SwerveModuleNeoFalcon frontLeft = new SwerveModuleNeoFalcon(
@@ -71,9 +72,6 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-   private final PoseEstimator visionPoseEstimator = new PoseEstimator(); 
-  // private final LimeLight limelight; 
-
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
         frontLeft.getPosition(),
         frontRight.getPosition(),
@@ -83,9 +81,9 @@ public class SwerveSubsytem extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics, 
-        new Rotation2d(0), //FIX why 0 & not getRotation2d? 
+        new Rotation2d(0), 
         modulePositions,  
-        new Pose2d()); // FIX add the starting pose estimate? 
+        new Pose2d()); 
         
 
     private ChassisSpeeds robotSpeeds;
@@ -154,17 +152,15 @@ public class SwerveSubsytem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        /*
         poseEstimator.update(                   
             getRotation2d(), 
             getModulePositions());
-        */
 
-       //Pair<Pose2d, Double> result = visionPoseEstimator.getEstimatedPose();  
-       //unnecessary since not using photon?
+        double tl = LimeLight.getEntryBasic("tl");
+        double cl = LimeLight.getEntryBasic("cl");  
 
         //Adds vision 
-       poseEstimator.addVisionMeasurement(LimeLight.getBotPose(), Timer.getFPGATimestamp() - LimelightHelpers.getLatency_Pipeline("")); 
+       poseEstimator.addVisionMeasurement(LimeLight.getBotPose(), Timer.getFPGATimestamp() - (tl/1000.0) - (cl/1000.0) ); 
        m_field.setRobotPose(getCurrentPose());
     }
 

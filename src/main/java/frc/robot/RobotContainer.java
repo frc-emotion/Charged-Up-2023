@@ -56,7 +56,21 @@ public class RobotContainer {
     () -> driverController.getRightBumper()));
 
     configureButtonBindings();
+
+
+
+    limelight.setDefaultCommand(
+       
+    new LimeLightAprilTags(
+      limelight, 
+      swerveSubsytem,
+      () -> driverController.getRawButton(OIConstants.kDriverLimeLightButton)));
+
   }
+
+
+
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by

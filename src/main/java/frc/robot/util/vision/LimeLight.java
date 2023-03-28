@@ -14,19 +14,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimeLight extends SubsystemBase{
 
-     //roll --> -25 degrees from vertical 
-    //30.5 inches high 
-    //6.5 inches to the left of the center of robot  
-    //13.5 inches forward from center of robot
-
     NetworkTable table;
 
-    static Pose2d botPose;
+    static Pose2d botPose, cameraPose;
     static Pose3d targetPose;
-    Pose2d cameraPose;
 
     double[] tagID;
-
 
     public LimeLight(){
         table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -34,19 +27,15 @@ public class LimeLight extends SubsystemBase{
 
     public void periodic(){
 
-        LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("");
+        LimelightHelpers.LimelightResults llresults = LimelightHelpers.getLatestResults("limelight");
         botPose = LimelightHelpers.getBotPose2d("limelight");
         targetPose = llresults.fiducialResults.getTargetPose_RobotSpace();
 
         tagID = table.getEntry("tid").getDoubleArray(new double[6]);
 
-
         SmartDashboard.getEntry("botpose"); 
-        SmartDashboard.getEntry("camerapose_targetspace"); 
-        SmartDashboard.getEntry("tid"); 
         SmartDashboard.getEntry("targetpose_robotspace");
-
-        System.out.println(botPose);
+        SmartDashboard.getEntry("tid"); 
        
     }
 
@@ -58,10 +47,14 @@ public class LimeLight extends SubsystemBase{
         return targetPose;
     }
 
-    public double[] getEntry(String selector) {
-        return table.getEntry(selector).getDoubleArray(new double[6]);
+    public static double[] getEntry(String selector) {
+        return  NetworkTableInstance.getDefault().getTable("limelight").getEntry(selector).getDoubleArray(new double[6]);
     }
 
+
+    public static double getEntryBasic(String selector) {
+        return  NetworkTableInstance.getDefault().getTable("limelight").getEntry(selector).getDouble(0);
+    }
 
 
 }

@@ -29,6 +29,7 @@ public final class Constants {
         public static final int kDriverXAxis = 0;
         public static final int kDriverRotAxis = 4;
         public static final int kDriverFieldOrientedButtonIdx = XboxController.Button.kA.value;
+        public static final int kDriverLimeLightButton = XboxController.Button.kX.value; 
         public static final int kDriverZeroHeadingButtonIdx = XboxController.Button.kB.value;
         public static final int kDriverSlowButtonIdx = XboxController.Button.kLeftBumper.value;
         public static final int kDriverTurboButtonIdx = XboxController.Button.kRightBumper.value;
@@ -60,7 +61,7 @@ public final class Constants {
         public static final double CAMERA_XAXIS = 0.5;
         public static final double CAMERA_YAXIS = 0;
         public static final double CAMERA_ZAXIS = Units.inchesToMeters(6);
-        public static final double TARGET_RANGE = 0;
+        public static final double TARGET_RANGE = 1;
         public static final double MAX_ALIGN_VELOCITY = 0;
         public static final double MAX_ROTATE_VELOCITY = 0;
         public static final double MAX_ALIGN_ACCELERATION = 0;
