@@ -80,7 +80,7 @@ public class RobotContainer {
 
     
     //eSubsystem.setDefaultCommand(new ManualControlElevator(eSubsystem, () -> -operatorController.getRightY()));
-   //armSubsystem.setDefaultCommand(new ManualArmCommand(armSubsystem, () -> -operatorController.getLeftY()));
+    //armSubsystem.setDefaultCommand(new ManualArmCommand(  armSubsystem,() -> -operatorController.getLeftY()));
 
     clawSubsytem.setDefaultCommand(
       new ClawCommand(clawSubsytem, 
