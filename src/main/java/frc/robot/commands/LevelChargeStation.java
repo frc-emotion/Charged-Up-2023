@@ -64,16 +64,20 @@ public class LevelChargeStation extends CommandBase{
 
     @Override
     public void end(boolean interrupted){
-        Rotation2d leftRotation = new Rotation2d(Math.PI/4);
-        Rotation2d rightRotation = new Rotation2d(-Math.PI/4);
+        Rotation2d leftRotation = new Rotation2d(-Math.PI/4);
+        Rotation2d rightRotation = new Rotation2d(Math.PI/4);
 
-        SwerveModuleState[] stoppedStates = {new SwerveModuleState(0, leftRotation)};
+        SwerveModuleState[] stoppedStates = {new SwerveModuleState(0, leftRotation), // Needs a lot of Fixing, Not sure how this is done currently
+                                             new SwerveModuleState(0, rightRotation), 
+                                             new SwerveModuleState(0, rightRotation), 
+                                             new SwerveModuleState(0, leftRotation)};
+        swerve.setModuleStates(stoppedStates);
         swerve.stopModules();
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(DriveConstants.TARGET_ANGLE - (-swerve.getPitch() * Math.cos(Units.degreesToRadians(swerve.getHeading())) - (swerve.getRoll() * Math.sin(Units.degreesToRadians(swerve.getHeading()))))) < DriveConstants.THRESHOLD; //Maybe have it end the command when the specified threshold is met and the robot is 'flat'?
-        //return false;
+        //return Math.abs(swerve.getPitch() * Math.cos(Units.degreesToRadians(swerve.getHeading())) + (swerve.getRoll() * Math.sin(Units.degreesToRadians(swerve.getHeading())))) < DriveConstants.THRESHOLD; //Maybe have it end the command when the specified threshold is met and the robot is 'flat'?
+        return false;
     }
 }

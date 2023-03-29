@@ -165,11 +165,11 @@ public final class Constants {
         // Angles for leveling
 
         public static final double TARGET_ANGLE = 0;
-        public static final double MAX_LEVEL_VELOCITY = 1; //FIX mps 
-        public static final double MAX_LEVEL_ACCELERATION = 2; //Fix with testing
-        public static final double THRESHOLD = Math.PI / 30;
-        public static final double KPLevel = 10;
-        public static final double KDLevel = 0.2;
+        public static final double MAX_LEVEL_VELOCITY = 0.1; //FIX mps 
+        public static final double MAX_LEVEL_ACCELERATION = 0.3; //Fix with testing
+        public static final double THRESHOLD = Units.degreesToRadians(4);
+        public static final double KPLevel = 5;
+        public static final double KDLevel = 0.3;
         public static final double KILevel = 0;
     }
 

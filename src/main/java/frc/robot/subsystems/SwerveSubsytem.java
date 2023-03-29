@@ -122,11 +122,11 @@ public class SwerveSubsytem extends SubsystemBase {
     }
 
     public double getPitch(){
-        return Units.degreesToRadians((gyro.getPitch()));
+        return Units.degreesToRadians((gyro.getPitch() - 1.08));
     }
 
     public double getRoll(){
-        return Units.degreesToRadians((gyro.getRoll()));
+        return Units.degreesToRadians((gyro.getRoll() - 178.74));
     }
 
     //Resets current pose to a specified pose. 
