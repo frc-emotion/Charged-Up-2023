@@ -10,7 +10,6 @@ public class ExamplePathPlannerCommand extends ParallelCommandGroup {
     
     public ExamplePathPlannerCommand(SwerveSubsytem swerveSubsytem, PathPlannerTrajectory path){
 
-        //addCommands(SwerveController.followTrajectoryCommand(path, true, swerveSubsytem)
-       // );
+        addCommands(SwerveController.followTrajectoryCommand(path, true, swerveSubsytem));
     }
 }
