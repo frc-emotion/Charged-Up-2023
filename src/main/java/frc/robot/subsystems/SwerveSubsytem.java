@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +25,8 @@ import frc.robot.util.dashboard.TabManager.SubsystemTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.Pair;
 import java.util.Optional;
+
+import com.kauailabs.navx.frc.AHRS;
 
 /**
  * Main Swerve Subsytem class
@@ -68,7 +70,7 @@ public class SwerveSubsytem extends SubsystemBase {
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
 
-    private AHRS gyro = new AHRS(SPI.Port.kMXP);
+   private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
    // private final PoseEstimator visionPoseEstimator = new PoseEstimator();
 
@@ -116,7 +118,7 @@ public class SwerveSubsytem extends SubsystemBase {
     }
 
     public void zeroHeading() {
-        gyro.reset();
+      gyro.reset();
     }
 
     public double getHeading() {
@@ -127,9 +129,9 @@ public class SwerveSubsytem extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
-    public Pose2d getCurrentPose(){
-        return poseEstimator.getEstimatedPosition();
-    }
+    // public Pose2d getCurrentPose(){
+    //     return //poseEstimator.getEstimatedPosition();
+    // }
 
     //Resets current pose to a specified pose. 
     public void resetOdometry(Pose2d pose){
@@ -170,9 +172,8 @@ public class SwerveSubsytem extends SubsystemBase {
         //Adds vision 
        // poseEstimator.addVisionMeasurement(result.getFirst(), result.getSecond()); 
 
-        m_field.setRobotPose(getCurrentPose());
+        // m_field.setRobotPose(getCurrentPose());
 
-        SmartDashboard.putNumber("Pitch", getPitch());
     }
 
     public void stopModules() {
@@ -184,10 +185,18 @@ public class SwerveSubsytem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        frontLeft.setDesiredState(desiredStates[0]);
-        frontRight.setDesiredState(desiredStates[1]);
-        backLeft.setDesiredState(desiredStates[2]);
-        backRight.setDesiredState(desiredStates[3]);
+        frontLeft.setDesiredState(desiredStates[0], false);
+        frontRight.setDesiredState(desiredStates[1], false);
+        backLeft.setDesiredState(desiredStates[2], false);
+        backRight.setDesiredState(desiredStates[3], false);
+    }
+
+    public void setModuleStates(SwerveModuleState[] desiredStates, boolean station) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        frontLeft.setDesiredState(desiredStates[0], station);
+        frontRight.setDesiredState(desiredStates[1], station);
+        backLeft.setDesiredState(desiredStates[2], station);
+        backRight.setDesiredState(desiredStates[3], station);
     }
 
     private void initShuffleboard(){

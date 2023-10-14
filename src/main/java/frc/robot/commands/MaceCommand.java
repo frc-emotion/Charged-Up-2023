@@ -17,16 +17,21 @@ public class MaceCommand extends CommandBase {
 
     private final Mace mSub;
     private Supplier<Boolean> buttonHigh, buttonMid, buttonLow, buttonPick;
-    private Supplier<Double> buttonPress;
+    private Supplier<Double> buttonPress, rightT, manualArm, manualE;
     public MaceCommand(Mace mSub, Supplier<Boolean> buttonHigh, Supplier<Boolean> buttonMid, Supplier<Boolean> buttonLow,
-    Supplier<Double> buttonPress, Supplier<Boolean> buttonPick
+    Supplier<Double> buttonPress, Supplier<Boolean> buttonPick, Supplier<Double> rightT, Supplier<Double> manualArm, Supplier<Double> manualE
     ){
+        this.rightT = rightT;
         this.buttonHigh = buttonHigh;
         this.buttonMid = buttonMid;
         this.buttonLow = buttonLow;
         this.buttonPress = buttonPress;
         this.buttonPick = buttonPick;
         this.mSub = mSub;
+
+        this.manualArm = manualArm;
+        this.manualE = manualE;
+
     addRequirements(mSub);
     }
 
@@ -35,7 +40,7 @@ public class MaceCommand extends CommandBase {
     
        // mSub.runMace(buttonLow, buttonPress, StoredTrajectories.LOW_MACE_TRAJECTORY, StoredTrajectories.LOW_BACK_MACE_TRAJECTORY);
 
-       mSub.runMace(buttonHigh, buttonPress, StoredTrajectories.HIGH_MACE_TRAJECTORY, StoredTrajectories.BACK_HIGH_TRAJECTORY);
+       mSub.runMace(buttonHigh, buttonPress, rightT, manualArm, manualE, StoredTrajectories.HIGH_MACE_TRAJECTORY, StoredTrajectories.BACK_HIGH_TRAJECTORY);
     }
 
     @Override

@@ -61,8 +61,8 @@ public class ArmSubsystem extends SubsystemBase{
         constraints);
 
 
-        resetPosition();
         convertToMeters();
+        resetPosition();
         //SmartDashboard.putNumber("Arm Pose", Units.radiansToDegrees(getPosition()));
 
         SmartDashboard.putNumber("KP Constant", ArmConstants.armKP);
@@ -199,7 +199,8 @@ public class ArmSubsystem extends SubsystemBase{
 
 
     public void resetPosition(){
-        armEncoder.setPosition(Math.PI/2);
+        armEncoder.setPosition(Units.degreesToRadians(-30));
+        //armEncoder.setPosition(Math.PI/2);
     }
 
 

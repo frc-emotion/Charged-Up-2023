@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -53,6 +54,7 @@ public class SwerveModuleNeoFalcon {
         absoluteEncoder.configMagnetOffset(Units.radiansToDegrees(absoluteEncoderOffsetRad));
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         absoluteEncoder.configSensorDirection(absoluteEncoderReversed);
+        absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 20);
         absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 100, 200);
 
@@ -110,7 +112,7 @@ public class SwerveModuleNeoFalcon {
         if (getTurningVelocity() < Math.toRadians(0.5)){
             if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                 resetIteration = 0;
-                double absoluteAngle = absoluteEncoder.getAbsolutePosition();
+                double absoluteAngle = Units.degreesToRadians(absoluteEncoder.getAbsolutePosition());
                 turningEncoder.setPosition(absoluteAngle);
                 currentAngleRadians = absoluteAngle;
             }
@@ -167,8 +169,8 @@ public class SwerveModuleNeoFalcon {
      * @param state
      */
 
-    public void setDesiredState(SwerveModuleState state){
-        if (Math.abs(state.speedMetersPerSecond) < 0.3){
+    public void setDesiredState(SwerveModuleState state, boolean station){
+        if (Math.abs(state.speedMetersPerSecond) < 0.3 && !station){
             stop();
             return;
         }

@@ -24,8 +24,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.SimConstants;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.mace.MacePoint;
@@ -63,7 +66,7 @@ public class Mace extends SubsystemBase {
         // SmartDashboard.putNumber("totalTime", 0);
         trajTimer.reset();
 
-        //SmartDashboard.putNumber("ttR", test.totalTime());
+        // SmartDashboard.putNumber("ttR", test.totalTime());
 
     }
 
@@ -85,6 +88,17 @@ public class Mace extends SubsystemBase {
 
     }
 
+    public void runAutoTraj(double time, MaceTrajectory mTraj) {
+
+        List<Double> auto_values = mTraj.sampleMace(time);
+
+        aSystem.setArmSpeeds(
+                aSystem.getPIDOutputVolts(Units.rotationsToRadians(SimConstants.armMeterToRot(auto_values.get(0)))));
+
+        eSystem.setElevatorVoltage(/* eSim.getFeedForwardOutputVolts(values.get(4), values.get(5)) */eSystem
+                .getPIDOutputVolts(auto_values.get(3)));
+    }
+
     // }
     /**
      * if button presed:
@@ -98,58 +112,83 @@ public class Mace extends SubsystemBase {
      * 
      */
 
-    public void runMace(Supplier<Boolean> func, Supplier<Double> prep, MaceTrajectory front, MaceTrajectory backT) {
+    public void runMace(Supplier<Boolean> func, Supplier<Double> prep,
+            Supplier<Double> prepMacro, Supplier<Double> angularSpdFunc,
+            Supplier<Double> elevatorMove,
+            MaceTrajectory front, MaceTrajectory backT) {
+        
+        
         if (prep.get() > 0.4) {
-
-            if (currentTraj == front && RobotContainer.operatorController.getXButton()
+                if (currentTraj == front && RobotContainer.operatorController.getXButton()
                     && !currentTraj.isActive(trajTimer.get())) {
-                startTraj = false;
-                aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(177)));
-                eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.22));
-            }
-            if (currentTraj == front && RobotContainer.operatorController.getAButton()
-                    && !currentTraj.isActive(trajTimer.get())) {
-                startTraj = false;
-                aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(247)));
-                eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.423));
-            }
-            if (currentTraj == front && RobotContainer.operatorController.getBButton()
-                && !currentTraj.isActive(trajTimer.get())) {
-                startTraj = false;
-                aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(175)));
-                eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.23));
-            }
-
-            if (currentTraj == front && func.get() && !currentTraj.isActive(trajTimer.get())) {
-                startTraj = false;
-                trajTimer.reset();
-                currentTraj = backT;
-                backTraj = true;
-
-            } else if (func.get() && (currentTraj == null || currentTraj == backT)) {
-                backTraj = false;
-                trajTimer.reset();
-                currentTraj = front;
-                startTraj = true;
-            }
-
-            if (backTraj) {
-                values = currentTraj.sampleMace(trajTimer.get());
-                runTrajectory();
-            }
-
-            if (startTraj) {
-                values = currentTraj.sampleMace(trajTimer.get());
-                runTrajectory();
-            }
-
-            if (currentTraj != null && (startTraj || backTraj)) {
-                if (!currentTraj.isActive(trajTimer.get())) {
-                    trajTimer.stop();
+                        startTraj = false;
+                        aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(170)));
+                        eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.22));
                 }
-            }
+                if (currentTraj == front && RobotContainer.operatorController.getAButton()
+                    && !currentTraj.isActive(trajTimer.get())) {
+                        startTraj = false;
+                        aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(247)));
+                        eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.423));
+                }
+                if (currentTraj == front && RobotContainer.operatorController.getBButton() && !currentTraj.isActive(trajTimer.get())) {
+                    startTraj = false;
+                    aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(15)));
+                    eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.38));
+                }
+                if (currentTraj == front && RobotContainer.operatorController.getRightTriggerAxis() > 0.2
+                && !currentTraj.isActive(trajTimer.get())) {
+                    startTraj = false;
+                    aSystem.setArmSpeeds(aSystem.getPIDOutputVolts(Units.degreesToRadians(85)));
+                    eSystem.setElevatorVoltage(eSystem.getPIDOutputVolts(0.1));
+                }
+
+                
+
+                if (currentTraj == front && func.get() && !currentTraj.isActive(trajTimer.get())) {
+                    startTraj = false;
+                    trajTimer.reset();
+                    currentTraj = backT;
+                    backTraj = true;
+
+                } else if (func.get() && (currentTraj == null || currentTraj == backT)) {
+                    backTraj = false;
+                    trajTimer.reset();
+                    currentTraj = front;
+                    startTraj = true;
+                }
+
+                if (backTraj) {
+                    values = currentTraj.sampleMace(trajTimer.get());
+                    runTrajectory();
+                }
+
+                if (startTraj) {
+                    values = currentTraj.sampleMace(trajTimer.get());
+                    runTrajectory();
+                }
+
+                if (currentTraj != null && (startTraj || backTraj)) {
+                    if (!currentTraj.isActive(trajTimer.get())) {
+                        trajTimer.stop();
+                    }
+                }
         } else {
-            stopAll();
+            double angularSpeed = angularSpdFunc.get();
+
+            if(angularSpeed > OIConstants.kDeadband){
+                aSystem.setArmSpeeds(ArmConstants.ARM_SPEED);
+            }
+            else if(angularSpeed < -OIConstants.kDeadband){
+                aSystem.setArmSpeeds(-ArmConstants.ARM_SPEED);
+            } else if (RobotContainer.operatorController.getStartButton()){
+                aSystem.resetPosition();
+            }
+            else{
+                aSystem.setArmSpeeds(0);
+            }
+
+            eSystem.manualMove(elevatorMove);
             currentTraj = null;
             startTraj = false;
             backTraj = false;

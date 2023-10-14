@@ -29,7 +29,7 @@ public class LevelChargeStation extends CommandBase {
 
         inControl = false; // Used to account for if angle is negative considering that PID calculate
                            // determines actual sign of velocity
-        angleController.setTolerance(Units.degreesToRadians(1));
+        angleController.setTolerance(Units.degreesToRadians(4));
         angleController.enableContinuousInput(-Math.PI, Math.PI);
 
         addRequirements(swerve);
@@ -43,6 +43,7 @@ public class LevelChargeStation extends CommandBase {
 
     @Override
     public void execute() {
+        //var stationHeadingAngle = Units.degreesToRadians(swerve.getHeading());
         double error1 = (swerve.getPitch());
         var levelSpeed = 0.0;
         //Checks to see if the Robot is on the Charge Station and tilted 
@@ -53,7 +54,7 @@ public class LevelChargeStation extends CommandBase {
             levelSpeed = angleController.calculate(error1);
         }
 
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(levelSpeed, 0,  0, swerve.getRotation2d()); //Speed is always in the correct heading assuming that heading angle is constant throughout the field
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(0 , levelSpeed, 0, swerve.getRotation2d());//Speed is always in the correct heading assuming that heading angle is constant throughout the field
         swerve.setChassisSpeeds(speeds);
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);

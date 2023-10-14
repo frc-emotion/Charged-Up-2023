@@ -24,6 +24,8 @@ public class ClawCommand extends CommandBase{
         this.clawFunc = clawFunc;
         this.clawStop = clawStop; 
         addRequirements(clawSubsystem);
+
+        timer = new Timer();
         
         direction = false; 
         stopped = true; 
@@ -47,15 +49,16 @@ public class ClawCommand extends CommandBase{
         if (clawFunc.get()){
             timer.reset();
             direction = !direction; 
-            //stopped = false; 
+            stopped = false; 
         } else if (clawStop.get()){
-            timer.start();
+            stopped = true;
         }
 
-        if (timer.get() > 0.5){
+        /*if (timer.get() > 0.5){
             //stopped = true;
             clawSubsystem.stopClaw();
-        } else if (direction && !stopped){
+        } else*/ 
+        if (direction && !stopped){
             clawSubsystem.setClawMotor(0.5);
         }
         else if (!direction && !stopped){

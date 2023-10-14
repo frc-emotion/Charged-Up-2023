@@ -56,6 +56,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorController.calculate(getHeight());
     }
 
+    public void setElevatorGoal(double setpoint){
+        elevatorController.setGoal(setpoint);
+    }
+
+    public double getPIDOutputVoltsAuto() {
+        return elevatorController.calculate(getHeight());
+    }
+
     public double getFeedForwardOutputVolts(double v, double a) {
         return feedForward.calculate(v, a);
     }

@@ -20,6 +20,7 @@ import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.commands.auton.LevelChargeStationAuto;
+import frc.robot.commands.auton.PlaceAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -35,11 +36,11 @@ import frc.robot.subsystems.mace.Mace;
 public class RobotContainer {
 
   private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
-  private ArmSubsystem armSubsystem = new ArmSubsystem();
-  private ElevatorSubsystem eSubsystem = new ElevatorSubsystem();
-  private final Mace mSub = new Mace(armSubsystem, eSubsystem);
+  // private ArmSubsystem armSubsystem = new ArmSubsystem();
+  // private ElevatorSubsystem eSubsystem = new ElevatorSubsystem();
+  // private final Mace mSub = new Mace(armSubsystem, eSubsystem);
   public static  XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
-  public static ClawSubsystem clawSubsytem = new ClawSubsystem();
+  // public static ClawSubsystem clawSubsytem = new ClawSubsystem();
   public static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
   //public static Joystick arcadeStick = new Joystick(1);
   //public static Joystick arcadeStick2 = new Joystick(0);
@@ -64,29 +65,35 @@ public class RobotContainer {
     () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
     () -> !driverController.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx),
     () -> driverController.getLeftBumper(),
-    () -> driverController.getRightBumper())
+    () -> driverController.getRightBumper(),
+    () -> driverController.getRightTriggerAxis(),
+    () -> driverController.getLeftTriggerAxis()
+    )
     
     );
     configureButtonBindings();
-    mSub.setDefaultCommand(
-      new MaceCommand(mSub, 
-      () -> operatorController.getYButtonPressed(),
-      () -> operatorController.getXButtonPressed(),
-      () -> operatorController.getAButtonPressed(),
-      () -> operatorController.getLeftTriggerAxis(),
-      () -> operatorController.getBButtonPressed()
-      )
-    ); 
+    // mSub.setDefaultCommand(
+    //   new MaceCommand(mSub, 
+    //   () -> operatorController.getYButtonPressed(),
+    //   () -> operatorController.getXButtonPressed(),
+    //   () -> operatorController.getAButtonPressed(),
+    //   () -> operatorController.getLeftTriggerAxis(),
+    //   () -> operatorController.getBButtonPressed(),
+    //   () -> operatorController.getRightTriggerAxis(),
+    //   () -> -operatorController.getLeftY(),
+    //   () -> -operatorController.getRightY()
+    //   )
+   // ); 
 
     
     //eSubsystem.setDefaultCommand(new ManualControlElevator(eSubsystem, () -> -operatorController.getRightY()));
     //armSubsystem.setDefaultCommand(new ManualArmCommand(  armSubsystem,() -> -operatorController.getLeftY()));
 
-    clawSubsytem.setDefaultCommand(
-      new ClawCommand(clawSubsytem, 
-      () -> operatorController.getLeftBumperPressed(), 
-     () -> operatorController.getRightBumperPressed())
-   );
+  //   clawSubsytem.setDefaultCommand(
+  //     new ClawCommand(clawSubsytem, 
+  //     () -> operatorController.getLeftBumperPressed(), 
+  //    () -> operatorController.getRightBumperPressed())
+  //  );
  }
   
   /**
@@ -97,8 +104,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(operatorController, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
-    //new JoystickButton(driverController, XboxController.Button.kX.value).whileTrue(new LevelChargeStation(swerveSubsytem));
+    //new JoystickButton(operatorController, XboxController.Button.kStart.value).onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
+    new JoystickButton(driverController, XboxController.Button.kY.value).whileTrue(new LevelChargeStation(swerveSubsytem));
     //new JoystickButton(arcadeStick, 5).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx).onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
 
@@ -114,24 +121,24 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
-  }
+  // public Command getAutonomousCommand() {
+  //   return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
+  // }
 
-  public Command getTaxiAuto(){
-    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.taxiBlue);
-  }
+  // public Command getTaxiAuto(){
+  //   return new ExamplePathPlannerCommand(swerveSubsytem, Robot.taxiBlue);
+  // }
 
-  public Command firstPickupAuto(){
-    return null;
-  }
+  // public Command firstPickupAuto(){
+  //   return null;
+  // }
 
-  public Command PlaceTaxiAuto(){
-    return null;
-  }
+  // public Command PlaceTaxiAuto(){
+  //   return new PlaceAuto(swerveSubsytem, clawSubsytem, mSub, armSubsystem, eSubsystem, Robot.taxiBlue);
+  // }
 
-  public Command LevelChargeStation(){
-    return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
-  }
+  // public Command LevelChargeStation(){
+  //   return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
+  // }
 
 }

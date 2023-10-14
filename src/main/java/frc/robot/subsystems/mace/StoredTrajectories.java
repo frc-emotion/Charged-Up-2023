@@ -18,7 +18,7 @@ public class StoredTrajectories {
 
     public static final MaceTrajectory HIGH_MACE_TRAJECTORY = MaceTrajectoryGenerator
     .generateMaceTrajectory(
-        new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-33))), 
+        new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-30))), 
         new ArrayList<Translation2d>() {
             {
             add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(170))));     
@@ -29,6 +29,20 @@ public class StoredTrajectories {
 
         0.4);
 
+        public static final MaceTrajectory AUTO_HIGH_MACE_TRAJECTORY = MaceTrajectoryGenerator
+        .generateMaceTrajectory(
+            new MacePoint(0.6, SimConstants.armRadToMeter(Units.degreesToRadians(-60))), 
+            new ArrayList<Translation2d>() {
+                {
+                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(0))));     
+                add(new Translation2d(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(170))));     
+                }
+            }, 
+            new MacePoint(0.63, SimConstants.armRadToMeter(Units.degreesToRadians(170))), 
+            0.5, 
+    
+            0.4);
+
         public static final MaceTrajectory BACK_HIGH_TRAJECTORY = MaceTrajectoryGenerator
         .generateMaceTrajectory(
             new MacePoint(0.63, SimConstants.armRadToMeter(Units.degreesToRadians(170))), 
@@ -38,7 +52,7 @@ public class StoredTrajectories {
                 }
 
             }, 
-            new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-33))), 
+            new MacePoint(0.1, SimConstants.armRadToMeter(Units.degreesToRadians(-30))), 
             0.5, 
     
             0.4);

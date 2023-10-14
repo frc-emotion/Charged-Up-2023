@@ -5,8 +5,10 @@
 package frc.robot;
 
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+//import com.pathplanner.lib.PathPlanner;
+//import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -26,7 +28,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-  public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
+  //public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
 
   XboxController controller2 = new XboxController(2);
 
@@ -44,12 +46,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     //load Trajectories here
-    examplePath = PathPlanner.loadPath("Taxi1R", 2, 1);
+    //  exaloadPathmplePath = PathPlannerAuto.("Taxi1R", 2, 1);
 
-    taxiBlue = PathPlanner.loadPath("Taxi1B", 2, 1);
+    //  taxiBlue = PathPlanner.loadPath("Taxi1B", 2, 1);
 
 
-    levelcenter = PathPlanner.loadPath("Levelforward", 1, 1);
+    //  levelcenter = PathPlanner.loadPath("Levelforward", 0.5, 0.5);
 
 
 
@@ -60,6 +62,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Taxi - Blue", 1);
     m_chooser.addOption("Taxi - Red", 2);
     m_chooser.addOption("Level + forward", 3);
+    m_chooser.addOption("Place + Taxi", 4);
 
     SmartDashboard.putData("Auto Path?", m_chooser);
 
@@ -91,20 +94,23 @@ public class Robot extends TimedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   public void autonomousInit() {
-    switch (m_chooser.getSelected()) {
-      case 1:
-      m_autonomousCommand = m_robotContainer.getTaxiAuto();
-        break;
-      case 2:
-      m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        break;
-      case 3:
-      m_autonomousCommand = m_robotContainer.LevelChargeStation();
-        break;
-      default:
-      m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        break;
-    }
+    // switch (m_chooser.getSelected()) {
+    //   case 1:
+    //   m_autonomousCommand = m_robotContainer.getTaxiAuto();
+    //     break;
+    //   case 2:
+    //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //     break;
+    //   case 3:
+    //   m_autonomousCommand = m_robotContainer.LevelChargeStation();
+    //     break;
+    //   case 4: 
+    //   m_autonomousCommand = m_robotContainer.PlaceTaxiAuto();
+    //     break;
+    //   default:
+    //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //     break;
+    // }
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

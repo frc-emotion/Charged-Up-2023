@@ -13,15 +13,20 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class SwerveXboxCommand extends CommandBase {
 
     private final SwerveSubsytem swerveSubsytem;
-    private final Supplier<Double> xSpdFunc, ySpdFunc, turningSpdFunc;
+    private final Supplier<Double> xSpdFunc, ySpdFunc, turningSpdFunc, hardRight, hardLeft;
     private final Supplier<Boolean> fieldOrientedFunc, slowModeFunc, turboModeFunc;
 
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
     public SwerveXboxCommand(SwerveSubsytem swerveSubsytem,
             Supplier<Double> xSpdFunc, Supplier<Double> ySpdFunc, Supplier<Double> turningSpdFunc,
-            Supplier<Boolean> fieldOrientedFunc, Supplier<Boolean> slowModeFunc, Supplier<Boolean> turboModeFunc) {
+            Supplier<Boolean> fieldOrientedFunc, Supplier<Boolean> slowModeFunc, Supplier<Boolean> turboModeFunc,
+            Supplier<Double> hardLeft, Supplier<Double> hardRight
 
+    ) {
+
+        this.hardLeft = hardLeft;
+        this.hardRight = hardRight;
         this.swerveSubsytem = swerveSubsytem;
         this.xSpdFunc = xSpdFunc;
         this.ySpdFunc = ySpdFunc;
@@ -45,16 +50,16 @@ public class SwerveXboxCommand extends CommandBase {
         double currentTranslationalSpeed = DriveConstants.kTeleDriveNormalSpeedMetersPerSecond;
         double currentAngularSpeed = DriveConstants.kTeleDriveNormalAngularSpeedRadiansPerSecond;
 
-        if (slowModeFunc.get()){
+        if (slowModeFunc.get()) {
             currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
             currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
-        } else if (turboModeFunc.get()){
+        } else if (turboModeFunc.get()) {
             currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
             currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        } 
+        }
         // deadBand
-        xSpeed = Math.abs(xSpeed) > (OIConstants.kDeadband /2 )? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > (OIConstants.kDeadband /2)? ySpeed : 0.0;
+        xSpeed = Math.abs(xSpeed) > (OIConstants.kDeadband / 2) ? xSpeed : 0.0;
+        ySpeed = Math.abs(ySpeed) > (OIConstants.kDeadband / 2) ? ySpeed : 0.0;
         turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
 
         xSpeed = xLimiter.calculate(xSpeed) * currentTranslationalSpeed;
@@ -64,9 +69,17 @@ public class SwerveXboxCommand extends CommandBase {
 
         ChassisSpeeds robotSpeeds;
 
-        if (fieldOrientedFunc.get()){
-            robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsytem.getRotation2d());
+        if (fieldOrientedFunc.get()) {
+            if (hardLeft.get() > 0.2) {
+                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.5, 0, swerveSubsytem.getRotation2d());
+            } else if (hardRight.get() > 0.2) {
+                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.5, 0, swerveSubsytem.getRotation2d());
+            } else {
+                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed,
+                        swerveSubsytem.getRotation2d());
+            }
         } else {
+
             robotSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
         }
 
