@@ -12,7 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class ClawSubsystem extends SubsystemBase {
 
     private final CANSparkMax claw;
-    public int gamePieceType;
+    private int gamePieceType;
 
     public ClawSubsystem() {
     

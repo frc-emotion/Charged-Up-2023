@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ClawConstants;
 import frc.robot.subsystems.ClawSubsystem;
 
-public class ClawCommand extends CommandBase{
+public class ClawCommand extends CommandBase {
     
     private final ClawSubsystem clawSubsystem;
     private final Supplier<Double> shouldIntake, shouldOutake; 
@@ -49,9 +49,14 @@ public class ClawCommand extends CommandBase{
 
         //double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 35);  
         //double clawSpeed = SmartDashboard.getNumber("Claw Forward Speed", 0.1);
-         
+
         if (leftBumper) {
+            System.out.println("Before: " + clawSubsystem.getPieceType());
+
             clawSubsystem.switchGamePieceType();
+
+            System.out.println("After: " + clawSubsystem.getPieceType());
+
         }
         
 

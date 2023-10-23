@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -130,28 +130,25 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   //return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
-  //   return null;
+  public Command getAutonomousCommand() {
+    //return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
+    return null;
+  }
+
+  // public Command getTaxiAuto(){
+  //   return new DriveForwardAuto(swerveSubsytem);
   // }
 
-  public Command getTaxiAuto(){
-
-  
-
-    return new DriveForwardAuto(swerveSubsytem);
-  }
-
-  public Command LeftOrRightAuto(){
-    return new NonLevelAuto(swerveSubsytem);
-  }
+  // public Command LeftOrRightAuto(){
+  //   return new NonLevelAuto(swerveSubsytem);
+  // }
 
   // public Command PlaceTaxiAuto(){
   //   return new PlaceAuto(swerveSubsytem, clawSubsytem, mSub, armSubsystem, eSubsystem, Robot.taxiBlue);
   // }
 
-  // public Command LevelChargeStation(){
-  //   return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
-  // }
+  public Command LevelChargeStation(){
+    return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
+  }
 
 }
