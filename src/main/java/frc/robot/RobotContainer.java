@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,14 +20,19 @@ import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.ManualControlElevator;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.auton.DriveForwardAuto;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.commands.auton.LevelChargeStationAuto;
+import frc.robot.commands.auton.NonLevelAuto;
 import frc.robot.commands.auton.PlaceAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsytem;
 import frc.robot.subsystems.mace.Mace;
+import frc.robot.Robot;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -72,28 +79,30 @@ public class RobotContainer {
     
     );
     configureButtonBindings();
-  //   mSub.setDefaultCommand(
-  //     new MaceCommand(mSub, 
-  //     () -> operatorController.getYButtonPressed(),
-  //     () -> operatorController.getXButtonPressed(),
-  //     () -> operatorController.getAButtonPressed(),
-  //     () -> operatorController.getLeftTriggerAxis(),
-  //     () -> operatorController.getBButtonPressed(),
-  //     () -> operatorController.getRightTriggerAxis(),
-  //     () -> -operatorController.getLeftY(),
-  //     () -> -operatorController.getRightY()
-  //     )
-  //  ); 
+    // clawSubsytem.setDefaultCommand(
+    //   new ClawCommand(clawSubsytem, 
+    //   () -> operatorController.getYButtonPressed(),
+    //   () -> operatorController.getXButtonPressed(),
+    //   () -> operatorController.getAButtonPressed(),
+    //   () -> operatorController.getLeftTriggerAxis(),
+    //   () -> operatorController.getBButtonPressed(),
+    //   () -> operatorController.getRightTriggerAxis(),
+    //   () -> -operatorController.getLeftY(),
+    //   () -> -operatorController.getRightY()
+    //   )
 
     
     eSubsystem.setDefaultCommand(new ManualControlElevator(eSubsystem, () -> -operatorController.getRightY()));
-    armSubsystem.setDefaultCommand(new ManualArmCommand(  armSubsystem,() -> -operatorController.getLeftY()));
+    armSubsystem.setDefaultCommand(new ManualArmCommand(armSubsystem,() -> -operatorController.getLeftY()));
 
     clawSubsytem.setDefaultCommand(
-      new ClawCommand(clawSubsytem, 
-      () -> operatorController.getLeftBumperPressed(), 
-     () -> operatorController.getRightBumperPressed())
-   );
+      new ClawCommand(
+        clawSubsytem, 
+        clawSubsytem.getPieceType(), 
+        () -> operatorController.getLeftTriggerAxis(),
+        () -> operatorController.getRightTriggerAxis(),
+        operatorController.getLeftBumper()
+        ));
  }
   
   /**
@@ -121,16 +130,20 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
-  }
+  // public Command getAutonomousCommand() {
+  //   //return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
+  //   return null;
+  // }
 
   public Command getTaxiAuto(){
-    return new ExamplePathPlannerCommand(swerveSubsytem, Robot.taxiBlue);
+
+  
+
+    return new DriveForwardAuto(swerveSubsytem);
   }
 
-  public Command firstPickupAuto(){
-    return null;
+  public Command LeftOrRightAuto(){
+    return new NonLevelAuto(swerveSubsytem);
   }
 
   // public Command PlaceTaxiAuto(){

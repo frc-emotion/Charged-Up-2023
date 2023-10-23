@@ -4,9 +4,9 @@
 
 package frc.robot;
 
-
 import org.ejml.dense.row.misc.TransposeAlgs_ZDRM;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -33,7 +33,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
+public static PathPlannerPath examplePath, taxiBlue, levelcenter;
+public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
 
@@ -51,15 +52,19 @@ public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
   @Override
   public void robotInit() {
    // load Trajectories here
-    PathPlannerPath taxi1RedExample = PathPlannerPath.fromPathFile("Taxi1R");
-    examplePath = new PathPlannerTrajectory(taxi1RedExample, new ChassisSpeeds()); // 2 1 ??
 
-    PathPlannerPath taxi1Blue = PathPlannerPath.fromPathFile("Taxi1B");
-    taxiBlue = new PathPlannerTrajectory(taxi1Blue, new ChassisSpeeds());
 
-    PathPlannerPath levelCenterThang = PathPlannerPath.fromPathFile("Levelforward");
-    levelcenter = new PathPlannerTrajectory(levelCenterThang, new ChassisSpeeds());
+   //  examplePath = PathPlannerPath.fromPathFile("BATB2023");
 
+    // taxiBlue = PathPlannerPath.fromPathFile("Taxi1B");
+
+    // levelcenter = PathPlannerPath.fromPathFile("Levelforward");
+
+
+    // examplePathCommand = AutoBuilder.followPathWithEvents(examplePath);
+    // taxiBlueCommand = AutoBuilder.followPathWithEvents(taxiBlue);
+    // levelCenterCommand = AutoBuilder.followPathWithEvents(levelcenter);
+    
     // taxiBlue = PathPlanner.loadPath("Taxi1B", 2, 1); // 2 1
 
     // levelcenter = PathPlanner.loadPath("", 0.5, 0.5); // 0.5 0.5 
@@ -68,13 +73,13 @@ public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
 
     // levelcenter = taxiBlue = new PathPlannerAuto("Levelforward");
 
-    // examplePath = new PathPlannerAuto("Taxi1R"); 
+     //examplePath = new PathPlannerAuto("Taxi1R"); 
 
     m_robotContainer = new RobotContainer();
 
-    m_chooser.setDefaultOption("Taxi - Blue", 1);
-    m_chooser.addOption("Taxi - Red", 2);
-    m_chooser.addOption("Level + forward", 3);
+    m_chooser.setDefaultOption("Don't do anything", 1);
+    m_chooser.addOption("Charge Station Level", 2);
+    m_chooser.addOption("Left/Right Forward", 3);
     //m_chooser.addOption("Place + Taxi", 4);
 
     SmartDashboard.putData("Auto Path?", m_chooser);
@@ -107,23 +112,25 @@ public static PathPlannerTrajectory examplePath, taxiBlue, levelcenter;
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   public void autonomousInit() {
-    // switch (m_chooser.getSelected()) {
-    //   case 1:
-    //   m_autonomousCommand = m_robotContainer.getTaxiAuto();
-    //     break;
-    //   case 2:
-    //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    //     break;
-    //   case 3:
-    //   m_autonomousCommand = m_robotContainer.LevelChargeStation();
-    //     break;
-    //   case 4: 
-    //   m_autonomousCommand = m_robotContainer.PlaceTaxiAuto();
-    //     break;
-    //   default:
-    //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    //     break;
-    // }
+    switch (m_chooser.getSelected()) {
+      case 1: // just incase yk
+        m_autonomousCommand = null;
+        break;
+      case 2:
+   //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_autonomousCommand = m_robotContainer.getTaxiAuto();
+        break;
+      case 3:
+  //    m_autonomousCommand = m_robotContainer.LevelChargeStation();
+        m_autonomousCommand = m_robotContainer.LeftOrRightAuto();
+        break;
+      case 4: 
+   //   m_autonomousCommand = m_robotContainer.PlaceTaxiAuto();
+        break;
+      default:
+   //   m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        break;
+    }
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class ClawSubsystem extends SubsystemBase {
 
     private final CANSparkMax claw;
+    public int gamePieceType;
 
     public ClawSubsystem() {
     
@@ -19,8 +20,20 @@ public class ClawSubsystem extends SubsystemBase {
      
      claw.setSmartCurrentLimit(ClawConstants.CURRENT_LIMIT);
      claw.setSecondaryCurrentLimit(ClawConstants.SECOND_CURRENT_LIMIT);
-     claw.setIdleMode(IdleMode.kBrake);
+     claw.setIdleMode(IdleMode.kCoast);
      claw.setInverted(false); 
+    }
+
+    public int getPieceType() {
+        return gamePieceType;
+    }
+
+    public void switchGamePieceType() {
+        if (gamePieceType == 0) {
+            gamePieceType = 1;
+        } else if (gamePieceType == 1) {
+            gamePieceType = 0;
+        }
     }
 
     public void setClawMotor(double speed) {

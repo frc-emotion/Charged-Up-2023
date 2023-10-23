@@ -22,8 +22,6 @@ public class ManualControlElevator extends CommandBase{
     @Override
     public void execute(){
         myElevator.manualMove(elevatorSpeedFunc);
-
-
     }
     @Override
     public void end(boolean interrupted){

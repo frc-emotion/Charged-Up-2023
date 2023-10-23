@@ -71,9 +71,9 @@ public class SwerveXboxCommand extends CommandBase {
 
         if (fieldOrientedFunc.get()) {
             if (hardLeft.get() > 0.2) {
-                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.5, 0, swerveSubsytem.getRotation2d());
+                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, swerveSubsytem.getRotation2d());
             } else if (hardRight.get() > 0.2) {
-                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.5, 0, swerveSubsytem.getRotation2d());
+                robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.8, 0, swerveSubsytem.getRotation2d());
             } else {
                 robotSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed,
                         swerveSubsytem.getRotation2d());
@@ -88,6 +88,7 @@ public class SwerveXboxCommand extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(robotSpeeds);
         swerveSubsytem.setModuleStates(moduleStates);
     }
+
 
     @Override
     public void end(boolean interrupted) {

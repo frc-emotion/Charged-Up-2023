@@ -221,11 +221,11 @@ public final class Constants {
 
     public static final class ArmConstants {
        
-        public static final int armMotorPort = 23;
+        public static final int armMotorPort = 22;
         public static final int absoluteEncoderPort = 9;
 
 
-        public static final double ARM_SPEED = 0.15;
+        public static final double ARM_SPEED = -0.2;
         public static final double TOP_HEIGHT = Math.PI / 2;
         public static final double MIDDLE_HEIGHT = Math.PI / 4;
         public static final double LOW_HEIGHT = Math.PI / 8;
@@ -277,7 +277,7 @@ public final class Constants {
         public static final double MIDDLELEVEL = 0.3;
         public static final double HIGHLEVEL = 0.55;
         public static final double MAXLEVEL = 0.6;
-        public static final double ELEVATORMOTORSPEED = 0.15;
+        public static final double ELEVATORMOTORSPEED = 0.2;
         public static final double KP = 2;
         public static final double KD = 9.9513;
         public static final double KI = 0;
@@ -289,7 +289,7 @@ public final class Constants {
         public static final double SECOND_CURRENT_LIMIT = 45;
         public static final double SPROCKETRADIUS = 2 / Math.PI;
         public static int operatorElevatorAxis = XboxController.Axis.kLeftY.value;
-        public static int ELEVATORMOTOR_ID = 22;
+        public static int ELEVATORMOTOR_ID = 21;
 
         public static double KS = 0.12212;
         public static double KA = 0.36817;
