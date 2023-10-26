@@ -15,11 +15,11 @@ public class ClawCommand extends CommandBase {
     private final Supplier<Double> shouldIntake, shouldOutake; 
     boolean direction, stopped; 
     private int gamePieceType; // 0 for cube - 1 for cone 
-    private boolean leftBumper;
+    private Supplier<Boolean> leftBumper;
 
     //private Timer timer;
 
-    public ClawCommand(ClawSubsystem clawSubsystem, int gamePieceType, Supplier<Double> shouldIntake, Supplier<Double> shouldOutake, Boolean leftBumper ){
+    public ClawCommand(ClawSubsystem clawSubsystem, int gamePieceType, Supplier<Double> shouldIntake, Supplier<Double> shouldOutake, Supplier<Boolean> leftBumper ){
        
         this.clawSubsystem = clawSubsystem;
         this.gamePieceType = gamePieceType;
@@ -40,51 +40,68 @@ public class ClawCommand extends CommandBase {
         SmartDashboard.putNumber("Claw Forward Speed", 0.1);
     }
 
-
+    @Override
     public void execute(){
         // SmartDashboard.putBoolean("Claw Direction", direction);
         // SmartDashboard.putBoolean("Stopped", stopped);
 
         //SmartDashboard.putNumber("Time to Close", timer.get());
+        // System.out.println("hi");
+        // System.out.println(leftBumper.get());
 
         //double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 35);  
         //double clawSpeed = SmartDashboard.getNumber("Claw Forward Speed", 0.1);
 
-        if (leftBumper) {
+        if (leftBumper.get()) {
             System.out.println("Before: " + clawSubsystem.getPieceType());
 
             clawSubsystem.switchGamePieceType();
+            //clawSubsystem.setClawMotor(-0.3);
 
             System.out.println("After: " + clawSubsystem.getPieceType());
 
         }
+
+        if (clawSubsystem.getPieceType() == 0) {
+            System.out.println("Currently on cube");
+        } else if (clawSubsystem.getPieceType() == 1) {
+            System.out.println("Currently on cone");
+        }
         
 
-        // switch (gamePieceType) {
-        //     case 0: // Cube
-        //         // Do routine for cube stuf
-        //         if (shouldIntake.get() > 0.2) {
-        //             // INTAKE
-        //             System.out.println("Attempting to set motor speed 1");
-        //             clawSubsystem.setClawMotor(-0.3);
-        //         } else if (shouldOutake.get() > 0.2) {
-        //             // Outtake
-        //             System.out.println("Attempting to set motor speed 2");
-        //             clawSubsystem.setClawMotor(0.3);
-        //         }
-        //         break;
-        //     case 1: // Cone
-        //         // Do routine for cone stuff
-        //         if (shouldIntake.get() > 0.2) {
-        //             // INTAKE 
-        //             System.out.println("Attempting to set motor speed 3");
-        //             clawSubsystem.setClawMotor(-0.5);
-        //         } else if (shouldOutake.get() > 0.2) {
-        //             // Outtake
-        //             System.out.println("Attempting to set motor speed 4");
-        //             clawSubsystem.setClawMotor(0.5);
-        //         }
-        //         break;
+        switch (clawSubsystem.getPieceType()) {
+            case 0: // Cube
+                // Do routine for cube stuf
+                if (shouldIntake.get() > 0.2) {
+                    // INTAKE
+                    System.out.println("Attempting to set motor speed 1");
+                    clawSubsystem.setClawMotor(0.3);
+                } else if (shouldOutake.get() > 0.2) {
+                    // Outtake
+                    System.out.println("Attempting to set motor speed 2");
+                    clawSubsystem.setClawMotor(-0.3);
+                } else if (shouldOutake.get() < 0.2) {
+                    System.out.println("Stopping cube");
+                    clawSubsystem.setClawMotor(0);
+                }
+                break;
+                
+            case 1: // Cone
+                // Do routine for cone stuff
+                if (shouldIntake.get() > 0.2) {
+                    // INTAKE 
+                    System.out.println("Attempting to set motor speed 3");
+                    clawSubsystem.setClawMotor(-0.3);
+                } else if (shouldOutake.get() > 0.2) {
+                    // Outtake
+                    System.out.println("Attempting to set motor speed 4");
+                    clawSubsystem.setClawMotor(0.3);
+                } else if (shouldOutake.get() < 0.2) {
+                    System.out.println("Stopping cone");
+                    clawSubsystem.setClawMotor(0);
+                }
+                break;
+            }
         }
 
         // if (clawFunc.get()){

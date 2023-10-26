@@ -101,7 +101,7 @@ public class RobotContainer {
         clawSubsytem.getPieceType(), 
         () -> operatorController.getLeftTriggerAxis(),
         () -> operatorController.getRightTriggerAxis(),
-        operatorController.getLeftBumper()
+        () -> operatorController.getLeftBumperPressed()
         ));
  }
   

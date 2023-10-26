@@ -36,7 +36,7 @@ public class ManualArmCommand extends CommandBase {
             arm.setArmSpeeds(ArmConstants.ARM_SPEED);
         }
         else if(angularSpeed < -OIConstants.kDeadband){
-            arm.setArmSpeeds(-ArmConstants.ARM_SPEED);
+            arm.setArmSpeeds(-ArmConstants.DOWN_ARM_SPEED);
         } else if(RobotContainer.operatorController.getBackButton()){
             arm.setArmSpeeds(arm.getPIDOutputVolts(Units.degreesToRadians(-30)));
         } else if(RobotContainer.operatorController.getBButton()){
