@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClawConstants;
+import frc.robot.Constants.GamePieceType;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -12,7 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class ClawSubsystem extends SubsystemBase {
 
     private final CANSparkMax claw;
-    private int gamePieceType;
+    private GamePieceType gamePieceType;
 
     public ClawSubsystem() {
     
@@ -24,7 +25,7 @@ public class ClawSubsystem extends SubsystemBase {
      claw.setInverted(false); 
     }
 
-    public int getPieceType() {
+    public GamePieceType getPieceType() {
         return gamePieceType;
     }
 

@@ -264,6 +264,13 @@ public final class Constants {
         public static final double closedClawCurrentThreshold = 45;
         public static final double clawNormalSpeed = 0.5;
 
+        public static final double DEADZONE = 0.2;
+
+        public static final double CUBE_INTAKE = 0.3;
+        public static final double CUBE_OUTTAKE = -0.3;
+
+        public static final double CONE_INTAKE = -0.3;
+        public static final double CONE_OUTTAKE = 0.3;
 
         public static final int CURRENT_LIMIT = 45;
         public static final double SECOND_CURRENT_LIMIT = 45;
