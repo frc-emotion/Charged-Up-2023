@@ -269,7 +269,7 @@ public final class Constants {
         public static final double CUBE_INTAKE = 0.3;
         public static final double CUBE_OUTTAKE = -0.3;
 
-        public static final double CONE_INTAKE = -0.3;
+        public static final double CONE_INTAKE = -0.4;
         public static final double CONE_OUTTAKE = 0.3;
 
         public static final int CURRENT_LIMIT = 45;

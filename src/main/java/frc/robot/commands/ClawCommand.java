@@ -17,6 +17,7 @@ public class ClawCommand extends CommandBase {
     boolean direction, stopped; 
     private int gamePieceType; // 0 for cube - 1 for cone 
     private Supplier<Boolean> leftBumper;
+    private boolean gamePieceBoolean;
 
     //private Timer timer;
 
@@ -27,6 +28,11 @@ public class ClawCommand extends CommandBase {
         this.shouldIntake = shouldIntake; 
         this.shouldOutake = shouldOutake;
         this.leftBumper = leftBumper;
+        if (gamePieceType == 0) { // Cube
+            this.gamePieceBoolean = true;
+        } else if (gamePieceType == 1) { // Cone
+            this.gamePieceBoolean = false;
+        }
         addRequirements(clawSubsystem);
 
         //timer = new Timer();
@@ -36,13 +42,6 @@ public class ClawCommand extends CommandBase {
 
         SmartDashboard.putBoolean("Claw Direction", direction);
         SmartDashboard.putBoolean("Stopped", stopped);
-        if (gamePieceType == 0) {
-            SmartDashboard.putString("Game Piece Type", "Cube");
-        } else if (gamePieceType == 1) {
-            SmartDashboard.putString("Game Piece Type", "Cone");
-        } else {
-            SmartDashboard.putString("Game Piece Type", "Unknown");
-        }
         //SmartDashboard.putNumber("Game Piece Type (0-cube, 1-cone)", gamePieceType);
         SmartDashboard.putNumber("Claw Current Limit", 35);
         SmartDashboard.putNumber("Claw Forward Speed", 0.1);
@@ -64,11 +63,18 @@ public class ClawCommand extends CommandBase {
             //System.out.println("Before: " + clawSubsystem.getPieceType());
 
             clawSubsystem.switchGamePieceType();
+            gamePieceBoolean = !gamePieceBoolean;
             //clawSubsystem.setClawMotor(-0.3);
 
             //System.out.println("After: " + clawSubsystem.getPieceType());
 
         }
+
+        SmartDashboard.putBoolean("Game Piece Type", gamePieceBoolean);
+
+        
+
+        
 
         // if (clawSubsystem.getPieceType() == 0) {
         //     System.out.println("Currently on cube");

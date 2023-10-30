@@ -124,10 +124,10 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   public void autonomousInit() {
     switch (m_chooser.getSelected()) {
       case 1:
-      m_autonomousCommand = m_robotContainer.LevelChargeStation();
-
+        m_autonomousCommand = m_robotContainer.LevelChargeStation();
+        break;
       default:
-      m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         break;
     }
 

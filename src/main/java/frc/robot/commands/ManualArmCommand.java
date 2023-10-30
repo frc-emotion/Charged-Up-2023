@@ -33,7 +33,7 @@ public class ManualArmCommand extends CommandBase {
 
         if(angularSpeed > OIConstants.kDeadband){
             //arm.setArmSpeeds(ArmConstants.ARM_SPEED);
-            arm.setArmSpeeds(-0.6 * Math.abs(RobotContainer.operatorController.getLeftY())); // Start at 0.6 increase if needed
+            arm.setArmSpeeds(-0.35 * Math.abs(RobotContainer.operatorController.getLeftY())); // Start at 0.6 increase if needed
             
         } else if(angularSpeed < -OIConstants.kDeadband){
             arm.setArmSpeeds(-ArmConstants.DOWN_ARM_SPEED);

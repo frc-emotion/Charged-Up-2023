@@ -10,7 +10,7 @@ import frc.robot.subsystems.SwerveSubsytem;
 public class ExamplePathPlannerCommand extends ParallelCommandGroup {
     
     public ExamplePathPlannerCommand(SwerveSubsytem swerveSubsytem, PathPlannerTrajectory path){
-
+        System.out.println("Adding command");
         addCommands(SwerveController.followTrajectoryCommand(path, true, swerveSubsytem));
     }
 }
