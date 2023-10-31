@@ -20,8 +20,10 @@ public class ClawSubsystem extends SubsystemBase {
      
      claw.setSmartCurrentLimit(ClawConstants.CURRENT_LIMIT);
      claw.setSecondaryCurrentLimit(ClawConstants.SECOND_CURRENT_LIMIT);
-     claw.setIdleMode(IdleMode.kCoast);
+     claw.setIdleMode(IdleMode.kBrake);
      claw.setInverted(false); 
+
+     gamePieceType = 1;
     }
 
     public int getPieceType() {

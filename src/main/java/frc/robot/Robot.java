@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-public static PathPlannerTrajectory  examplePath, taxiBlue, levelcenter;
+public static PathPlannerTrajectory  examplePath, rightMost, levelcenter;
 public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
@@ -71,7 +71,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   
     // = PathPlanner.loadPath("BATB2023", 2, 1);
 
-    taxiBlue = PathPlanner.loadPath("Taxi1B", 2, 1); // 2 1
+    rightMost = PathPlanner.loadPath("rightForward", 2, 1); // 2 1
 
     levelcenter = PathPlanner.loadPath("Levelforward", 0.5, 0.5); // 0.5 0.5 
 
@@ -88,6 +88,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     // m_chooser.addOption("Left/Right Forward", 3);
     //m_chooser.addOption("Place + Taxi", 4);
     m_chooser.setDefaultOption("Level", 1);
+    m_chooser.addOption("Rightmost Forward Test", 2);
     // m_chooser.addOption("Taxi - Red", 2);
     // m_chooser.addOption("Level + forward", 3);
     // m_chooser.addOption("Place + Taxi", 4);
@@ -126,6 +127,8 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
       case 1:
         m_autonomousCommand = m_robotContainer.LevelChargeStation();
         break;
+      case 2:
+        m_autonomousCommand = m_robotContainer.RightMostForward();
       default:
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         break;

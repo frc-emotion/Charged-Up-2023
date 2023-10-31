@@ -29,7 +29,6 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 public final class SwerveController {
 
   public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, SwerveSubsytem swerveSubsystem) {
-
     PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
     PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
     PIDController thetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
