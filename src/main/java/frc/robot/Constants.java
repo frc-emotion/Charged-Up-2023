@@ -188,7 +188,7 @@ public final class Constants {
     
         //Change based on testing/tune PID controllers
         public static final double kPXController = 3.1;
-        public static final double kPYController = 1.5;
+        public static final double kPYController = 3.1;
         public static final double kPThetaController = 0;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //

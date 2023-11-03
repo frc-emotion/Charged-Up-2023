@@ -20,6 +20,7 @@ import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.ManualControlElevator;
 import frc.robot.commands.SwerveArcadeCommand;
 import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.auton.CurvedAuto;
 import frc.robot.commands.auton.DriveForwardAuto;
 import frc.robot.commands.auton.ExamplePathPlannerCommand;
 import frc.robot.commands.auton.LevelChargeStationAuto;
@@ -163,6 +164,10 @@ public class RobotContainer {
 
   public Command LevelChargeStation() {
     return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
+  }
+
+  public Command CurvedTest() {
+    return new CurvedAuto(swerveSubsytem, Robot.placeauto);
   }
 
 }
