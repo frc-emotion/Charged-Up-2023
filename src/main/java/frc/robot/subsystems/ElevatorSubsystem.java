@@ -61,11 +61,17 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getPIDOutputVoltsAuto() {
+        System.out.println("the height");
+        System.out.println(getHeight());
         return elevatorController.calculate(getHeight());
     }
 
     public double getFeedForwardOutputVolts(double v, double a) {
         return feedForward.calculate(v, a);
+    }
+
+    public void setElePID(double valToSet) {
+        elevatorMotor.set(valToSet);
     }
 
     // the xbox controller buttons are temporary
@@ -97,6 +103,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setElevatorVoltage(double volts) {
         elevatorMotor.set(volts);
+    }
+
+    public void runElevatorAuto(double goal){
+        elevatorController.setGoal(goal);
+        pidValue = elevatorController.calculate(getHeight());
+                // feedForwardVal = feedForward.calculate(0.02);
+                // MathUtil.clamp(pidValue, 0, 12);
+        elevatorMotor.set(pidValue);
     }
 
     // allows for manual control as backup
@@ -136,6 +150,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public double getHeight() {
         return positionSensor.getRange() * 0.001;
     }
+    
 
     // converts inches to meters
     public void convertToMeters() {

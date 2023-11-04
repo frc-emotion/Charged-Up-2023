@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto;
+public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight;
 public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
@@ -76,6 +76,15 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     levelcenter = PathPlanner.loadPath("Levelforward", 0.5, 0.5); // 0.5 0.5 
 
     placeauto = PathPlanner.loadPath("PlaceAuto", 2, 1);
+    
+    bottomCurved = PathPlanner.loadPath("BestCurved", 2, 1);
+
+    straightBottomCone = PathPlanner.loadPath("DirectPickupB", 2, 1);
+
+    smoothCurveTop = PathPlanner.loadPath("TopCurveCone", 2, 1);
+    
+    topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
+
     //taxiBlue = new PathPlannerAuto("Taxi1B");
 
     // levelcenter = taxiBlue = new PathPlannerAuto("Levelforward");
@@ -91,6 +100,11 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     m_chooser.setDefaultOption("Level", 1);
     m_chooser.addOption("Rightmost Forward Test", 2);
     m_chooser.addOption("Curved Auto Test", 3);
+
+    m_chooser.addOption("Bottom Curved Test", 4);
+    m_chooser.addOption("Straight To Cone Bottom Test", 5);
+    m_chooser.addOption("Smooth Curved Path (Top)", 6);
+    m_chooser.addOption("Straight Path (Top)", 7);
     // m_chooser.addOption("Taxi - Red", 2);
     // m_chooser.addOption("Level + forward", 3);
     // m_chooser.addOption("Place + Taxi", 4);
@@ -129,12 +143,30 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
       case 1:
         m_autonomousCommand = m_robotContainer.LevelChargeStation();
         break;
+        
       case 2:
-        m_autonomousCommand = m_robotContainer.RightMostForward();
+        m_autonomousCommand = m_robotContainer.EasyToTest(rightMost, 8.5);
         break;
+
       case 3:
-        m_autonomousCommand = m_robotContainer.CurvedTest();
+        m_autonomousCommand = m_robotContainer.EasyToTest(placeauto, 16.5);
         break;
+
+      case 4:
+        m_autonomousCommand = m_robotContainer.EasyToTest(bottomCurved, 10.5);
+        break;
+
+      case 5:
+        m_autonomousCommand = m_robotContainer.EasyToTest(straightBottomCone, 10.5);
+        break;
+
+      case 6:
+        m_autonomousCommand = m_robotContainer.EasyToTest(smoothCurveTop, 12.5);
+        break;
+
+      case 7:
+        m_autonomousCommand = m_robotContainer.EasyToTest(topStraight, 5.5);
+
       default:
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         break;

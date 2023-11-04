@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 // import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -14,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.LevelChargeStation;
+import frc.robot.commands.AutoAbstracted;
 import frc.robot.commands.ClawCommand;
 import frc.robot.commands.MaceCommand;
 import frc.robot.commands.ManualArmCommand;
@@ -27,6 +30,7 @@ import frc.robot.commands.auton.LevelChargeStationAuto;
 import frc.robot.commands.auton.NonLevelAuto;
 import frc.robot.commands.auton.PlaceAuto;
 import frc.robot.commands.auton.RightTest;
+import frc.robot.commands.auton.toTestAuto;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -46,13 +50,15 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
  */
 public class RobotContainer {
 
-  private final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
-  private ArmSubsystem armSubsystem = new ArmSubsystem();
-  private ElevatorSubsystem eSubsystem = new ElevatorSubsystem();
+  public static final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  public static ArmSubsystem armSubsystem = new ArmSubsystem();
+  public static ElevatorSubsystem eSubsystem = new ElevatorSubsystem();
   // private final Mace mSub = new Mace(armSubsystem, eSubsystem);
   public static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public static ClawSubsystem clawSubsytem = new ClawSubsystem();
   public static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+ 
+  public static AutoAbstracted autoAbstracted = new AutoAbstracted(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem);
   // public static Joystick arcadeStick = new Joystick(1);
   // public static Joystick arcadeStick2 = new Joystick(0);
 
@@ -92,7 +98,7 @@ public class RobotContainer {
     // () -> operatorController.getBButtonPressed(),
     // () -> operatorController.getRightTriggerAxis(),
     // () -> -operatorController.getLeftY(),
-    // () -> -operatorController.getRightY()
+    // () -> -operatorController.getRightY() 
     // )
 
     eSubsystem.setDefaultCommand(new ManualControlElevator(eSubsystem, () -> -operatorController.getRightY()));
@@ -158,16 +164,20 @@ public class RobotContainer {
   // eSubsystem, Robot.taxiBlue);
   // }
 
-  public Command RightMostForward() {
-    return new RightTest(swerveSubsytem, Robot.rightMost);
-  }
+  // public Command RightMostForward() {
+  //   return new RightTest(swerveSubsytem, Robot.rightMost);
+  // }
 
   public Command LevelChargeStation() {
-    return new LevelChargeStationAuto(swerveSubsytem, Robot.levelcenter);
+    return new LevelChargeStationAuto(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, Robot.levelcenter);
   }
 
-  public Command CurvedTest() {
-    return new CurvedAuto(swerveSubsytem, Robot.placeauto);
+  // public Command CurvedTest() {
+  //   return new CurvedAuto(swerveSubsytem, Robot.placeauto);
+  // }
+
+  public Command EasyToTest(PathPlannerTrajectory pathToUse, Double timeoutTime) {
+    return new toTestAuto(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime);
   }
 
 }

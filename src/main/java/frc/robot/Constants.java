@@ -246,7 +246,7 @@ public final class Constants {
         public static final double COUNTS_PER_REVOLUTION = 4096;
         public static final double MAX_ARM_VELOCITY = 0.1;
         public static final double MAX_ARM_ACCELERATION = 0.05;
-        public static final double ARM_GEAR_RATIO = 56.33;
+        public static final double ARM_GEAR_RATIO = 36.56;
         public static final double ARM_SPROCKET_RADIUS = 0.01;
 
 
@@ -282,7 +282,7 @@ public final class Constants {
         //constants for levels may vary
         public static final double MINLEVEL = 0.04;
         public static final double LOWLEVEL = 0.1;
-        public static final double MIDDLELEVEL = 0.3;
+        public static final double MIDDLELEVEL = 0.28;
         public static final double HIGHLEVEL = 0.55;
         public static final double MAXLEVEL = 0.6;
         public static final double ELEVATORMOTORSPEED = 0.2;

@@ -55,7 +55,7 @@ public class ArmSubsystem extends SubsystemBase{
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
         //armController = armMotor.getPIDController();
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(2.0, 2);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(1.6, 0.6);
 
         armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
         constraints);
@@ -139,6 +139,16 @@ public class ArmSubsystem extends SubsystemBase{
         return armFeedForward.calculate(d, v, a);
 
     }
+
+    public void setArmAuto(double setpoint){
+        armController.setGoal(Units.degreesToRadians(setpoint));
+        pidVal = armController.calculate(getPosition());
+        //feedForwardVal = armFeedForward.calculate(ArmConstants.TOP_HEIGHT, ArmConstants.MAX_ARM_VELOCITY);
+
+
+        //MathUtil.clamp(pidVal, 0, 12);
+        setArmSpeeds(pidVal);
+    }
     public void setArmAngle(){
         if(RobotContainer.operatorController.getBButton()){
             armController.setGoal(Units.degreesToRadians(-30));
@@ -199,7 +209,7 @@ public class ArmSubsystem extends SubsystemBase{
 
 
     public void resetPosition(){
-        armEncoder.setPosition(Units.degreesToRadians(-30));
+        armEncoder.setPosition(Units.degreesToRadians(0));
         //armEncoder.setPosition(Math.PI/2);
     }
 
