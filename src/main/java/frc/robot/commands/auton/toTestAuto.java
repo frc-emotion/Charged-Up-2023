@@ -38,8 +38,8 @@ public class toTestAuto extends SequentialCommandGroup {
     
                 new ParallelCommandGroup(
                     new ElevatorPID(ElevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL),
-                    new ArmPID(aSubsystem, 10)
-                ).withTimeout(2),
+                    new ArmPID(aSubsystem, 1)
+                ).withTimeout(2.5),
     
                 new ParallelCommandGroup(
                     //new ArmPID(aSubsystem, 200).withTimeout(3),

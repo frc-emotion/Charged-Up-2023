@@ -73,7 +73,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
     rightMost = PathPlanner.loadPath("Forward", 2, 1); // 2 1
 
-    levelcenter = PathPlanner.loadPath("Levelforward", 0.5, 0.5); // 0.5 0.5 
+    levelcenter = PathPlanner.loadPath("Levelforward", 0.526, 0.5); // 0.5 0.5 
 
     placeauto = PathPlanner.loadPath("PlaceAuto", 2, 1);
     
@@ -166,6 +166,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
       case 7:
         m_autonomousCommand = m_robotContainer.EasyToTest(topStraight, 5.5);
+        break;
 
       default:
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
