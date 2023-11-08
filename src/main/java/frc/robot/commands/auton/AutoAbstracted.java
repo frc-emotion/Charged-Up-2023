@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.auton;
 
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.ArmPID;
 import frc.robot.commands.ElevatorPID;
-import frc.robot.commands.auton.GrabberAuton;
 
 public class AutoAbstracted {
 
@@ -22,9 +21,10 @@ public class AutoAbstracted {
         this.clawSubSystem = ClawSubsystem;
         this.elevatorSubsystem = ElevatorSubsystem;
         this.armSubsystem = aSubsystem;
-    }
 
-    public SequentialCommandGroup placeConeMid() {
+    } // TODO: Pick up another piece from ground
+
+    public SequentialCommandGroup PlaceConeMid() {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_INTAKE),
@@ -48,10 +48,6 @@ public class AutoAbstracted {
                 new ArmPID(armSubsystem, 10)
             ).withTimeout(2)
 
-            //new ArmPID(aSubsystem, 200).withTimeout(3),
-            //new ElevatorPID(elevatorSubsystem, 0.04).withTimeout(1.5)
-            //SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(5.5)
-        
         );
     }
 

@@ -65,9 +65,9 @@ public class SimConstants {
 
     //1 rot = 2 * pi * r  mete
 
-    private double metertoRot(double meter){
-        return meter ; 
-    }
+    // private double metertoRot(double meter){
+    //     return meter ; 
+    // }
 
     public static double armMPStoRPM(double meters){
         return armMeterToRot(meters) / 60;

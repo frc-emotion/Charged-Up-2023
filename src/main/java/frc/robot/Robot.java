@@ -4,15 +4,6 @@
 
 package frc.robot;
 
-import org.ejml.dense.row.misc.TransposeAlgs_ZDRM;
-
-// import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.commands.PathPlannerAuto;
-// import com.pathplanner.lib.path.PathPlannerTrajectory;
-// import com.pathplanner.lib.path.PathPlannerPath;
-// import com.pathplanner.lib.PathPlannerTrajectory;
-// import com.pathplanner.lib.;;;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,10 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
+import frc.robot.commands.auton.LockWheels;
 
 
 
@@ -45,7 +37,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   private SendableChooser<Integer> m_chooser = new SendableChooser<>();
 
-  private SendableChooser<Integer> allianceChooser = new SendableChooser<>();
+  //private SendableChooser<Integer> allianceChooser = new SendableChooser<>();
 
 
 
@@ -55,21 +47,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
    */
   @Override
   public void robotInit() {
-   // load Trajectories here
-
-
-   //  examplePath = PathPlannerPath.fromPathFile("BATB2023");
-
-    // taxiBlue = PathPlannerPath.fromPathFile("Taxi1B");
-
-    // levelcenter = PathPlannerPath.fromPathFile("Levelforward");
-
-
-    // examplePathCommand = AutoBuilder.followPathWithEvents(examplePath);
-    // taxiBlueCommand = AutoBuilder.followPathWithEvents(taxiBlue);
-    // levelCenterCommand = AutoBuilder.followPathWithEvents(levelcenter);
-  
-    // = PathPlanner.loadPath("BATB2023", 2, 1);
+   // Load paths here
 
     rightMost = PathPlanner.loadPath("Forward", 2, 1); // 2 1
 
@@ -85,18 +63,10 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     
     topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
 
-    //taxiBlue = new PathPlannerAuto("Taxi1B");
 
-    // levelcenter = taxiBlue = new PathPlannerAuto("Levelforward");
-
-     //examplePath = new PathPlannerAuto("Taxi1R"); 
 
     m_robotContainer = new RobotContainer();
 
-    // m_chooser.setDefaultOption("Don't do anything", 1);
-    // m_chooser.addOption("Charge Station Level", 2);
-    // m_chooser.addOption("Left/Right Forward", 3);
-    //m_chooser.addOption("Place + Taxi", 4);
     m_chooser.setDefaultOption("Level", 1);
     m_chooser.addOption("Rightmost Forward Test", 2);
     m_chooser.addOption("Curved Auto Test", 3);
@@ -105,9 +75,6 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     m_chooser.addOption("Straight To Cone Bottom Test", 5);
     m_chooser.addOption("Smooth Curved Path (Top)", 6);
     m_chooser.addOption("Straight Path (Top)", 7);
-    // m_chooser.addOption("Taxi - Red", 2);
-    // m_chooser.addOption("Level + forward", 3);
-    // m_chooser.addOption("Place + Taxi", 4);
 
     SmartDashboard.putData("Auto Path?", m_chooser);
 
@@ -141,31 +108,35 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   public void autonomousInit() {
     switch (m_chooser.getSelected()) {
       case 1:
-        m_autonomousCommand = m_robotContainer.LevelChargeStation();
+        m_autonomousCommand = m_robotContainer.EasyToUse(
+          levelcenter, 
+          5.5,
+          new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2)
+          );
         break;
         
       case 2:
-        m_autonomousCommand = m_robotContainer.EasyToTest(rightMost, 8.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(rightMost, 8.5);
         break;
 
       case 3:
-        m_autonomousCommand = m_robotContainer.EasyToTest(placeauto, 16.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(placeauto, 16.5);
         break;
 
       case 4:
-        m_autonomousCommand = m_robotContainer.EasyToTest(bottomCurved, 10.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(bottomCurved, 10.5);
         break;
 
       case 5:
-        m_autonomousCommand = m_robotContainer.EasyToTest(straightBottomCone, 10.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(straightBottomCone, 10.5);
         break;
 
       case 6:
-        m_autonomousCommand = m_robotContainer.EasyToTest(smoothCurveTop, 12.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(smoothCurveTop, 12.5);
         break;
 
       case 7:
-        m_autonomousCommand = m_robotContainer.EasyToTest(topStraight, 5.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5);
         break;
 
       default:

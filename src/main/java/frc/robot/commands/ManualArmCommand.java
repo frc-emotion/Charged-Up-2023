@@ -7,7 +7,6 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.mace.Mace;
 
 public class ManualArmCommand extends CommandBase {
 

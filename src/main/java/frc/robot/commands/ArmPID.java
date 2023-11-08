@@ -1,21 +1,13 @@
 package frc.robot.commands;
 
-import java.util.function.Supplier;
-
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.ClawConstants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 
 public class ArmPID extends CommandBase {
 
     private ArmSubsystem aSubsystem;
 
-    private double pidValue, goal;
+    private double goal;
 
     public ArmPID(ArmSubsystem arm, double goal) {
         aSubsystem = arm;
