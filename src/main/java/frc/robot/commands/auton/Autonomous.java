@@ -13,10 +13,10 @@ public class Autonomous extends SequentialCommandGroup {
     
 
 
-    public Autonomous(SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime){
+    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime){
         
         AutoAbstracted autoCommands = new AutoAbstracted(swerveSubsytem, aSubsystem, ElevatorSubsystem, ClawSubsystem);
-        
+
         addCommands(
             autoCommands.PlaceConeMid(),
             SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime)

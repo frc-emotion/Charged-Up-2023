@@ -11,15 +11,15 @@ import frc.robot.commands.ArmPID;
 import frc.robot.commands.ElevatorPID;
 
 public class AutoAbstracted {
-
+    public SwerveSubsytem swerveSubsytem;
     public ClawSubsystem clawSubsystem;
     public ArmSubsystem armSubsystem;
-    public ClawSubsystem clawSubSystem;
     public ElevatorSubsystem elevatorSubsystem;
 
-    public AutoAbstracted(SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem) {
-        this.clawSubSystem = ClawSubsystem;
-        this.elevatorSubsystem = ElevatorSubsystem;
+    public AutoAbstracted(SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem) {
+        this.swerveSubsytem = swerveSubsytem;
+        this.clawSubsystem = clawSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
         this.armSubsystem = aSubsystem;
 
     } // TODO: Pick up another piece from ground
@@ -32,7 +32,7 @@ public class AutoAbstracted {
             ).withTimeout(0.8), // Remove ??
 
             new ParallelCommandGroup(
-                new GrabberAuton(clawSubSystem, Constants.ClawConstants.CONE_INTAKE),
+                new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_INTAKE),
                 new ArmPID(armSubsystem, 97),
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL)
             ).withTimeout(3),
@@ -40,7 +40,7 @@ public class AutoAbstracted {
             new ParallelCommandGroup(
                 new ArmPID(armSubsystem, 97),
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL),
-                new GrabberAuton(clawSubSystem, Constants.ClawConstants.CONE_OUTTAKE)
+                new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_OUTTAKE)
                 ).withTimeout(1),
 
             new ParallelCommandGroup(

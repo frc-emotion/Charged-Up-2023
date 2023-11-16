@@ -113,6 +113,10 @@ public class SwerveSubsytem extends SubsystemBase {
 
     }
 
+    public void autoGyro() {
+        gyro.setAngleAdjustment(180);
+    }
+
     public double getPitch(){
         return Units.degreesToRadians((gyro.getPitch()));
     }

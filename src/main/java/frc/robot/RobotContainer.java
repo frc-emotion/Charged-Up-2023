@@ -102,10 +102,12 @@ public class RobotContainer {
   }
 
   public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime) {
+    //swerveSubsytem.autoGyro();
     return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime);
   }
 
   public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime, Command additional) {
+    //swerveSubsytem.autoGyro();
     return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, additional);
   }
 
