@@ -4,14 +4,20 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.auton.LockWheels;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,9 +29,16 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-  public static PathPlannerTrajectory examplePath;
+public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight;
+public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
+
+
+  private SendableChooser<Integer> m_chooser = new SendableChooser<>();
+
+  //private SendableChooser<Integer> allianceChooser = new SendableChooser<>();
+
 
 
   /**
@@ -34,10 +47,38 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    //load Trajectories here
-    examplePath = PathPlanner.loadPath("Rotate", 1, 1);
+   // Load paths here
+
+    rightMost = PathPlanner.loadPath("Forward", 2, 1); // 2 1
+
+    levelcenter = PathPlanner.loadPath("Levelforward", 0.526, 0.5); // 0.5 0.5 
+
+    placeauto = PathPlanner.loadPath("PlaceAuto", 2, 1);
+    
+    bottomCurved = PathPlanner.loadPath("BestCurved", 2, 1);
+
+    straightBottomCone = PathPlanner.loadPath("DirectPickupB", 2, 1);
+
+    smoothCurveTop = PathPlanner.loadPath("TopCurveCone", 2, 1);
+    
+    topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
+
+
 
     m_robotContainer = new RobotContainer();
+
+    m_chooser.setDefaultOption("Level", 1);
+    m_chooser.addOption("Rightmost Forward Test", 2);
+    m_chooser.addOption("Curved Auto Test", 3);
+
+    m_chooser.addOption("Bottom Curved Test", 4);
+    m_chooser.addOption("Straight To Cone Bottom Test", 5);
+    m_chooser.addOption("Smooth Curved Path (Top)", 6);
+    m_chooser.addOption("Straight Path (Top)", 7);
+
+    SmartDashboard.putData("Auto Path?", m_chooser);
+
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -64,14 +105,52 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
-  @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    switch (m_chooser.getSelected()) {
+      // Essentially just one method for any path which is why its easy to use
+      // Take timeout estimates from pathplanner estimates (Make sure correct velocity and accel are set)
 
-    // schedule the autonomous command (example)
+      case 1:
+        m_autonomousCommand = m_robotContainer.EasyToUse(
+          levelcenter, 
+          5.5,
+          new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2) // Extra command for special cases such as leveling
+          );
+        break;
+        
+      case 2:
+        m_autonomousCommand = m_robotContainer.EasyToUse(rightMost, 8.5);
+        break;
+
+      case 3:
+        m_autonomousCommand = m_robotContainer.EasyToUse(placeauto, 16.5);
+        break;
+
+      case 4:
+        m_autonomousCommand = m_robotContainer.EasyToUse(bottomCurved, 10.5);
+        break;
+
+      case 5:
+        m_autonomousCommand = m_robotContainer.EasyToUse(straightBottomCone, 10.5);
+        break;
+
+      case 6:
+        m_autonomousCommand = m_robotContainer.EasyToUse(smoothCurveTop, 12.5);
+        break;
+
+      case 7:
+        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5);
+        break;
+
+      default:
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        break;
+    }
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+
   }
 
   /** This function is called periodically during autonomous. */

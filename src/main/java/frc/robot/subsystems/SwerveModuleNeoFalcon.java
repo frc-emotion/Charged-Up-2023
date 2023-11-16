@@ -1,14 +1,15 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -45,10 +46,14 @@ public class SwerveModuleNeoFalcon {
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = absoluteEncoderReversed;
 
+        
         absoluteEncoder = new CANCoder(absoluteEncoderId);
         absoluteEncoder.configMagnetOffset(Units.radiansToDegrees(absoluteEncoderOffsetRad));
         absoluteEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
         absoluteEncoder.configSensorDirection(absoluteEncoderReversed);
+        absoluteEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 10, 20);
+        absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 100, 200);
 
         driveMotor = new WPI_TalonFX(driveMotorId);
         driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -59,6 +64,9 @@ public class SwerveModuleNeoFalcon {
         turningMotor.setSmartCurrentLimit(45);
         turningMotor.setSecondaryCurrentLimit(45);
         turningMotor.setInverted(turningMotorReversed);
+        turningMotor.setIdleMode(IdleMode.kBrake);
+
+
 
         turningEncoder = turningMotor.getEncoder();
         turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
@@ -101,7 +109,7 @@ public class SwerveModuleNeoFalcon {
         if (getTurningVelocity() < Math.toRadians(0.5)){
             if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                 resetIteration = 0;
-                double absoluteAngle = absoluteEncoder.getAbsolutePosition();
+                double absoluteAngle = Units.degreesToRadians(absoluteEncoder.getAbsolutePosition());
                 turningEncoder.setPosition(absoluteAngle);
                 currentAngleRadians = absoluteAngle;
             }
@@ -132,8 +140,8 @@ public class SwerveModuleNeoFalcon {
         if (isOpenLoop){
             driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         } else {
-            double velocity = MPSToFalcon(state.speedMetersPerSecond, (((ModuleConstants.kWheelDiameterMeters / 2)) * 2 * Math.PI), 1 / (ModuleConstants.kDriveMotorGearRatio));
-            driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(state.speedMetersPerSecond));
+          //  double velocity = MPSToFalcon(state.speedMetersPerSecond, (((ModuleConstants.kWheelDiameterMeters / 2)) * 2 * Math.PI), 1 / (ModuleConstants.kDriveMotorGearRatio));
+          //  driveMotor.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedforward.calculate(state.speedMetersPerSecond));
         }
     }
 
@@ -158,8 +166,8 @@ public class SwerveModuleNeoFalcon {
      * @param state
      */
 
-    public void setDesiredState(SwerveModuleState state){
-        if (Math.abs(state.speedMetersPerSecond) < 0.3){
+    public void setDesiredState(SwerveModuleState state, boolean station){
+        if (Math.abs(state.speedMetersPerSecond) < 0.3 && !station){
             stop();
             return;
         }
