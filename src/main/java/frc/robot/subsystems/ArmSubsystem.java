@@ -92,10 +92,9 @@ public class ArmSubsystem extends SubsystemBase{
     public void setArmAuto(double setpoint){
         armController.setGoal(Units.degreesToRadians(setpoint));
         pidVal = armController.calculate(getPosition());
-
-
         setArmSpeeds(pidVal);
     }
+    
     public void setArmAngle(){
         if(RobotContainer.operatorController.getBButton()){
             armController.setGoal(Units.degreesToRadians(-30));

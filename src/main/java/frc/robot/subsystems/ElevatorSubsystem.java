@@ -98,11 +98,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void runElevatorAuto(double goal){
-        elevatorController.setGoal(goal);
-        pidValue = elevatorController.calculate(getHeight());
-                // feedForwardVal = feedForward.calculate(0.02);
-                // MathUtil.clamp(pidValue, 0, 12);
-        elevatorMotor.set(pidValue);
+        elevatorController.setGoal(goal); // Set the goal
+        pidValue = elevatorController.calculate(getHeight()); // Figure out next value for controller
+        elevatorMotor.set(pidValue); // Set elevator to appropriate pid value to acheive target position
     }
 
     // allows for manual control as backup

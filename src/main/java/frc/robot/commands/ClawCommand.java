@@ -47,40 +47,15 @@ public class ClawCommand extends CommandBase {
 
     @Override
     public void execute(){
-        // SmartDashboard.putBoolean("Claw Direction", direction);
-        // SmartDashboard.putBoolean("Stopped", stopped);
-
-        //SmartDashboard.putNumber("Time to Close", timer.get());
-        // System.out.println("hi");
-        // System.out.println(leftBumper.get());
-
-        //double clawCurrentLimit = SmartDashboard.getNumber("Claw Current Limit", 35);  
-        //double clawSpeed = SmartDashboard.getNumber("Claw Forward Speed", 0.1);
-
+        // Check if game piece type should be switched
         if (leftBumper.get()) {
-            //System.out.println("Before: " + clawSubsystem.getPieceType());
-
-            clawSubsystem.switchGamePieceType();
-            gamePieceBoolean = !gamePieceBoolean;
-            //clawSubsystem.setClawMotor(-0.3);
-
-            //System.out.println("After: " + clawSubsystem.getPieceType());
+            clawSubsystem.switchGamePieceType(); // Switch it 
+            gamePieceBoolean = !gamePieceBoolean; // Invert local variable
 
         }
 
-        SmartDashboard.putBoolean("Game Piece Type", gamePieceBoolean);
-
+        SmartDashboard.putBoolean("Game Piece Type", gamePieceBoolean); // I hope you know what this does
         
-
-        
-
-        // if (clawSubsystem.getPieceType() == 0) {
-        //     System.out.println("Currently on cube");
-        // } else if (clawSubsystem.getPieceType() == 1) {
-        //     System.out.println("Currently on cone");
-        // }
-        
-
         switch (clawSubsystem.getPieceType()) {
             case 0: // Cube
                 // Do routine for cube stuf
@@ -115,44 +90,6 @@ public class ClawCommand extends CommandBase {
                 break;
             }
         }
-
-        // if (clawFunc.get()){
-        //     timer.reset();
-        //     direction = !direction; 
-        //     stopped = false; 
-        // } else if (clawStop.get()){
-        //     stopped = true;
-        // }
-
-        /*if (timer.get() > 0.5){
-            //stopped = true;
-            clawSubsystem.stopClaw();
-        } else*/ 
-        // if (direction && !stopped){
-        //     clawSubsystem.setClawMotor(0.5);
-        // }
-        // else if (!direction && !stopped){
-        //         clawSubsystem.setClawMotor(-0.25);
-        // }
-        // else if (stopped){
-        //     clawSubsystem.stopClaw();
-        // }
-
-        /* 
-        if(direction && !stopped){
-                clawSubsystem.setClawMotor(ClawConstants.clawNormalSpeed);
-        }
-        else if(!direction && !stopped){
-            if (Math.abs(clawSubsystem.getClawCurrent()) < clawCurrentLimit){
-                clawSubsystem.setClawMotor(-ClawConstants.clawNormalSpeed);
-            }
-            else if (Math.abs(clawSubsystem.getClawCurrent()) >= clawCurrentLimit){
-                clawSubsystem.stopClaw(); 
-                stopped = true;
-            }
-        }
-        */
-   // }
 
     @Override
     public void end(boolean interrupted) {

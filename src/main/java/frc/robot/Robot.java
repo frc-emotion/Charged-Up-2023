@@ -107,11 +107,14 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   public void autonomousInit() {
     switch (m_chooser.getSelected()) {
+      // Essentially just one method for any path which is why its easy to use
+      // Take timeout estimates from pathplanner estimates (Make sure correct velocity and accel are set)
+
       case 1:
         m_autonomousCommand = m_robotContainer.EasyToUse(
           levelcenter, 
           5.5,
-          new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2)
+          new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2) // Extra command for special cases such as leveling
           );
         break;
         

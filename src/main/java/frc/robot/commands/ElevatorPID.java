@@ -11,7 +11,7 @@ public class ElevatorPID extends CommandBase {
 
     public ElevatorPID(ElevatorSubsystem elevator, double goal) {
         elevatorSubsystem = elevator;
-        this.goal = goal;
+        this.goal = goal; // Set the goal of elevator position
 
         addRequirements(elevatorSubsystem);
         
@@ -20,18 +20,16 @@ public class ElevatorPID extends CommandBase {
     @Override
     public void initialize() {
         elevatorSubsystem.resetHeight();
-
         elevatorSubsystem.convertToMeters();
 
-        
     }
 
     @Override
     public void execute() {
         //elevatorSubsystem.setElevatorGoal(goal);
        // pidValue = elevatorSubsystem.getPIDOutputVoltsAuto();
-        System.out.println("PID Value");
-        System.out.println(pidValue);
+        // System.out.println("PID Value");
+        // System.out.println(pidValue);
         //elevatorSubsystem.setElePID(elevatorSubsystem.getPIDOutputVolts(elevatorSubsystem.getHeight()));
         // feedForwardVal = feedForward.calculate(0.02);
         // MathUtil.clamp(pidValue, 0, 12);

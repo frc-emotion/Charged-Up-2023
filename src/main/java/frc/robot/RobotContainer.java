@@ -101,6 +101,9 @@ public class RobotContainer {
     return null;
   }
 
+  // Returns the command based on path & timeout given
+  // Overload incase additional commands wanted
+
   public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime) {
     //swerveSubsytem.autoGyro();
     return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime);

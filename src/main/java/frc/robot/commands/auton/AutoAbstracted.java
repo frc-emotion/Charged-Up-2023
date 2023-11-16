@@ -22,30 +22,30 @@ public class AutoAbstracted {
         this.elevatorSubsystem = elevatorSubsystem;
         this.armSubsystem = aSubsystem;
 
-    } // TODO: Pick up another piece from ground
+    }
 
     public SequentialCommandGroup PlaceConeMid() {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_INTAKE),
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL)
-            ).withTimeout(0.8), // Remove ??
+            ).withTimeout(0.8), // Initial raise 
 
             new ParallelCommandGroup(
                 new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_INTAKE),
                 new ArmPID(armSubsystem, 97),
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL)
-            ).withTimeout(3),
+            ).withTimeout(3), // Intake cone while getting to correct level to place
 
             new ParallelCommandGroup(
                 new ArmPID(armSubsystem, 97),
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL),
                 new GrabberAuton(clawSubsystem, Constants.ClawConstants.CONE_OUTTAKE)
-                ).withTimeout(1),
+                ).withTimeout(1), // Outtaking and maintaining elevator and arm
 
             new ParallelCommandGroup(
                 new ElevatorPID(elevatorSubsystem, Constants.ElevatorConstants.MIDDLELEVEL),
-                new ArmPID(armSubsystem, 10)
+                new ArmPID(armSubsystem, 10) // Move arm back
             ).withTimeout(2)
 
         );
