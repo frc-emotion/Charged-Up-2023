@@ -104,14 +104,14 @@ public class RobotContainer {
   // Returns the command based on path & timeout given
   // Overload incase additional commands wanted
 
-  public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime) {
+  public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime, Boolean place) {
     //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime);
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place);
   }
 
-  public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime, Command additional) {
+  public Command EasyToUse(PathPlannerTrajectory pathToUse, Double timeoutTime, Boolean place, Command additional) {
     //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, additional);
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, additional);
   }
 
 

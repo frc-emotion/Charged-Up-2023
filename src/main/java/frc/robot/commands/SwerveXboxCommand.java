@@ -47,16 +47,19 @@ public class SwerveXboxCommand extends CommandBase {
         double ySpeed = ySpdFunc.get();
         double turningSpeed = turningSpdFunc.get();
 
-        double currentTranslationalSpeed = DriveConstants.kTeleDriveNormalSpeedMetersPerSecond;
-        double currentAngularSpeed = DriveConstants.kTeleDriveNormalAngularSpeedRadiansPerSecond;
+        // double currentTranslationalSpeed = DriveConstants.kTeleDriveNormalSpeedMetersPerSecond;
+        // double currentAngularSpeed = DriveConstants.kTeleDriveNormalAngularSpeedRadiansPerSecond;
 
-        if (slowModeFunc.get()) {
-            currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
-            currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
-        } else if (turboModeFunc.get()) {
-            currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-            currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        }
+        double currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
+        double  currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
+
+        // if (slowModeFunc.get()) {
+        //     currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
+        //     currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
+        // } else if (turboModeFunc.get()) {
+        //     currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        //     currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        // }
         // deadBand
         xSpeed = Math.abs(xSpeed) > (OIConstants.kDeadband / 2) ? xSpeed : 0.0;
         ySpeed = Math.abs(ySpeed) > (OIConstants.kDeadband / 2) ? ySpeed : 0.0;
