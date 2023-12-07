@@ -13,7 +13,7 @@ public class Autonomous extends SequentialCommandGroup {
     
 
 
-    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime, Boolean place){
+    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, double timeoutTime, boolean place){
         
         AutoAbstracted autoCommands = new AutoAbstracted(swerveSubsytem, aSubsystem, ElevatorSubsystem, ClawSubsystem);
 
@@ -33,7 +33,7 @@ public class Autonomous extends SequentialCommandGroup {
         
     }
 
-    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime, Boolean place, Command AdditionalCommands){
+    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, double timeoutTime, boolean place, Command AdditionalCommands){
         
         AutoAbstracted autoCommands = new AutoAbstracted(swerveSubsytem, aSubsystem, ElevatorSubsystem, ClawSubsystem);
         
