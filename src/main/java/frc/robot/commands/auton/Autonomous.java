@@ -13,28 +13,44 @@ public class Autonomous extends SequentialCommandGroup {
     
 
 
-    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime){
+    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime, Boolean place){
         
         AutoAbstracted autoCommands = new AutoAbstracted(swerveSubsytem, aSubsystem, ElevatorSubsystem, ClawSubsystem);
 
-        addCommands(
-            autoCommands.PlaceConeMid(),
-            SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime)
-            
-            );
+        if (place) {
+            addCommands(
+                autoCommands.PlaceConeMid(),
+                SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime)
+                );   
+        } else {
+            addCommands(
+                SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime)
+                );
+        }
+
+        
 
         
     }
 
-    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime, Command AdditionalCommands){
+    public Autonomous (SwerveSubsytem swerveSubsytem, ArmSubsystem aSubsystem, ElevatorSubsystem ElevatorSubsystem, ClawSubsystem ClawSubsystem, PathPlannerTrajectory path, Double timeoutTime, Boolean place, Command AdditionalCommands){
         
         AutoAbstracted autoCommands = new AutoAbstracted(swerveSubsytem, aSubsystem, ElevatorSubsystem, ClawSubsystem);
         
-        addCommands(
-            autoCommands.PlaceConeMid(),
-            SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime),
-            AdditionalCommands
-            );
+        if (place) {
+            addCommands(
+                autoCommands.PlaceConeMid(),
+                SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime),
+                AdditionalCommands
+                );
+        } else {
+            addCommands(
+                SwerveController.followTrajectoryCommand(path, true, swerveSubsytem).withTimeout(timeoutTime),
+                AdditionalCommands
+                );
+        }
+
+        
     }
 
 }

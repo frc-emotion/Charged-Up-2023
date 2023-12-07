@@ -114,32 +114,33 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
         m_autonomousCommand = m_robotContainer.EasyToUse(
           levelcenter, 
           5.5,
+          true,
           new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2) // Extra command for special cases such as leveling
           );
         break;
         
       case 2:
-        m_autonomousCommand = m_robotContainer.EasyToUse(rightMost, 8.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(rightMost, 8.5, false);
         break;
 
       case 3:
-        m_autonomousCommand = m_robotContainer.EasyToUse(placeauto, 16.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(placeauto, 16.5, false);
         break;
 
       case 4:
-        m_autonomousCommand = m_robotContainer.EasyToUse(bottomCurved, 10.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(bottomCurved, 10.5, false);
         break;
 
       case 5:
-        m_autonomousCommand = m_robotContainer.EasyToUse(straightBottomCone, 10.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(straightBottomCone, 10.5, false);
         break;
 
       case 6:
-        m_autonomousCommand = m_robotContainer.EasyToUse(smoothCurveTop, 12.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(smoothCurveTop, 12.5, false);
         break;
 
       case 7:
-        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5);
+        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5, false);
         break;
 
       default:
