@@ -27,8 +27,8 @@ public class LockWheels extends CommandBase {
     
             SwerveModuleState[] stoppedStates = {new SwerveModuleState(0, rightRotation), 
                                                  new SwerveModuleState(0, leftRotation),
-                                                 new SwerveModuleState(0, leftRotation),
-                                                 new SwerveModuleState(0, rightRotation)                                           
+                                                 new SwerveModuleState(0, rightRotation),
+                                                 new SwerveModuleState(0, leftRotation)                                           
                                                 };
             swerve.setModuleStates(stoppedStates, true);
 
