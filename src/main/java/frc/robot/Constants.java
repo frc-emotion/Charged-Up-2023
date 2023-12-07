@@ -177,6 +177,8 @@ public final class Constants {
         public static final double KPLevel = 5;
         public static final double KDLevel = 0.3;
         public static final double KILevel = 0;
+
+        public static final boolean BabyMode = false;
     }
 
     public static class AutoConstants {
