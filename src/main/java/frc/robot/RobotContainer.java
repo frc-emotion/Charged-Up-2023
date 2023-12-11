@@ -114,5 +114,9 @@ public class RobotContainer {
     return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, additional);
   }
 
+  public void setRobotSpeedDivisor(double divisor) {
+    swerveSubsytem.setSpeedType(divisor);
+  }
+
 
 }

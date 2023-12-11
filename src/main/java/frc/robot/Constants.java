@@ -151,13 +151,15 @@ public final class Constants {
                Math.hypot(kTrackWidth / 2.0, kWheelBase / 2.0);
 
 
-        
-            
-        public static final double kTeleDriveSlowSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
-        public static final double kTeleDriveSlowlAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+        // No longer needed since calculations are done within code
+        // public static final double kTeleDriveSuperSlowSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 6;
+        // public static final double kTeleDriveSuperSlowlAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 6;
 
-        public static final double kTeleDriveNormalSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
-        public static final double kTeleDriveNormalAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
+        // public static final double kTeleDriveSlowSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4;
+        // public static final double kTeleDriveSlowlAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4;
+
+        // public static final double kTeleDriveNormalSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 2;
+        // public static final double kTeleDriveNormalAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 2;
 
         //Don't change these unless you want to increase max mps
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
@@ -178,7 +180,6 @@ public final class Constants {
         public static final double KDLevel = 0.3;
         public static final double KILevel = 0;
 
-        public static final boolean BabyMode = false;
     }
 
     public static class AutoConstants {

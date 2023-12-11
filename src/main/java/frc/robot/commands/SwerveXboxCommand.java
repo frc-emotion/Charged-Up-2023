@@ -6,7 +6,6 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsytem;
@@ -18,6 +17,8 @@ public class SwerveXboxCommand extends CommandBase {
     private final Supplier<Boolean> fieldOrientedFunc, slowModeFunc, turboModeFunc;
 
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+
+    private double[] speeds;
 
     public SwerveXboxCommand(SwerveSubsytem swerveSubsytem,
             Supplier<Double> xSpdFunc, Supplier<Double> ySpdFunc, Supplier<Double> turningSpdFunc,
@@ -49,23 +50,20 @@ public class SwerveXboxCommand extends CommandBase {
         double turningSpeed = turningSpdFunc.get();
         double currentTranslationalSpeed, currentAngularSpeed;
 
-        if (Constants.DriveConstants.BabyMode) {
-            // Incase driver isnt experienced
-            currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
-            currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
-        } else {
+        speeds = swerveSubsytem.getSpeedType();
+
+        currentTranslationalSpeed = speeds[0];
+        currentAngularSpeed = speeds[1];
+        
+        if (slowModeFunc.get()) {
+            currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond / 4;
+            currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond / 4;
+        } else if (turboModeFunc.get()) {
             // If driver is farzad
-            if (slowModeFunc.get()) {
-                currentTranslationalSpeed = DriveConstants.kTeleDriveSlowSpeedMetersPerSecond;
-                currentAngularSpeed = DriveConstants.kTeleDriveSlowlAngularSpeedRadiansPerSecond;
-            } else if (turboModeFunc.get()) {
-                currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-                currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-            } else {
-                currentTranslationalSpeed = DriveConstants.kTeleDriveNormalSpeedMetersPerSecond;
-                currentAngularSpeed = DriveConstants.kTeleDriveNormalAngularSpeedRadiansPerSecond;
-            }
+            currentTranslationalSpeed = DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+            currentAngularSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         }
+    
 
         // deadBand
         xSpeed = Math.abs(xSpeed) > (OIConstants.kDeadband / 2) ? xSpeed : 0.0;

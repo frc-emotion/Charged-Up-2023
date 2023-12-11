@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
@@ -70,6 +71,8 @@ public class SwerveSubsytem extends SubsystemBase {
 
    private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+   private double toDivideBy;
+
    // private final PoseEstimator visionPoseEstimator = new PoseEstimator();
 
     private final SwerveModulePosition[] modulePositions =  new SwerveModulePosition[] {
@@ -110,7 +113,18 @@ public class SwerveSubsytem extends SubsystemBase {
 
         initShuffleboard();
 
+        toDivideBy = 1;
+    }
 
+    public double[] getSpeedType() {
+        double[] toReturn = new double[2];
+        toReturn[0] = Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond / toDivideBy;
+        toReturn[1] = Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond / toDivideBy;
+        return toReturn;
+    }
+
+    public void setSpeedType(double divisor) {
+        toDivideBy = divisor;
     }
 
     public void autoGyro() {

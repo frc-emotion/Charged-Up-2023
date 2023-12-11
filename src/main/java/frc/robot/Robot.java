@@ -35,7 +35,9 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   XboxController controller2 = new XboxController(2);
 
 
-  private SendableChooser<Integer> m_chooser = new SendableChooser<>();
+  private SendableChooser<Integer> autoDropdown = new SendableChooser<>();
+
+  private SendableChooser<Integer> speedDropdown = new SendableChooser<>();
 
   //private SendableChooser<Integer> allianceChooser = new SendableChooser<>();
 
@@ -63,20 +65,25 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     
     topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
 
-
-
     m_robotContainer = new RobotContainer();
 
-    m_chooser.setDefaultOption("Level", 1);
-    m_chooser.addOption("Rightmost Forward Test", 2);
-    m_chooser.addOption("Curved Auto Test", 3);
+    autoDropdown.setDefaultOption("Level", 1);
+    autoDropdown.addOption("Rightmost Forward Test", 2);
+    autoDropdown.addOption("Curved Auto Test", 3);
 
-    m_chooser.addOption("Bottom Curved Test", 4);
-    m_chooser.addOption("Straight To Cone Bottom Test", 5);
-    m_chooser.addOption("Smooth Curved Path (Top)", 6);
-    m_chooser.addOption("Straight Path (Top)", 7);
+    autoDropdown.addOption("Bottom Curved Test", 4);
+    autoDropdown.addOption("Straight To Cone Bottom Test", 5);
+    autoDropdown.addOption("Smooth Curved Path (Top)", 6);
+    autoDropdown.addOption("Straight Path (Top)", 7);
 
-    SmartDashboard.putData("Auto Path?", m_chooser);
+    SmartDashboard.putData("Auto Path?", autoDropdown);
+
+    speedDropdown.addOption("Slow Speed", 1);
+    speedDropdown.addOption("Impacted Speed", 2);
+    speedDropdown.setDefaultOption("Regular speed", 3);
+    speedDropdown.addOption("Max Speed", 4);
+
+    SmartDashboard.putData("Driving Speed", autoDropdown);
 
     CameraServer.startAutomaticCapture();
   }
@@ -94,6 +101,24 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    switch (speedDropdown.getSelected()) {
+      case 1: // Slowest Speed
+        m_robotContainer.setRobotSpeedDivisor(6.0);
+        break;
+
+      case 2: // Slow Speed
+        m_robotContainer.setRobotSpeedDivisor(4.0);
+        break;
+
+      case 3: // Regular Speed
+        m_robotContainer.setRobotSpeedDivisor(2.0);
+        break;
+
+      case 4: // Max Speed
+        m_robotContainer.setRobotSpeedDivisor(1.0);
+        break;
+
+    }
     CommandScheduler.getInstance().run();
   }
 
@@ -106,7 +131,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   public void autonomousInit() {
-    switch (m_chooser.getSelected()) {
+    switch (autoDropdown.getSelected()) {
       // Essentially just one method for any path which is why its easy to use
       // Take timeout estimates from pathplanner estimates (Make sure correct velocity and accel are set)
 
