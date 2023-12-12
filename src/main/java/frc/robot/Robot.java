@@ -104,18 +104,22 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     switch (speedDropdown.getSelected()) {
       case 1: // Slowest Speed
         m_robotContainer.setRobotSpeedDivisor(6.0);
+        SmartDashboard.putString("Speed Type", "Slowest");
         break;
 
       case 2: // Slow Speed
         m_robotContainer.setRobotSpeedDivisor(4.0);
+        SmartDashboard.putString("Speed Type", "Slow");
         break;
 
       case 3: // Regular Speed
         m_robotContainer.setRobotSpeedDivisor(2.0);
+        SmartDashboard.putString("Speed Type", "Normal");
         break;
 
       case 4: // Max Speed
         m_robotContainer.setRobotSpeedDivisor(1.0);
+        SmartDashboard.putString("Speed Type", "Max");
         break;
 
     }
