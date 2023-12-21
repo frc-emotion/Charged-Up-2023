@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight;
+public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight, levelForwardStraight;
 public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
@@ -65,6 +65,8 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     
     topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
 
+    levelForwardStraight = PathPlanner.loadPath("LevelforwardStraight", 0.526, 0.5);
+
     m_robotContainer = new RobotContainer();
 
     autoDropdown.setDefaultOption("Level", 1);
@@ -76,6 +78,8 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     autoDropdown.addOption("Smooth Curved Path (Top)", 6);
     autoDropdown.addOption("Straight Path (Top)", 7);
 
+    autoDropdown.addOption("Test Auto", 8);
+
     SmartDashboard.putData("Auto Path?", autoDropdown);
 
     speedDropdown.addOption("Slow Speed", 1);
@@ -83,7 +87,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     speedDropdown.setDefaultOption("Regular speed", 3);
     speedDropdown.addOption("Max Speed", 4);
 
-    SmartDashboard.putData("Driving Speed", autoDropdown);
+    SmartDashboard.putData("Driving Speed", speedDropdown);
 
     CameraServer.startAutomaticCapture();
   }
@@ -101,28 +105,6 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    switch (speedDropdown.getSelected()) {
-      case 1: // Slowest Speed
-        m_robotContainer.setRobotSpeedDivisor(6.0);
-        SmartDashboard.putString("Speed Type", "Slowest");
-        break;
-
-      case 2: // Slow Speed
-        m_robotContainer.setRobotSpeedDivisor(4.0);
-        SmartDashboard.putString("Speed Type", "Slow");
-        break;
-
-      case 3: // Regular Speed
-        m_robotContainer.setRobotSpeedDivisor(2.0);
-        SmartDashboard.putString("Speed Type", "Normal");
-        break;
-
-      case 4: // Max Speed
-        m_robotContainer.setRobotSpeedDivisor(1.0);
-        SmartDashboard.putString("Speed Type", "Max");
-        break;
-
-    }
     CommandScheduler.getInstance().run();
   }
 
@@ -169,7 +151,11 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
         break;
 
       case 7:
-        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5, false);
+        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5, true);
+        break;
+
+      case 8:
+        m_autonomousCommand = m_robotContainer.TestAuto(levelForwardStraight, 5.5, false);
         break;
 
       default:
@@ -196,12 +182,35 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.setRobotSpeedDivisor(2.0);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // switch (speedDropdown.getSelected()) {
+    //   case 1: // Slowest Speed
+    //     m_robotContainer.setRobotSpeedDivisor(6.0);
+    //     SmartDashboard.putString("Speed Type", "Slowest");
+    //     break;
 
+    //   case 2: // Slow Speed
+    //     m_robotContainer.setRobotSpeedDivisor(4.0);
+    //     SmartDashboard.putString("Speed Type", "Slow");
+    //     break;
+
+    //   case 3: // Regular Speed
+    //     m_robotContainer.setRobotSpeedDivisor(2.0);
+    //     SmartDashboard.putString("Speed Type", "Normal");
+    //     break;
+
+    //   case 4: // Max Speed
+    //     m_robotContainer.setRobotSpeedDivisor(1.0);
+    //     SmartDashboard.putString("Speed Type", "Max");
+    //     break;
+
+    // }
 
   }
 

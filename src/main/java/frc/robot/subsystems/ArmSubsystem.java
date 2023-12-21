@@ -46,7 +46,7 @@ public class ArmSubsystem extends SubsystemBase{
        
         armFeedForward = new ArmFeedforward(ArmConstants.armKS, ArmConstants.armKG, ArmConstants.armKV);
 
-        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(1.8, 0.8);
+        TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(1.8, 1.0);
 
         armController = new ProfiledPIDController(ArmConstants.armKP , ArmConstants.armKI, ArmConstants.armKD,
         constraints);

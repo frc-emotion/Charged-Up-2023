@@ -51,5 +51,15 @@ public class AutoAbstracted {
         );
     }
 
+    public ParallelCommandGroup TestAuto() {
+        return new ParallelCommandGroup(
+            new SequentialCommandGroup(
+                new ArmPID(armSubsystem, 173.5).withTimeout(3),
+                new GrabberAuton(clawSubsystem, Constants.ClawConstants.CUBE_INTAKE).withTimeout(3)
+            )
+            
+        );
+    }
+
 
 }
