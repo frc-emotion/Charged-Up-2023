@@ -106,13 +106,26 @@ public class RobotContainer {
 
   public Command EasyToUse(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place) {
     //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place);
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, false);
   }
 
   public Command EasyToUse(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place, Command additional) {
     //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, additional);
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, false, additional);
   }
+
+  public void setRobotSpeedDivisor(double divisor) {
+    swerveSubsytem.setSpeedType(divisor);
+  }
+
+  public Command TestAuto(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place) {
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, true);
+  }
+
+  public Command TestAuto(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place, Command additional) {
+    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, true, additional);
+  }
+
 
 
 }

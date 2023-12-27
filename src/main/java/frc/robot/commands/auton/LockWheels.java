@@ -25,10 +25,10 @@ public class LockWheels extends CommandBase {
             Rotation2d rightRotation = new Rotation2d(-Math.PI/4);
 
     
-            SwerveModuleState[] stoppedStates = {new SwerveModuleState(0, rightRotation), 
-                                                 new SwerveModuleState(0, leftRotation),
-                                                 new SwerveModuleState(0, rightRotation),
-                                                 new SwerveModuleState(0, leftRotation)                                           
+            SwerveModuleState[] stoppedStates = {new SwerveModuleState(0, leftRotation), // Front Left
+                                                 new SwerveModuleState(0, rightRotation), // Back Left
+                                                 new SwerveModuleState(0, rightRotation), // Front Right
+                                                 new SwerveModuleState(0, leftRotation)   // Back Right                          
                                                 };
             swerve.setModuleStates(stoppedStates, true);
 

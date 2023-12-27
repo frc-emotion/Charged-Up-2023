@@ -24,8 +24,8 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 /**
  * Static method that starts swerve controller command for ease of use
- * TODO: Add path planner event markers
  */
+
 public final class SwerveController {
 
   public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, SwerveSubsytem swerveSubsystem) {
