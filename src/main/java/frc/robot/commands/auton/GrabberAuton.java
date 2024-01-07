@@ -16,6 +16,10 @@ public class GrabberAuton extends CommandBase {
         
     }
 
+    public static GrabberAuton getGrabberAuto(double speed) {
+        return new GrabberAuton(new ClawSubsystem(), speed);
+    }
+
     @Override
     public void initialize() {
 

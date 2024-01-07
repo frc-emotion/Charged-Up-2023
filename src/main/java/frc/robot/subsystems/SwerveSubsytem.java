@@ -23,9 +23,14 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.util.dashboard.TabManager;
 import frc.robot.util.dashboard.TabManager.SubsystemTab;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.Drake;
 import edu.wpi.first.math.controller.PIDController;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 /**
  * Main Swerve Subsytem class
@@ -114,6 +119,21 @@ public class SwerveSubsytem extends SubsystemBase {
         initShuffleboard();
 
         toDivideBy = 1;
+
+        AutoBuilder.configureHolonomic(
+            this::getCurrentPose,
+            this::resetOdometry,
+            this::getChassisSpeeds,
+            this::driveRobotRelative,
+            new HolonomicPathFollowerConfig(
+                new PIDConstants(AutoConstants.kPXController, 0, 0),
+                new PIDConstants(AutoConstants.kPYController, 0, 0),
+                AutoConstants.kMaxSpeedMetersPerSecond,
+                DriveConstants.kWheelBase / 2,
+                new ReplanningConfig()
+            ),
+            this
+        );
     }
 
     public double[] getSpeedType() {

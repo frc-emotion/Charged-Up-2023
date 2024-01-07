@@ -4,10 +4,14 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -16,7 +20,10 @@ import frc.robot.commands.ClawCommand;
 import frc.robot.commands.ManualArmCommand;
 import frc.robot.commands.ManualControlElevator;
 import frc.robot.commands.SwerveXboxCommand;
+import frc.robot.commands.auton.AutoAbstracted;
 import frc.robot.commands.auton.Autonomous;
+import frc.robot.commands.auton.GrabberAuton;
+import frc.robot.commands.auton.LockWheels;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -33,7 +40,7 @@ import frc.robot.subsystems.SwerveSubsytem;
  */
 public class RobotContainer {
 
-  public static final SwerveSubsytem swerveSubsytem = new SwerveSubsytem();
+  public static final SwerveSubsytem swerveSubsystem = new SwerveSubsytem();
   public static ArmSubsystem armSubsystem = new ArmSubsystem();
   public static ElevatorSubsystem eSubsystem = new ElevatorSubsystem();
   public static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -43,11 +50,13 @@ public class RobotContainer {
   // public static Joystick arcadeStick = new Joystick(1);
   // public static Joystick arcadeStick2 = new Joystick(0);
 
+  private final SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
-    swerveSubsytem.setDefaultCommand(
+    swerveSubsystem.setDefaultCommand(
 
         new SwerveXboxCommand(
-            swerveSubsytem,
+            swerveSubsystem,
             () -> -driverController.getRawAxis(OIConstants.kDriverYAxis),
             () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
             () -> driverController.getRawAxis(OIConstants.kDriverRotAxis),
@@ -69,8 +78,28 @@ public class RobotContainer {
             clawSubsytem.getPieceType(),
             () -> operatorController.getLeftTriggerAxis(),
             () -> operatorController.getRightTriggerAxis(),
-            () -> operatorController.getLeftBumperPressed()));
+            () -> operatorController.getLeftBumperPressed()
+        )
+    );
+
+    AutoAbstracted autoAbstracted = new AutoAbstracted(swerveSubsystem, armSubsystem, eSubsystem, clawSubsytem);
+
+    NamedCommands.registerCommand("Lock Wheels", new LockWheels(swerveSubsystem));
+    NamedCommands.registerCommand("Place Cone Mid", autoAbstracted.PlaceConeMid());
+    NamedCommands.registerCommand("Auto Test", autoAbstracted.TestAuto());
+
+    NamedCommands.registerCommand("Intake Cone", GrabberAuton.getGrabberAuto(Constants.ClawConstants.CONE_INTAKE));
+    NamedCommands.registerCommand("Outtake Cone", GrabberAuton.getGrabberAuto(Constants.ClawConstants.CONE_OUTTAKE));
+
+    NamedCommands.registerCommand("Intake Cube", GrabberAuton.getGrabberAuto(Constants.ClawConstants.CUBE_INTAKE));
+    NamedCommands.registerCommand("Outtake Cube", GrabberAuton.getGrabberAuto(Constants.ClawConstants.CUBE_OUTTAKE));
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
+
+  
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -86,7 +115,7 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> armSubsystem.resetPosition()));
 
     new JoystickButton(driverController, OIConstants.kDriverZeroHeadingButtonIdx)
-        .onTrue(new InstantCommand(() -> swerveSubsytem.zeroHeading()));
+        .onTrue(new InstantCommand(() -> swerveSubsystem.zeroHeading()));
 
 
   }
@@ -98,32 +127,13 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return new ExamplePathPlannerCommand(swerveSubsytem, Robot.examplePath);
-    return null;
+    return autoChooser.getSelected();
   }
 
   // Returns the command based on path & timeout given
   // Overload incase additional commands wanted
-
-  public Command EasyToUse(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place) {
-    //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, false);
-  }
-
-  public Command EasyToUse(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place, Command additional) {
-    //swerveSubsytem.autoGyro();
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, false, additional);
-  }
-
   public void setRobotSpeedDivisor(double divisor) {
-    swerveSubsytem.setSpeedType(divisor);
-  }
-
-  public Command TestAuto(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place) {
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, true);
-  }
-
-  public Command TestAuto(PathPlannerTrajectory pathToUse, double timeoutTime, boolean place, Command additional) {
-    return new Autonomous(swerveSubsytem, armSubsystem, eSubsystem, clawSubsytem, pathToUse, timeoutTime, place, true, additional);
+    swerveSubsystem.setSpeedType(divisor);
   }
 
 

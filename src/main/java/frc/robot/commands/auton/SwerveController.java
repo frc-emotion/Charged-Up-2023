@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsytem;
-import com.pathplanner.lib.PathPlannerTrajectory;
+//import com.pathplanner.lib.PathPlannerTrajectory;
 
 // import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+//import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 // import edu.wpi.first.math.controller.PIDController;
 // import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +28,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 public final class SwerveController {
 
+  /*
   public static Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath, SwerveSubsytem swerveSubsystem) {
     PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
     PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
@@ -56,4 +57,5 @@ public final class SwerveController {
          new InstantCommand(() -> swerveSubsystem.stopModules())
      ); 
   }
+  */
 }
