@@ -12,9 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import frc.robot.commands.auton.LockWheels;
 
 
@@ -29,13 +26,14 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
 
-public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight, levelForwardStraight;
-public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
+  // public static PathPlannerTrajectory  examplePath, rightMost, levelcenter, placeauto, bottomCurved, straightBottomCone, smoothCurveTop, topStraight, levelForwardStraight;
+  public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   XboxController controller2 = new XboxController(2);
 
 
-  private SendableChooser<Integer> autoDropdown = new SendableChooser<>();
+  
+  // private SendableChooser<Integer> autoDropdown = new SendableChooser<>();
 
   private SendableChooser<Integer> speedDropdown = new SendableChooser<>();
 
@@ -51,6 +49,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
   public void robotInit() {
    // Load paths here
 
+   /*
     rightMost = PathPlanner.loadPath("Forward", 2, 1); // 2 1
 
     levelcenter = PathPlanner.loadPath("Levelforward", 0.526, 0.5); // 0.5 0.5 
@@ -66,9 +65,11 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     topStraight = PathPlanner.loadPath("TopStraight2Cone", 2, 1);
 
     levelForwardStraight = PathPlanner.loadPath("LevelforwardStraight", 0.526, 0.5);
+    */
 
     m_robotContainer = new RobotContainer();
 
+    /*
     autoDropdown.setDefaultOption("Level", 1);
     autoDropdown.addOption("Rightmost Forward Test", 2);
     autoDropdown.addOption("Curved Auto Test", 3);
@@ -81,6 +82,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
     autoDropdown.addOption("Test Auto", 8);
 
     SmartDashboard.putData("Auto Path?", autoDropdown);
+    */
 
     speedDropdown.addOption("Slow Speed", 1);
     speedDropdown.addOption("Impacted Speed", 2);
@@ -117,51 +119,7 @@ public static Command examplePathCommand, taxiBlueCommand, levelCenterCommand;
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   public void autonomousInit() {
-    switch (autoDropdown.getSelected()) {
-      // Essentially just one method for any path which is why its easy to use
-      // Take timeout estimates from pathplanner estimates (Make sure correct velocity and accel are set)
-
-      case 1:
-        m_autonomousCommand = m_robotContainer.EasyToUse(
-          levelcenter, 
-          5.5,
-          true,
-          new LockWheels(RobotContainer.swerveSubsytem).withTimeout(2) // Extra command for special cases such as leveling
-          );
-        break;
-        
-      case 2:
-        m_autonomousCommand = m_robotContainer.EasyToUse(rightMost, 8.5, false);
-        break;
-
-      case 3:
-        m_autonomousCommand = m_robotContainer.EasyToUse(placeauto, 16.5, false);
-        break;
-
-      case 4:
-        m_autonomousCommand = m_robotContainer.EasyToUse(bottomCurved, 10.5, false);
-        break;
-
-      case 5:
-        m_autonomousCommand = m_robotContainer.EasyToUse(straightBottomCone, 10.5, false);
-        break;
-
-      case 6:
-        m_autonomousCommand = m_robotContainer.EasyToUse(smoothCurveTop, 12.5, false);
-        break;
-
-      case 7:
-        m_autonomousCommand = m_robotContainer.EasyToUse(topStraight, 5.5, true);
-        break;
-
-      case 8:
-        m_autonomousCommand = m_robotContainer.TestAuto(levelForwardStraight, 5.5, false);
-        break;
-
-      default:
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        break;
-    }
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
